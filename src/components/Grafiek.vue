@@ -220,13 +220,16 @@
         </n-space>
       </n-tab-pane>
     </n-tabs>
+    <n-scrollbar id="legenda" v-if="tab != 'intro'">
+      <Legenda :data="legendaData" />
+    </n-scrollbar>
   </div>
 </template>
 
 <style scoped>
 .grid {
   display: grid;
-  grid-template-columns: 300px auto;
+  grid-template-columns: 300px auto 400px;
 }
 .deleteButton {
   float: right;
@@ -236,12 +239,13 @@
 <script>
 import { ref, nextTick } from "vue";
 import Intro from "./Intro.vue";
+import Legenda from "./Legenda.vue";
 import algemeen from "@/js/berekeningen/algemeen";
 import hra from "@/js/belasting/hypotheekrente_aftrek";
 import belasting_data from "@/js/belasting/belasting_data";
 import stacked_chart from "@/js/grafieken/stacked_chart";
-import { BeschikbaarInkomenLegenda } from "@/js/grafieken/beschikbaar_inkomen_legenda";
-import { MarginaleDrukLegenda } from "@/js/grafieken/marginale_druk_legenda";
+import { BeschikbaarInkomenLegenda } from "@/js/grafieken/BeschikbaarInkomenLegenda";
+import { MarginaleDrukLegenda } from "@/js/grafieken/MarginaleDrukLegenda";
 
 const MAX_PERSONEN = 5;
 const MAX_HUUR = belasting_data.HT["2023"].MaxHuur;
@@ -261,6 +265,7 @@ for (const [k, v] of Object.entries(belasting_data.LEEFTIJDEN)) {
 export default {
   components: {
     Intro,
+    Legenda,
   },
   data() {
     return {
@@ -286,6 +291,9 @@ export default {
         rente: AVG_RENTE,
       },
       toeslagenpartner: false,
+
+      // Legenda
+      legendaData: { grafiek: {}, netto: {}, bruto: {} },
     };
   },
   mounted() {
@@ -405,7 +413,8 @@ export default {
         document.getElementById(this.tab).offsetWidth,
         beschikbaarInkomen
           ? new BeschikbaarInkomenLegenda()
-          : new MarginaleDrukLegenda()
+          : new MarginaleDrukLegenda(),
+        (d) => (this.legendaData = d)
       );
     },
   },

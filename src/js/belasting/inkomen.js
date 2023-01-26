@@ -66,7 +66,14 @@ function toetsingsinkomen(arbeidsinkomen, hypotheekRenteAftrek) {
 }
 
 function toeslagenToetsInkomen(arbeidsinkomen, personen) {
-  return arbeidsinkomen + personen.reduce((subtotaal, a) => subtotaal + (isNaN(a.bruto_inkomen) ? 0 : a.bruto_inkomen), 0);
+  return (
+    arbeidsinkomen +
+    personen.reduce(
+      (subtotaal, a) =>
+        subtotaal + (isNaN(a.bruto_inkomen) ? 0 : a.bruto_inkomen),
+      0
+    )
+  );
 }
 
 function inkomstenBelasting(toetsingsInkomen) {

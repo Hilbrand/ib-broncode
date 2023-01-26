@@ -11,8 +11,9 @@ import * as d3 from "d3";
 
 function StackedAreaChart(
   id,
-  data,
+  ad,
   legenda,
+  legendaFunction,
   {
     x = ([x]) => x, // given d in data, returns the (ordinal) x-value
     y = ([, y]) => y, // given d in data, returns the (quantitative) y-value
@@ -39,6 +40,7 @@ function StackedAreaChart(
     colors = d3.schemeTableau10, // array of colors for z
   } = {}
 ) {
+  const data = ad.series;
   // Compute values.
   const X = d3.map(data, x);
   const Y = d3.map(data, y);
@@ -158,10 +160,6 @@ function StackedAreaChart(
     .attr("y1", 0)
     .attr("y2", height);
 
-  let legendaData = legenda.addLegenda(hoverLineGroup, series, width, (i) =>
-    color(Z[i])
-  );
-
   hoverLineGroup.style("opacity", 1); //1e-6);
 
   svg.style("pointer-events", "all");
@@ -193,7 +191,15 @@ function StackedAreaChart(
     if (d == undefined) {
       return;
     }
-    legenda.setLegendaText(legendaData, data, series.length, i, d);
+    let colorFunction = (i) => color(Z[i]);
+    legenda.setLegendaText(
+      data,
+      series.length,
+      i,
+      colorFunction,
+      legendaFunction,
+      ad.bereken
+    );
     hoverLine.attr("x1", mouse_x).attr("x2", mouse_x);
 
     hoverLineGroup.style("opacity", 1);
@@ -206,8 +212,8 @@ function StackedAreaChart(
   return Object.assign(svg.node(), { scales: { color } });
 }
 
-function makeChart(id, data, width, legenda) {
-  return StackedAreaChart(id, data, legenda, {
+function makeChart(id, data, width, legenda, legendaFunction) {
+  return StackedAreaChart(id, data, legenda, legendaFunction, {
     x: (d) => d.id,
     y: (d) => d.getal * legenda.getFactorYas(),
     z: (d) => d.type,

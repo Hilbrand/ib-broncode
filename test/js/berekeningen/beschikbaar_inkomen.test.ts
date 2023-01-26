@@ -17,14 +17,15 @@
 
 import { assert, expect, test } from 'vitest'
 import algemeen from '../../../src/js/berekeningen/algemeen.js'
-import bi from '../../../src/js/berekeningen/beschikbaar_inkomen.js'
+import { BeschikbaarInkomen } from '../../../src/js/berekeningen/BeschikbaarInkomen.js'
 
 const vis = {periode:'jaar'};
 const personen = [{leeftijd:'V'}, {leeftijd:'V', inkomen:0}, {leeftijd:'K611'}, {leeftijd:'K611'}];
 const wonen = {woning_type:'huur', huur:1100};
 const algemeneGegevens = algemeen.berekenAlgemeneGegevens(vis, personen, wonen);
 const arbeidsinkomen = 46377;
-const berekening = bi.berekenBeschikbaarInkomen(arbeidsinkomen, personen, wonen, algemeneGegevens);
+const bekenen = new BeschikbaarInkomen(vis, personen, wonen);
+const berekening = bekenen.bereken(arbeidsinkomen);
 
 test('Bereken beschikbaar inkomen eenverdiener, 2 kinderen', () => {
   let expected = {

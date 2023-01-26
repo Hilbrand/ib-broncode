@@ -27,8 +27,13 @@ function negatiefIsNul(getal) {
   return Math.max(0, getal);
 }
 
+function factorBerekening(periode) {
+  return "maand" == periode ? 1 / 12 : 1;
+}
+
 export default {
   telPersonen,
   toeslagenPartner,
   negatiefIsNul,
+  factorBerekening,
 };

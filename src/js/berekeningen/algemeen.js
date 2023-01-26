@@ -16,42 +16,13 @@
  */
 
 import functies from "@/js/functies";
-import inkomen from "@/js/belasting/inkomen";
-import iack from "@/js/belasting/inkomensafhankelijke_combinatiekorting";
-import kbs from "@/js/belasting/kinderbijslag";
-import kgb from "@/js/belasting/kindgebonden_budget";
-import hra from "@/js/belasting/hypotheekrente_aftrek";
-import bi from "@/js/berekeningen/beschikbaar_inkomen";
-import md from "@/js/berekeningen/marginale_druk";
+import { BeschikbaarInkomen } from "@/js/berekeningen/BeschikbaarInkomen";
+import { MarginaleDruk } from "@/js/berekeningen/MarginaleDruk";
 
 const stap = 100;
 
-function factorBerekening(periode) {
-  return "maand" == periode ? 1 / 12 : 1;
-}
-
 function afronden(getal, factor) {
   return (getal * factor).toFixed("2") * 1;
-}
-
-function berekenAlgemeneGegevens(vis, personen, wonen) {
-  let toeslagenpartner = functies.toeslagenPartner(personen);
-  let huren = wonen.woning_type == "huur";
-
-  return {
-    toeslagenpartner: toeslagenpartner,
-    iacbInkomen: iack.bepaalLaagsteArbeidsInkomenAnderen(personen),
-    kinderbijslag: kbs.kinderbijslag(personen),
-    maxKindgebondenBudget: kgb.maxKindgebondenBudget(
-      personen,
-      toeslagenpartner
-    ),
-    nk: inkomen.nettoKortingenInkomens(personen),
-    huren: huren,
-    hypotheekRenteAftrek: huren
-      ? 0
-      : hra.hypotheekRenteAftrek(wonen.rente, wonen.woz),
-  };
 }
 
 function budgetData(
@@ -125,51 +96,27 @@ function log(berekening, berekening2) {
 }
 
 function berekenGrafiekData(type, vis, personen, wonen) {
+  const bereken =
+    "beschikbaar_inkomen_grafiek" == type
+      ? new BeschikbaarInkomen(vis, personen, wonen)
+      : new MarginaleDruk(vis, personen, wonen);
+  const factor = functies.factorBerekening(vis.periode);
   let alles = [];
-  let factor = factorBerekening(vis.periode);
-  let algemeneData = berekenAlgemeneGegevens(vis, personen, wonen);
 
   for (let i = vis.ondergrens; i <= vis.bovengrens; i += stap) {
-    let berekening = bi.berekenBeschikbaarInkomen(
-      i,
-      personen,
-      wonen,
-      algemeneData
-    );
     let arbeidsinkomen_grafiek = Math.round(i * factor);
 
-    if ("beschikbaar_inkomen_grafiek" == type) {
-      budgetData(
-        alles,
-        berekening,
-        arbeidsinkomen_grafiek,
-        algemeneData,
-        factor
-      );
-    } else if ("marginale_druk" == type) {
-      console.log("vis.salarisVerhoging:" + vis.salarisVerhoging);
-      //belastingdruk(alles, berekening, arbeidsinkomen_grafiek);
-      let berekening2 = bi.berekenBeschikbaarInkomen(
-        i + i * (vis.salarisVerhoging / 100),
-        personen,
-        wonen,
-        algemeneData
-      );
-
-      //marginaleDruk(alles, berekening, berekening2, arbeidsinkomen_grafiek);
-      budgetData(
-        alles,
-        md.marginaleDruk(berekening, berekening2, arbeidsinkomen_grafiek),
-        arbeidsinkomen_grafiek,
-        algemeneData,
-        1 // bij marginale druk geen factor op percentage toepassen.
-      );
-    }
+    budgetData(
+      alles,
+      bereken.bereken(i),
+      arbeidsinkomen_grafiek,
+      bereken.getAlgemeneData(),
+      bereken.getFactor()
+    );
   }
-  return alles;
+  return { bereken: bereken, series: alles };
 }
 
 export default {
-  berekenAlgemeneGegevens,
   berekenGrafiekData,
 };

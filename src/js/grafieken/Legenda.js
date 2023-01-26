@@ -21,22 +21,19 @@
 export class Legenda {
   static EURO = "€";
 
-  appendLegendText(group) {
-    return group
-      .append("text")
-      .attr("fill", "currentColor")
-      .attr("dy", "0.55em")
-      .attr("font-size", "10px")
-      .attr("font-family", "courier new");
+  percentage(getal) {
+    return (
+      (getal > 0 ? (1 * getal).toFixed(1) : "-").padStart(5, "\u00A0") + " %"
+    );
   }
 
-  padGeld(e, tekst, getal, width) {
-    return e.text(tekst.padEnd(width, ".") + " " + Legenda.EURO + " " + getal);
+  geld(bedrag) {
+    return bedrag > 0
+      ? Legenda.EURO + " " + bedrag.toFixed().padStart(4, "\u00A0")
+      : "-";
   }
 
-  addLegenda(group, series, width, colorLegend) {}
-
-  setLegendaText(legendaData, data, length, offset, d) {}
+  setLegendaText(data, length, offset) {}
 
   getLabelYAs() {}
 
