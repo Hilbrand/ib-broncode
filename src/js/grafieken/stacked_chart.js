@@ -217,6 +217,7 @@ function makeChart(id, data, width, legenda, legendaFunction) {
     x: (d) => d.id,
     y: (d) => d.getal * legenda.getFactorYas(),
     z: (d) => d.type,
+    yDomain: [0, data.bereken.getYMax()],
     xLabel: "Arbeidsinkomen",
     yLabel: legenda.getLabelYAs(),
     width: width,

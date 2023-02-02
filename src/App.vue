@@ -4,7 +4,7 @@
       <n-message-provider>
         <n-notification-provider>
           <n-dialog-provider>
-            <grafiek />
+            <router-view></router-view>
           </n-dialog-provider>
         </n-notification-provider>
       </n-message-provider>
@@ -15,7 +15,6 @@
 <script>
 import { defineComponent } from "vue";
 import { NConfigProvider } from "naive-ui";
-import Grafiek from "./components/Grafiek.vue";
 
 const themeOverrides = {
   common: {
@@ -28,9 +27,6 @@ const themeOverrides = {
 };
 
 export default defineComponent({
-  components: {
-    Grafiek,
-  },
   data() {
     return {
       themeOverrides: themeOverrides,

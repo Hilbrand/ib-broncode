@@ -20,7 +20,7 @@ import algemeen from '../../../src/js/berekeningen/algemeen.js'
 import {MarginaleDruk} from '../../../src/js/berekeningen/MarginaleDruk.js'
 
 test('Marginale Druk Details ', () => {
-  const vis = {periode:'jaar', salarisVerhoging: 3};
+  const vis = {periode:'jaar', sv: 3};
   const personen = [{leeftijd:'V'}];
   const wonen = {woning_type:'huur', huur:600};
    

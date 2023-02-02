@@ -31,7 +31,7 @@ export class MarginaleDruk extends BeschikbaarInkomen {
       this.algemeneData
     );
     const berekening2 = this.berekenBeschikbaarInkomen(
-      arbeidsInkomen + arbeidsInkomen * (this.vis.salarisVerhoging / 100),
+      arbeidsInkomen + arbeidsInkomen * (this.vis.sv / 100),
       this.personen,
       this.wonen,
       this.algemeneData

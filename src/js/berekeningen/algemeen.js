@@ -97,13 +97,13 @@ function log(berekening, berekening2) {
 
 function berekenGrafiekData(type, vis, personen, wonen) {
   const bereken =
-    "beschikbaar_inkomen_grafiek" == type
+    "bi" == type
       ? new BeschikbaarInkomen(vis, personen, wonen)
       : new MarginaleDruk(vis, personen, wonen);
   const factor = functies.factorBerekening(vis.periode);
   let alles = [];
 
-  for (let i = vis.ondergrens; i <= vis.bovengrens; i += stap) {
+  for (let i = vis.van_tot[0]; i <= vis.van_tot[1]; i += stap) {
     let arbeidsinkomen_grafiek = Math.round(i * factor);
 
     budgetData(

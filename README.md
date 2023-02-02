@@ -7,6 +7,8 @@ De broncode is beschikbaar onder de AGPL3.0 licentie.
 
 # Technische informatie
 
+![Bouw en Uitrol](https://github.com/Hilbrand/ib-broncode/actions/workflows/deploy.yml/badge.svg)
+
 ## Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).

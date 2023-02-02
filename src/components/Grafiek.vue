@@ -21,16 +21,18 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(p, index) in persoonsdata" size="small">
+              <tr v-for="(p, index) in gegevens.personen" size="small">
                 <td>{{ index + 1 }}</td>
                 <td>
                   <n-select
-                    v-model:value="persoonsdata[index]['leeftijd']"
+                    v-model:value="gegevens.personen[index]['leeftijd']"
                     :options="actieveLeeftijden(index)"
                     :consistent-menu-width="false"
                   />
                   <div
-                    v-if="index != 0 && persoonsdata[index]['leeftijd'] == 'V'"
+                    v-if="
+                      index != 0 && gegevens.personen[index]['leeftijd'] == 'V'
+                    "
                   >
                     Bruto inkomen
                     <n-input-number
@@ -39,7 +41,7 @@
                       min="0"
                       step="1"
                       size="small"
-                      v-model:value="persoonsdata[index]['bruto_inkomen']"
+                      v-model:value="gegevens.personen[index]['bruto_inkomen']"
                     >
                       <template #prefix>&euro;</template>
                     </n-input-number>
@@ -72,13 +74,13 @@
         </n-space>
       </n-card>
       <n-card title="Wonen" size="small">
-        <label for="woning_type_huren"></label>
-        <n-radio-group v-model:value="wonen.woning_type">
+        <label for="wt_huren"></label>
+        <n-radio-group v-model:value="gegevens.wonen.woning_type">
           <n-radio label="Huurwoning" key="huur" value="huur" size="small" />
           <n-radio label="Koopwoning" key="koop" value="koop" size="small" />
         </n-radio-group>
         <n-divider />
-        <div v-if="wonen.woning_type == 'huur'" size="small">
+        <div v-if="gegevens.wonen.woning_type == 'huur'" size="small">
           <n-space vertical>
             <n-space :wrap="false">
               <div style="white-space: nowrap">Rekenhuur p/m</div>
@@ -89,7 +91,7 @@
                 max="2000"
                 step="1"
                 size="small"
-                v-model:value="wonen.huur"
+                v-model:value="gegevens.wonen.huur"
               >
                 <template #prefix>&euro;</template>
               </n-input-number>
@@ -114,7 +116,7 @@
                 min="0"
                 step="1"
                 size="small"
-                v-model:value="wonen.woz"
+                v-model:value="gegevens.wonen.woz"
               >
                 <template #prefix>&euro;</template>
               </n-input-number>
@@ -127,7 +129,7 @@
                 min="0"
                 step="1"
                 size="small"
-                v-model:value="wonen.rente"
+                v-model:value="gegevens.wonen.rente"
               >
                 <template #prefix>&euro;</template>
               </n-input-number>
@@ -139,7 +141,7 @@
       <n-card title="Grafiek Instellingen" size="small">
         <n-space vertical>
           <n-slider
-            v-model:value="bruto_grenzen"
+            v-model:value="gegevens.grafiek.van_tot"
             range
             :step="100"
             :min="0"
@@ -151,17 +153,17 @@
               min="0"
               step="100"
               size="small"
-              v-model:value="bruto_grenzen[0]"
+              v-model:value="gegevens.grafiek.van_tot[0]"
             />
             <n-input-number
               placeholder="Bruto Bovengrens"
               min="0"
               step="100"
               size="small"
-              v-model:value="bruto_grenzen[1]"
+              v-model:value="gegevens.grafiek.van_tot[1]"
             />
           </n-space>
-          <n-radio-group v-model:value="periode">
+          <n-radio-group v-model:value="gegevens.grafiek.periode">
             <n-space :wrap="false">
               Bruto:
               <n-radio label="Jaarbasis" key="jaar" value="jaar" size="small" />
@@ -181,32 +183,24 @@
       type="line"
       style="padding: 0 10px"
       @update:value="tabUpdated"
-      v-model:value="tab"
+      v-model:value="gegevens.tab"
     >
       <n-tab-pane name="intro" tab="Introductie">
         <Intro />
       </n-tab-pane>
-      <n-tab-pane
-        name="beschikbaar_inkomen_grafiek"
-        tab="Beschikbaar Inkomen"
-        key="beschikbaar_inkomen_grafiek"
-      >
+      <n-tab-pane name="bi" tab="Beschikbaar Inkomen" key="bi">
         <n-space>
           Deze grafiek toont het beschikbare inkomen uitgesplitst naar kortingen
           en toeslagen.
         </n-space>
-        <div id="beschikbaar_inkomen_grafiek"><svg></svg></div>
+        <div id="bi"><svg></svg></div>
       </n-tab-pane>
-      <n-tab-pane
-        name="marginale_druk"
-        tab="Marginale Druk"
-        key="marginale_druk"
-      >
+      <n-tab-pane name="md" tab="Marginale Druk" key="md">
         <n-space vertical>
           <n-space
             >Deze grafiek toont de marginale druk bij een salarisverhoging van
             <n-input-number
-              v-model:value="salarisVerhoging"
+              v-model:value="gegevens.grafiek.sv"
               min="0"
               max="100"
               step="1"
@@ -216,11 +210,11 @@
               <template #suffix>%</template></n-input-number
             ></n-space
           >
-          <div id="marginale_druk"><svg></svg></div>
+          <div id="md"><svg></svg></div>
         </n-space>
       </n-tab-pane>
     </n-tabs>
-    <n-scrollbar id="legenda" v-if="tab != 'intro'">
+    <n-scrollbar id="legenda" v-if="gegevens.tab != 'intro'">
       <Legenda :data="legendaData" />
     </n-scrollbar>
   </div>
@@ -240,6 +234,7 @@
 import { ref, nextTick } from "vue";
 import Intro from "./Intro.vue";
 import Legenda from "./Legenda.vue";
+import gegevens from "@/js/berekeningen/gegevens";
 import algemeen from "@/js/berekeningen/algemeen";
 import hra from "@/js/belasting/hypotheekrente_aftrek";
 import belasting_data from "@/js/belasting/belasting_data";
@@ -247,11 +242,7 @@ import stacked_chart from "@/js/grafieken/stacked_chart";
 import { BeschikbaarInkomenLegenda } from "@/js/grafieken/BeschikbaarInkomenLegenda";
 import { MarginaleDrukLegenda } from "@/js/grafieken/MarginaleDrukLegenda";
 
-const MAX_PERSONEN = 5;
-const MAX_HUUR = belasting_data.HT["2023"].MaxHuur;
-const AVG_HUUR = 600;
-const AVG_WOZ = 315000;
-const AVG_RENTE = AVG_WOZ * 0.0428;
+const MAX_PERSONEN = 8;
 
 const personOptions = [];
 for (let i = 1; i <= MAX_PERSONEN; i++) {
@@ -267,106 +258,105 @@ export default {
     Intro,
     Legenda,
   },
+  props: ["route"],
   data() {
     return {
-      // Visualisatie
       tabsRef: ref(null),
       tabRef: ref("intro"),
-      tab: "intro",
-      periode: "jaar",
-      salarisVerhoging: 3,
-      bruto_grenzen: [10000, 100000],
+      gegevens: {
+        tab: "intro",
+        // Personen
+        personen: [],
+        // Wonen
+        wonen: {
+          wt: "huur",
+          huur: 0,
+          woz: 0,
+          rente: 0,
+        },
+        // Visualisatie
+        grafiek: {
+          periode: null,
+          van_tot: [],
+          sv: 0,
+        },
+      },
 
       // Personen
       leeftijden: leeftijdenData,
       personOptions: personOptions,
       personen: 1,
-      persoonsdata: [{ leeftijd: "V" }],
-
-      // Wonen
-      wonen: {
-        woning_type: "huur",
-        huur: AVG_HUUR,
-        woz: AVG_WOZ,
-        rente: AVG_RENTE,
-      },
-      toeslagenpartner: false,
-
       // Legenda
       legendaData: { grafiek: {}, netto: {}, bruto: {} },
     };
   },
   mounted() {
+    this.gegevens = gegevens.navigatieToJson(this.$route.query);
+    this.personen = this.gegevens.personen.length;
     this.resize();
     window.addEventListener("resize", this.resize);
   },
   unmounted() {
     window.removeEventListener("resize", this.resize);
   },
-  created() {},
+  created() {
+    this.$watch(
+      () => this.$route.query,
+      (toQuery, previousQuery) => {
+        this.gegevens = gegevens.navigatieToJson(toQuery);
+        this.chart(false);
+      }
+    );
+  },
   computed: {
     renteaftrek() {
-      if (this.wonen.woning_type == "koop") {
-        return -hra.hypotheekRenteAftrek(this.wonen.rente, this.wonen.woz);
+      if (this.gegevens.wonen.woning_type == "koop") {
+        return -hra.hypotheekRenteAftrek(
+          this.gegevens.wonen.rente,
+          this.gegevens.wonen.woz
+        );
+      } else {
+        return "";
       }
     },
   },
   watch: {
-    periode(newPeriode, oldPeriode) {
-      this.chart();
-    },
-    salarisVerhoging(newSalarisVerhoging, oldSalarisVerhoging) {
-      this.chart();
+    gegevens: {
+      deep: true,
+      handler() {
+        this.$router.replace({
+          query: gegevens.jsonToNavigatie(this.gegevens),
+        });
+      },
     },
     personen(newPersonen, oldPersonen) {
-      if (this.persoonsdata.length == newPersonen) {
+      let current = this.gegevens.personen;
+      if (current.length == newPersonen) {
         return;
       }
       if (oldPersonen > newPersonen) {
-        for (var i = 0; i < oldPersonen - newPersonen; i++) {
-          this.persoonsdata.pop();
+        for (let i = 0; i < oldPersonen - newPersonen; i++) {
+          current.pop();
         }
       } else if (newPersonen > oldPersonen) {
-        for (var i = 0; i < newPersonen - oldPersonen; i++) {
-          this.persoonsdata.push({ leeftijd: "", bruto_inkomen: 0 });
+        for (let i = 0; i < newPersonen - oldPersonen; i++) {
+          // moet altijd geldige waarde hebben, dus initaliseer met 'V'
+          current.push({ leeftijd: "V", bruto_inkomen: 0 });
         }
       }
-      this.chart();
-    },
-    persoonsdata: {
-      deep: true,
-      handler() {
-        this.chart();
-      },
-    },
-    wonen: {
-      deep: true,
-      handler() {
-        this.chart();
-      },
-    },
-    bruto_grenzen: {
-      deep: true,
-      handler() {
-        if (this.bruto_grenzen[0] > this.bruto_grenzen[1]) {
-          this.bruto_grenzen[0] = this.bruto_grenzen[1];
-        }
-        this.chart();
-      },
     },
   },
   methods: {
     resize() {
-      //if (document.getElementById('infoBar')) {
-      document.getElementById("infoBar").style.maxHeight =
-        document.documentElement.clientHeight + "px";
-      //}
+      if (document.getElementById("infoBar")) {
+        document.getElementById("infoBar").style.maxHeight =
+          document.documentElement.clientHeight + "px";
+      }
       this.chart(false);
     },
     tabUpdated(value) {
       this.tabRef = ref(value);
-      this.tab = value;
-      nextTick(() => this.chart(false));
+      this.gegevens.tab = value;
     },
     actieveLeeftijden(index) {
       if (index == 0) {
@@ -376,41 +366,36 @@ export default {
       }
     },
     verwijderPersoon(index) {
-      this.persoonsdata.splice(index, 1);
+      this.gegevens.personen.splice(index, 1);
       this.personen--;
     },
     setMaxHuur(event) {
-      this.wonen.huur = MAX_HUUR;
+      this.gegevens.wonen.huur = belasting_data.MAX_HUUR;
     },
     setAvgHuur(event) {
-      this.wonen.huur = AVG_HUUR;
+      this.gegevens.wonen.huur = belasting_data.AVG_HUUR;
     },
     async chart(selectChart = true) {
-      if (this.tab == "intro" && selectChart) {
-        this.tab = "beschikbaar_inkomen_grafiek";
+      if (this.gegevens.tab == "intro" && selectChart) {
+        this.gegevens.tab = "bi";
         nextTick(() => this.chart());
         return;
       }
-      if (this.tab == "intro" && !selectChart) {
+      if (this.gegevens.tab == "intro" && !selectChart) {
         return;
       }
       await nextTick();
-      const beschikbaarInkomen = this.tab == "beschikbaar_inkomen_grafiek";
+      const beschikbaarInkomen = this.gegevens.tab == "bi";
 
       stacked_chart.makeChart(
-        "#" + this.tab,
+        "#" + this.gegevens.tab,
         algemeen.berekenGrafiekData(
-          this.tab,
-          {
-            periode: this.periode,
-            ondergrens: this.bruto_grenzen[0],
-            bovengrens: this.bruto_grenzen[1],
-            salarisVerhoging: this.salarisVerhoging,
-          },
-          this.persoonsdata,
-          this.wonen
+          this.gegevens.tab,
+          this.gegevens.grafiek,
+          this.gegevens.personen,
+          this.gegevens.wonen
         ),
-        document.getElementById(this.tab).offsetWidth,
+        document.getElementById(this.gegevens.tab).offsetWidth,
         beschikbaarInkomen
           ? new BeschikbaarInkomenLegenda()
           : new MarginaleDrukLegenda(),

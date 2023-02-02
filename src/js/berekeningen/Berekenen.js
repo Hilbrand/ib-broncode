@@ -31,6 +31,10 @@ export class Berekenen {
     this.factor = functies.factorBerekening(vis.periode);
   }
 
+  getYMax() {
+    return this.vis.van_tot[1];
+  }
+
   getAlgemeneData() {
     return this.algemeneData;
   }

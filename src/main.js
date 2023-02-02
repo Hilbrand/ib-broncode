@@ -16,11 +16,23 @@
  */
 
 import { createApp } from "vue";
+import { createRouter, createWebHistory } from "vue-router";
 import naive from "naive-ui";
 import App from "./App.vue";
+import Grafiek from "./components/Grafiek.vue";
+
+const routes = [
+  { path: "/", component: Grafiek, props: (route) => route.query },
+];
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
 
 const app = createApp(App);
 
+app.use(router);
 app.use(naive);
 
 app.mount("#app");

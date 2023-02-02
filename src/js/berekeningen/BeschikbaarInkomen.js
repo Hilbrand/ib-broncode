@@ -28,6 +28,10 @@ export class BeschikbaarInkomen extends Berekenen {
     super(vis, personen, wonen);
   }
 
+  getYMax() {
+    return Math.round(super.getYMax() / 1000);
+  }
+
   bereken(arbeidsInkomen) {
     return this.berekenBeschikbaarInkomen(
       arbeidsInkomen,

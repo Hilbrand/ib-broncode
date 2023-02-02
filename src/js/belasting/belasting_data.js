@@ -752,6 +752,10 @@ const AK = {
 const JAAR = 2023;
 const IBGRENS_2023 = 73031;
 const BALKENENDENORM = 223000;
+const AVG_HUUR = 600;
+const AVG_WOZ = 315000;
+const MAX_HUUR = HT[JAAR].MaxHuur;
+const AVG_RENTE = AVG_WOZ * 0.0428;
 
 export default {
   TABEL: TABEL,
@@ -768,4 +772,8 @@ export default {
   JAAR: JAAR,
   IBGRENS_2023: IBGRENS_2023,
   BALKENENDENORM: BALKENENDENORM,
+  AVG_HUUR,
+  AVG_WOZ,
+  AVG_RENTE,
+  MAX_HUUR,
 };
