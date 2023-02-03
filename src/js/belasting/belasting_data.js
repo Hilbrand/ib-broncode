@@ -125,6 +125,8 @@ const TABEL = {
   },
 };
 
+//  Huurtoeslag
+
 const HT = {
   2023: {
     HTjaar: "2023",
@@ -168,7 +170,7 @@ const HTBP = {
       TaakStBedr: 0,
       MinNrmHr: 225.54,
     },
-    "EPH65+": {
+    EPHAOW: {
       "Factor a": 0.000000671404,
       "Factor b": -0.002850602044,
       MinInkGr: 20500,
@@ -184,7 +186,7 @@ const HTBP = {
       TaakStBedr: 0,
       MinNrmHr: 225.54,
     },
-    "MPH65+": {
+    MPHAOW: {
       "Factor a": 0.000000430722,
       "Factor b": -0.003611907743,
       MinInkGr: 27275,
@@ -202,7 +204,7 @@ const HTBP = {
       TaakStBedr: 16.94,
       MinNrmHr: 220.68,
     },
-    "EPH65+": {
+    EPHAOW: {
       "Factor a": 0.000000800848,
       "Factor b": -0.003802527235,
       MinInkGr: 19075,
@@ -218,7 +220,7 @@ const HTBP = {
       TaakStBedr: 16.94,
       MinNrmHr: 220.68,
     },
-    "MPH65+": {
+    MPHAOW: {
       "Factor a": 0.000000499095,
       "Factor b": -0.004173489348,
       MinInkGr: 25450,
@@ -229,6 +231,8 @@ const HTBP = {
   },
 };
 
+// Inkomsten afhankelijk combinatie korting
+
 const IACK = {
   2023: {
     H: {
@@ -237,7 +241,7 @@ const IACK = {
       MaxAInk: 29076,
       MaxInkAfKrt: 2694,
     },
-    "H65+": {
+    HAOW: {
       MinAInk: 5548,
       InkKorting: 0.059,
       MaxAInk: 29076,
@@ -245,6 +249,8 @@ const IACK = {
     },
   },
 };
+
+// Maximum Kindergebonden budget
 
 const MAXKGB = {
   2023: {
@@ -268,6 +274,8 @@ const MAXKGB = {
     8: 8332,
   },
 };
+
+// Kinderopvang toeslag
 
 const KOTT = {
   2023: [
@@ -620,6 +628,7 @@ const KOTT = {
 };
 
 // Kinderbijslag per kwartaal
+
 const KBS = {
   2023: {
     K05: 269.76,
@@ -628,16 +637,8 @@ const KBS = {
   },
 };
 
-const LEEFTIJDEN = {
-  K05: "Kind 0 t/m 5 Jaar",
-  K611: "Kind 6 t/m 11 Jaar",
-  K1215: "Kind 12 t/m 15 jaar",
-  K1617: "16 of 17 jaar",
-  V: "Volwassene",
-  AOW: "AOW Leeftijd",
-};
-
 // Eigenwoningforfait
+
 const EWF = {
   2023: {
     kSchuldFactor: 0.8333,
@@ -672,6 +673,7 @@ const EWF = {
 };
 
 // Algemene Heffingskorting
+
 const AHK = {
   2023: {
     V: [
@@ -688,10 +690,25 @@ const AHK = {
         factor: -0.06095,
       },
     ],
+    AOW: [
+      {
+        inkomen: { van: 0, tot: 22661 },
+        minimum: 1583,
+        minus: 0,
+        factor: 0,
+      },
+      {
+        inkomen: { van: 22661, tot: 73031 },
+        minimum: 1583,
+        minus: 22660,
+        factor: -0.03141,
+      },
+    ],
   },
 };
 
 // Arbeidskorting
+
 const AK = {
   2023: {
     V: [
@@ -749,8 +766,46 @@ const AK = {
   },
 };
 
+const IB = {
+  2023: {
+    V: [
+      {
+        tot: 73031,
+        percentage: 0.3693,
+      },
+      {
+        vanaf: 73031,
+        percentage: 0.495,
+      },
+    ],
+    AOW: [
+      {
+        tot: 38703,
+        percentage: 0.1903,
+      },
+      {
+        vanaf: 38703,
+        tot: 73031,
+        percentage: 0.3693,
+      },
+      {
+        vanaf: 73031,
+        percentage: 0.495,
+      },
+    ],
+  },
+};
+
+const LEEFTIJDEN = {
+  K05: "Kind 0 t/m 5 Jaar",
+  K611: "Kind 6 t/m 11 Jaar",
+  K1215: "Kind 12 t/m 15 jaar",
+  K1617: "16 of 17 jaar",
+  V: "Volwassene",
+  AOW: "AOW Leeftijd",
+};
+
 const JAAR = 2023;
-const IBGRENS_2023 = 73031;
 const BALKENENDENORM = 223000;
 const AVG_HUUR = 600;
 const AVG_WOZ = 315000;
@@ -768,9 +823,9 @@ export default {
   EWF: EWF,
   AHK: AHK,
   AK: AK,
+  IB,
   LEEFTIJDEN: LEEFTIJDEN,
   JAAR: JAAR,
-  IBGRENS_2023: IBGRENS_2023,
   BALKENENDENORM: BALKENENDENORM,
   AVG_HUUR,
   AVG_WOZ,

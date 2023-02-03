@@ -29,7 +29,7 @@ function budgetData(
   alles,
   berekening,
   arbeidsinkomen_grafiek,
-  algemeneData,
+  algemeneGegevens,
   factor
 ) {
   if (berekening.netto !== undefined) {
@@ -59,7 +59,7 @@ function budgetData(
     },
     {
       id: arbeidsinkomen_grafiek,
-      type: algemeneData.huren ? "huurtoeslag" : "hypotheekrenteaftrek",
+      type: algemeneGegevens.huren ? "huurtoeslag" : "hypotheekrenteaftrek",
       getal: afronden(berekening.wonen, factor),
     },
     {
@@ -110,7 +110,7 @@ function berekenGrafiekData(type, vis, personen, wonen) {
       alles,
       bereken.bereken(i),
       arbeidsinkomen_grafiek,
-      bereken.getAlgemeneData(),
+      bereken.getAlgemeneGegevens(),
       bereken.getFactor()
     );
   }

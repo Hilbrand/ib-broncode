@@ -21,54 +21,58 @@ import inkomen from '../../../src/js/belasting/inkomen.js'
 // test algemeneHeffingsKorting
 
 test('Algemene Heffings Korting 1.000', () => {
-  expect(inkomen.algemeneHeffingsKorting(1000, 10000)).toEqual(3070)
+  expect(inkomen.algemeneHeffingsKorting(1000, 10000, false)).toEqual(3070)
+  expect(inkomen.algemeneHeffingsKorting(1000, 10000, true)).toEqual(1583)
 })
 
 test('Algemene Heffings Korting 10.000', () => {
-  expect(inkomen.algemeneHeffingsKorting(10000, 10000)).toEqual(3070)
+  expect(inkomen.algemeneHeffingsKorting(10000, 10000, false)).toEqual(3070)
+  expect(inkomen.algemeneHeffingsKorting(10000, 10000, true)).toEqual(1583)
 })
 
 test('Algemene Heffings Korting 40.000', () => {
-  expect(inkomen.algemeneHeffingsKorting(40000, 10000)).toEqual(2013)
+  expect(inkomen.algemeneHeffingsKorting(40000, 10000, false)).toEqual(2013)
+  expect(inkomen.algemeneHeffingsKorting(40000, 10000, true)).toEqual(1038)
 })
 
 test('Algemene Heffings Korting 100.000', () => {
-  expect(inkomen.algemeneHeffingsKorting(100000, 10000)).toEqual(0)
+  expect(inkomen.algemeneHeffingsKorting(100000, 10000, false)).toEqual(0)
+  expect(inkomen.algemeneHeffingsKorting(100000, 10000, true)).toEqual(0)
 })
 
 // test arbeidskorting
 
 test('Arbeidskorting 1.000', () => {
-  expect(inkomen.arbeidskorting(1000, 10000)).toEqual(82)
+  expect(inkomen.arbeidskorting(1000, 10000, false)).toEqual(82)
+  expect(inkomen.arbeidskorting(1000, 10000, true)).toEqual(42)
 })
 
 test('Arbeidskorting 15.000', () => {
-  expect(inkomen.arbeidskorting(15000, 10000)).toEqual(2156)
+  expect(inkomen.arbeidskorting(15000, 10000, false)).toEqual(2156)
+  expect(inkomen.arbeidskorting(15000, 10000, true)).toEqual(1115)
 })
 
 test('Arbeidskorting 30.000', () => {
-  expect(inkomen.arbeidskorting(30000, 10000)).toEqual(4815)
+  expect(inkomen.arbeidskorting(30000, 10000, false)).toEqual(4815)
+  expect(inkomen.arbeidskorting(30000, 10000, true)).toEqual(2482)
 })
 
 test('Arbeidskorting 60.000', () => {
-  expect(inkomen.arbeidskorting(60000, 10000)).toEqual(3600)
+  expect(inkomen.arbeidskorting(60000, 10000, false)).toEqual(3600)
+  expect(inkomen.arbeidskorting(60000, 10000, true)).toEqual(1855)
 })
 
 // test inkomstenBelasting
 
 test('Belasting 10.000', () => {
-  expect(inkomen.inkomstenBelasting(10000)).toEqual(3693)
+  expect(inkomen.inkomstenBelasting(10000, false)).toEqual(3693)
+  expect(inkomen.inkomstenBelasting(10000, true)).toEqual(1903)
 })
 
 test('Belasting 100.000', () => {
-  expect(inkomen.inkomstenBelasting(100000)).toEqual(40320)
+  expect(inkomen.inkomstenBelasting(100000, false)).toEqual(40320)
+  expect(inkomen.inkomstenBelasting(100000, true)).toEqual(33392)
 })
-
-// test inkomstenBelastingAangepast
-
-// test('Belasting aangepast 10.000', () => {
-//   expect(inkomen.inkomstenBelastingAangepast(10000)).toEqual(0)
-// })
 
 // test netto
 

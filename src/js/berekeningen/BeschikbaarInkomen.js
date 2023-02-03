@@ -37,18 +37,24 @@ export class BeschikbaarInkomen extends Berekenen {
       arbeidsInkomen,
       this.personen,
       this.wonen,
-      this.algemeneData
+      this.algemeneGegevens
     );
   }
 
   berekenBeschikbaarInkomen(arbeidsinkomen, personen, wonen, algemeneGegevens) {
+    let aow = personen[0].leeftijd == "AOW";
     let toetsingsInkomen = inkomen.toetsingsinkomen(
       arbeidsinkomen,
       algemeneGegevens.hypotheekRenteAftrek
     );
-    let toetsingsInkomenBelasting =
-      inkomen.inkomstenBelasting(toetsingsInkomen);
-    let arbeidsinkomenBelasting = inkomen.inkomstenBelasting(arbeidsinkomen);
+    let toetsingsInkomenBelasting = inkomen.inkomstenBelasting(
+      toetsingsInkomen,
+      aow
+    );
+    let arbeidsinkomenBelasting = inkomen.inkomstenBelasting(
+      arbeidsinkomen,
+      aow
+    );
     let toeslagenToetsInkomen = inkomen.toeslagenToetsInkomen(
       arbeidsinkomen,
       personen
@@ -56,14 +62,16 @@ export class BeschikbaarInkomen extends Berekenen {
     let nettoArbeidsinkomen = arbeidsinkomen - toetsingsInkomenBelasting;
     let algemeneHeffingsKorting = inkomen.algemeneHeffingsKorting(
       toetsingsInkomen,
-      toetsingsInkomenBelasting
+      toetsingsInkomenBelasting,
+      aow
     );
     let maxBelastingTeruggave = functies.negatiefIsNul(
       toetsingsInkomenBelasting - algemeneHeffingsKorting
     );
     let arbeidskorting = inkomen.arbeidskorting(
       arbeidsinkomen,
-      maxBelastingTeruggave
+      maxBelastingTeruggave,
+      aow
     );
     let effectieveRenteVerschil = functies.negatiefIsNul(
       arbeidsinkomenBelasting - toetsingsInkomenBelasting
@@ -92,7 +100,12 @@ export class BeschikbaarInkomen extends Berekenen {
         algemeneGegevens.toeslagenpartner
       ),
       wonen: algemeneGegevens.huren
-        ? ht.huurtoeslag(toeslagenToetsInkomen, wonen.huur, personen.length)
+        ? ht.huurtoeslag(
+            toeslagenToetsInkomen,
+            wonen.huur,
+            personen.length,
+            algemeneGegevens.aow
+          )
         : effectieveHypotheekRenteAftrek,
       kinderbijslag: algemeneGegevens.kinderbijslag,
       kindgebondenBudget: kindgebondenBudget,
@@ -101,7 +114,7 @@ export class BeschikbaarInkomen extends Berekenen {
           ? iack.inkomensafhankelijkeCombinatiekorting(
               arbeidsinkomen,
               algemeneGegevens.iacbInkomen,
-              false
+              algemeneGegevens.aow
             )
           : 0,
     };

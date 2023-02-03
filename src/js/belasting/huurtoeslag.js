@@ -26,13 +26,19 @@ import data from "@/js/belasting/belasting_data";
 const HT = data.HT[data.JAAR];
 const HTBP = data.HTBP[data.JAAR];
 
-function huurtoeslag(rekeninkomen, rekenhuur, aantalPersonen) {
+function huurtoeslag(rekeninkomen, rekenhuur, aantalPersonen, aow) {
   // als jonger 23 dan HT.KwKrtGrns
   if (rekenhuur > HT.MaxHuur) {
     return 0;
   }
   let mph = aantalPersonen > 1;
-  let htbp = mph ? HTBP.MPH : HTBP.EPH;
+  let htbp = aow
+    ? mph
+      ? HTBP.MPHAOW
+      : HTBP.EPHAOW
+    : mph
+    ? HTBP.MPH
+    : HTBP.EPH;
   let basishuur =
     (rekeninkomen > htbp.MinInkGr
       ? htbp["Factor a"] * rekeninkomen * rekeninkomen +
@@ -57,7 +63,7 @@ function huurtoeslag(rekeninkomen, rekenhuur, aantalPersonen) {
 function huurtoeslagMax(rekeninkomen) {
   let maxhuur = HT.MaxHuur;
 
-  return huurtoeslag(rekeninkomen, maxhuur, 1);
+  return huurtoeslag(rekeninkomen, maxhuur, 1, false);
 }
 
 export default {

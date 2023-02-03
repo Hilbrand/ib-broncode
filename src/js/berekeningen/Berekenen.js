@@ -27,7 +27,7 @@ export class Berekenen {
     this.vis = vis;
     this.personen = personen;
     this.wonen = wonen;
-    this.algemeneData = this.berekenAlgemeneGegevens(personen, wonen);
+    this.algemeneGegevens = this.berekenAlgemeneGegevens(personen, wonen);
     this.factor = functies.factorBerekening(vis.periode);
   }
 
@@ -35,8 +35,8 @@ export class Berekenen {
     return this.vis.van_tot[1];
   }
 
-  getAlgemeneData() {
-    return this.algemeneData;
+  getAlgemeneGegevens() {
+    return this.algemeneGegevens;
   }
 
   getFactor() {
@@ -45,10 +45,12 @@ export class Berekenen {
 
   berekenAlgemeneGegevens(personen, wonen) {
     let toeslagenpartner = functies.toeslagenPartner(personen);
+    let aow = functies.aow(personen);
     let huren = wonen.woning_type == "huur";
 
     return {
       toeslagenpartner: toeslagenpartner,
+      aow: aow,
       iacbInkomen: iack.bepaalLaagsteArbeidsInkomenAnderen(personen),
       kinderbijslag: kbs.kinderbijslag(personen),
       maxKindgebondenBudget: kgb.maxKindgebondenBudget(

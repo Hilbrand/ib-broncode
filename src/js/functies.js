@@ -23,6 +23,10 @@ function toeslagenPartner(personen) {
   return telPersonen(personen, "V") + telPersonen(personen, "AOW") > 1;
 }
 
+function aow(personen) {
+  return telPersonen(personen, "AOW") > 0;
+}
+
 function negatiefIsNul(getal) {
   return Math.max(0, getal);
 }
@@ -34,6 +38,7 @@ function factorBerekening(periode) {
 export default {
   telPersonen,
   toeslagenPartner,
+  aow,
   negatiefIsNul,
   factorBerekening,
 };

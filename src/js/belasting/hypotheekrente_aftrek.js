@@ -27,9 +27,7 @@ const KSF = data.EWF[data.JAAR].kSchuldFactor;
 
 //  Eigenwoning forfait
 function eigenwoningforfait(wozWaarde) {
-  for (let i = 0; i < EWF.length; i++) {
-    let ewf = EWF[i];
-
+  for (let ewf of EWF) {
     if (wozWaarde < ewf.woz.tm) {
       return Math.floor(
         ewf.minimum

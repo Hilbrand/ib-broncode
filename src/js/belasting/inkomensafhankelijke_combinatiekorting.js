@@ -57,7 +57,7 @@ function inkomensafhankelijkeCombinatiekorting(
     laagstePartnerinkomen < 0
       ? toetsinkomen
       : Math.min(toetsinkomen, laagstePartnerinkomen);
-  let t = tabel[aow ? "H65+" : "H"];
+  let t = aow ? tabel.HAOW : tabel.H;
 
   return arbeidsinkomen < t.MinAInk
     ? 0
