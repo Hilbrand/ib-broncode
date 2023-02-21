@@ -212,14 +212,14 @@ function StackedAreaChart(
   return Object.assign(svg.node(), { scales: { color } });
 }
 
-function makeChart(id, data, width, legenda, legendaFunction) {
-  return StackedAreaChart(id, data, legenda, legendaFunction, {
+function makeChart(id, data, width, legendaFunction) {
+  return StackedAreaChart(id, data, data.legenda, legendaFunction, {
     x: (d) => d.id,
-    y: (d) => d.getal * legenda.getFactorYas(),
+    y: (d) => d.getal * data.legenda.getFactorYas(),
     z: (d) => d.type,
     yDomain: data.bereken.getYDomain(),
     xLabel: "Arbeidsinkomen",
-    yLabel: legenda.getLabelYAs(),
+    yLabel: data.legenda.getLabelYAs(),
     width: width,
     height: 500,
   });

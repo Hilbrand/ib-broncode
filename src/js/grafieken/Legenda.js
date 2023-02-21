@@ -35,7 +35,11 @@ export class Legenda {
 
   setLegendaText(data, length, offset) {}
 
-  getLabelYAs() {}
+  getLabelYAs() {
+    return "";
+  }
 
-  getFactorYas() {}
+  getFactorYas() {
+    return 1;
+  }
 }

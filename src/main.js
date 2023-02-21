@@ -19,10 +19,10 @@ import { createApp } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
 import naive from "naive-ui";
 import App from "./App.vue";
-import Grafiek from "./components/Grafiek.vue";
+import HoofdPanel from "./components/HoofdPanel.vue";
 
 const routes = [
-  { path: "/ib", component: Grafiek, props: (route) => route.query },
+  { path: "/ib", component: HoofdPanel, props: (route) => route.query },
 ];
 
 const router = createRouter({

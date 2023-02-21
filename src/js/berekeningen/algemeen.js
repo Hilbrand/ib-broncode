@@ -17,7 +17,9 @@
 
 import functies from "@/js/functies";
 import { BeschikbaarInkomen } from "@/js/berekeningen/BeschikbaarInkomen";
+import { BeschikbaarInkomenLegenda } from "@/js/grafieken/BeschikbaarInkomenLegenda";
 import { MarginaleDruk } from "@/js/berekeningen/MarginaleDruk";
+import { MarginaleDrukLegenda } from "@/js/grafieken/MarginaleDrukLegenda";
 
 const stap = 100;
 /*
@@ -52,10 +54,19 @@ function log(berekening, berekening2) {
 }
 
 function berekenGrafiekData(type, vis, personen, wonen) {
-  const bereken =
-    "bi" == type
-      ? new BeschikbaarInkomen(vis, personen, wonen)
-      : new MarginaleDruk(vis, personen, wonen);
+  let bereken = null;
+  let legenda = null;
+
+  switch (type) {
+    case "bi":
+      bereken = new BeschikbaarInkomen(vis, personen, wonen);
+      legenda = new BeschikbaarInkomenLegenda();
+      break;
+    case "md":
+      bereken = new MarginaleDruk(vis, personen, wonen);
+      legenda = new MarginaleDrukLegenda();
+      break;
+  }
   const factor = functies.factorBerekening(vis.periode);
   let alles = [];
 
@@ -69,7 +80,7 @@ function berekenGrafiekData(type, vis, personen, wonen) {
       bereken.getFactor()
     );
   }
-  return { bereken: bereken, series: alles };
+  return { bereken: bereken, legenda: legenda, series: alles };
 }
 
 export default {
