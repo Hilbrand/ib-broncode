@@ -4,7 +4,12 @@
       <n-message-provider>
         <n-notification-provider>
           <n-dialog-provider>
-            <router-view></router-view>
+            <n-layout>
+              <n-layout-content>
+                <router-view></router-view>
+              </n-layout-content>
+              <n-layout-footer><FooterPaneel /></n-layout-footer>
+            </n-layout>
           </n-dialog-provider>
         </n-notification-provider>
       </n-message-provider>
@@ -15,6 +20,7 @@
 <script>
 import { defineComponent } from "vue";
 import { NConfigProvider } from "naive-ui";
+import FooterPaneel from "./components/FooterPaneel.vue";
 
 const themeOverrides = {
   common: {
@@ -27,6 +33,9 @@ const themeOverrides = {
 };
 
 export default defineComponent({
+  components: {
+    FooterPaneel,
+  },
   data() {
     return {
       themeOverrides: themeOverrides,

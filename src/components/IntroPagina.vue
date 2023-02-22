@@ -37,24 +37,5 @@
         aan de effectief te betalen belasting.
       </dd>
     </dl>
-    <n-collapse>
-      <n-collapse-item title="Verantwoording" name="disclaimer">
-        <p>
-          De berekeningen zijn met zorg samengesteld, maar het is mogelijk dat
-          er nog fouten in zitten. In de berekeningen hier wordt uitgegaan dat
-          de personen in 1 huishouden in hetzelfde huis wonen. Daardoor zijn
-          niet alle mogelijke variaties meengenomen die invloed hebben op
-          toeslagen. Zo hebben onder andere aow leeftijd, eigen vermogen,
-          leeftijds wisseling binnen jaar, wonen in buitenland invloed op de
-          toeslagen.
-        </p>
-        <p>
-          Voor opmerkingen/aanvullingen/verbeteringen kunt u terecht op
-          <a href="https://github.com/hilbrand/ib-broncode" target="_blank"
-            >https://github.com/hilbrand/ib-broncode</a
-          >.
-        </p>
-      </n-collapse-item>
-    </n-collapse>
   </n-space>
 </template>
