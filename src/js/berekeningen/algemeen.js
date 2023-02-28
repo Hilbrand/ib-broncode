@@ -20,38 +20,10 @@ import { BeschikbaarInkomen } from "@/js/berekeningen/BeschikbaarInkomen";
 import { BeschikbaarInkomenLegenda } from "@/js/grafieken/BeschikbaarInkomenLegenda";
 import { MarginaleDruk } from "@/js/berekeningen/MarginaleDruk";
 import { MarginaleDrukLegenda } from "@/js/grafieken/MarginaleDrukLegenda";
+import { EffectieveBelasting } from "@/js/berekeningen/EffectieveBelasting";
+import { EffectieveBelastingLegenda } from "@/js/grafieken/EffectieveBelastingLegenda";
 
 const stap = 100;
-/*
-function addGrafiekGegevens2(
-  alles,
-  berekening,
-  arbeidsinkomen_grafiek,
-  algemeneGegevens,
-  factor
-) {
-  alles.push({
-    id: arbeidsinkomen_grafiek,
-    type: "belasting percentage",
-    getal:
-      1000 *
-      ((arbeidsinkomen_grafiek - berekening.beschikbaarInkomen) /
-        arbeidsinkomen_grafiek) *
-      100,
-    //      getal: afronden((berekening.beschikbaarInkomen / arbeidsinkomen_grafiek) * 100, factor),
-  });
-}
-*/
-
-function log(berekening, berekening2) {
-  console.log("".padEnd(30, "."));
-  console.log("berekening2.budget:" + berekening2.budget);
-  console.log("berekening1.budget :" + berekening.budget);
-  console.log("berekening2.arbeidsinkomen:" + berekening2.arbeidsinkomen);
-  console.log("berekening1.arbeidsinkomen :" + berekening.arbeidsinkomen);
-  console.log("berekening2:" + JSON.stringify(berekening2));
-  console.log("berekening1:" + JSON.stringify(berekening));
-}
 
 function berekenGrafiekData(type, vis, personen, wonen) {
   let bereken = null;
@@ -65,6 +37,10 @@ function berekenGrafiekData(type, vis, personen, wonen) {
     case "md":
       bereken = new MarginaleDruk(vis, personen, wonen);
       legenda = new MarginaleDrukLegenda();
+      break;
+    case "eb":
+      bereken = new EffectieveBelasting(vis, personen, wonen);
+      legenda = new EffectieveBelastingLegenda();
       break;
   }
   const factor = functies.factorBerekening(vis.periode);
