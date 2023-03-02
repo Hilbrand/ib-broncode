@@ -21,26 +21,24 @@ import { Legenda } from "@/js/grafieken/Legenda";
  * Legenda voor tonen effectieve belasting.
  */
 export class EffectieveBelastingLegenda extends Legenda {
-  setLegendaText(
-    data,
-    length,
-    offset,
-    colorFunction,
-    legendaFunction,
-    berekening
-  ) {
-    let b = berekening.bereken(data[offset].id);
+  constructor(berekenen) {
+    super(berekenen);
+  }
+
+  setLegendaText(data, length, offset) {
+    let entry = data[offset];
+    let b = this.berekenGetallen(data[offset]);
     let ld = {
       grafiek: [],
       titel: "Effectieve belasting",
-      arbeidsInkomen: b.arbeidsInkomen,
+      arbeidsInkomen: data[offset].id.toFixed(),
     };
-    let entry = data[offset];
+
     ld.grafiek.push({
-      color: colorFunction(0),
+      color: this.colorFunction(0),
       naam: entry.type,
-      percentage: this.percentage(b.effectieveBelastingPercentage),
-      bedrag: this.geld(b.effectieveBelasting),
+      percentage: this.percentage(entry.getal),
+      bedrag: this.geld(entry.getal * entry.id * 0.01),
     });
 
     ld.totals = [
@@ -49,10 +47,12 @@ export class EffectieveBelastingLegenda extends Legenda {
         percentage: this.percentage(
           (100 * b.brutoInkomstenBelasting) / b.arbeidsInkomen
         ),
-        bedrag: this.geld(b.brutoInkomstenBelasting),
+        bedrag: this.geld(
+          b.brutoInkomstenBelasting * this.berekenen.getFactor()
+        ),
       },
     ];
-    legendaFunction(ld);
+    this.legendaFunction(ld);
   }
 
   getLabelYAs() {

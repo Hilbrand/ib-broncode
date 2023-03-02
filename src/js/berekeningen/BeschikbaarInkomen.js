@@ -22,10 +22,15 @@ import iack from "@/js/belasting/inkomensafhankelijke_combinatiekorting";
 import kgb from "@/js/belasting/kindgebonden_budget";
 import zt from "@/js/belasting/zorgtoeslag";
 import { Berekenen } from "@/js/berekeningen/Berekenen";
+import { BeschikbaarInkomenLegenda } from "@/js/grafieken/BeschikbaarInkomenLegenda";
 
 export class BeschikbaarInkomen extends Berekenen {
   constructor(vis, personen, wonen) {
     super(vis, personen, wonen);
+  }
+
+  createLegenda() {
+    return new BeschikbaarInkomenLegenda(this);
   }
 
   getYDomain() {
@@ -128,22 +133,18 @@ export class BeschikbaarInkomen extends Berekenen {
     return beschikbaarInkomen;
   }
 
-  verzamelGrafiekSeries(
-    alles,
-    beschikbaarInkomen,
-    arbeidsinkomen_grafiek,
-    factor
-  ) {
+  verzamelGrafiekSeries(alles, beschikbaarInkomen, id) {
+    let factor = this.getFactor();
     if (beschikbaarInkomen.netto !== undefined) {
       alles.push({
-        id: arbeidsinkomen_grafiek,
+        id: id,
         type: "netto",
         getal: this.afronden(beschikbaarInkomen.netto, factor),
       });
     }
     alles.push(
       {
-        id: arbeidsinkomen_grafiek,
+        id: id,
         type: "algemeneHeffingsKorting",
         getal: this.afronden(
           beschikbaarInkomen.algemeneHeffingsKorting,
@@ -151,34 +152,34 @@ export class BeschikbaarInkomen extends Berekenen {
         ),
       },
       {
-        id: arbeidsinkomen_grafiek,
+        id: id,
         type: "arbeidskorting",
         getal: this.afronden(beschikbaarInkomen.arbeidskorting, factor),
       },
       {
-        id: arbeidsinkomen_grafiek,
+        id: id,
         type: this.algemeneGegevens.huren
           ? "huurtoeslag"
           : "hypotheekrenteaftrek",
         getal: this.afronden(beschikbaarInkomen.wonen, factor),
       },
       {
-        id: arbeidsinkomen_grafiek,
+        id: id,
         type: "zorgtoeslag",
         getal: this.afronden(beschikbaarInkomen.zorgtoeslag, factor),
       },
       {
-        id: arbeidsinkomen_grafiek,
+        id: id,
         type: "kinderbijslag",
         getal: this.afronden(beschikbaarInkomen.kinderbijslag, factor),
       },
       {
-        id: arbeidsinkomen_grafiek,
+        id: id,
         type: "kindgebonden budget",
         getal: this.afronden(beschikbaarInkomen.kindgebondenBudget, factor),
       },
       {
-        id: arbeidsinkomen_grafiek,
+        id: id,
         type: "inkomenafh. combi krt",
         getal: this.afronden(
           beschikbaarInkomen.inkomensafhankelijkeCombinatiekorting,

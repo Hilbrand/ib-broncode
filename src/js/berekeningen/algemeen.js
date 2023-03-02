@@ -17,46 +17,34 @@
 
 import functies from "@/js/functies";
 import { BeschikbaarInkomen } from "@/js/berekeningen/BeschikbaarInkomen";
-import { BeschikbaarInkomenLegenda } from "@/js/grafieken/BeschikbaarInkomenLegenda";
 import { MarginaleDruk } from "@/js/berekeningen/MarginaleDruk";
-import { MarginaleDrukLegenda } from "@/js/grafieken/MarginaleDrukLegenda";
 import { EffectieveBelasting } from "@/js/berekeningen/EffectieveBelasting";
-import { EffectieveBelastingLegenda } from "@/js/grafieken/EffectieveBelastingLegenda";
 
 const stap = 100;
 
 function berekenGrafiekData(type, vis, personen, wonen) {
-  let bereken = null;
-  let legenda = null;
+  let berekenen = null;
 
   switch (type) {
     case "bi":
-      bereken = new BeschikbaarInkomen(vis, personen, wonen);
-      legenda = new BeschikbaarInkomenLegenda();
+      berekenen = new BeschikbaarInkomen(vis, personen, wonen);
       break;
     case "md":
-      bereken = new MarginaleDruk(vis, personen, wonen);
-      legenda = new MarginaleDrukLegenda();
+      berekenen = new MarginaleDruk(vis, personen, wonen);
       break;
     case "eb":
-      bereken = new EffectieveBelasting(vis, personen, wonen);
-      legenda = new EffectieveBelastingLegenda();
+      berekenen = new EffectieveBelasting(vis, personen, wonen);
       break;
   }
-  const factor = functies.factorBerekening(vis.periode);
-  let alles = [];
+  berekenen.factor = functies.factorBerekening(vis.periode);
+  let series = [];
 
   for (let i = vis.van_tot[0]; i <= vis.van_tot[1]; i += stap) {
-    let arbeidsinkomen_grafiek = Math.round(i * factor);
+    let id = Math.round(i * berekenen.factor);
 
-    bereken.verzamelGrafiekSeries(
-      alles,
-      bereken.bereken(i),
-      arbeidsinkomen_grafiek,
-      bereken.getFactor()
-    );
+    berekenen.verzamelGrafiekSeries(series, berekenen.bereken(i), id);
   }
-  return { bereken: bereken, legenda: legenda, series: alles };
+  return { berekenen: berekenen, series: series };
 }
 
 export default {

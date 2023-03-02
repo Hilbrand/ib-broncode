@@ -17,10 +17,15 @@
 
 import functies from "@/js/functies";
 import { BeschikbaarInkomen } from "@/js/berekeningen/BeschikbaarInkomen";
+import { MarginaleDrukLegenda } from "@/js/grafieken/MarginaleDrukLegenda";
 
 export class MarginaleDruk extends BeschikbaarInkomen {
   constructor(vis, personen, wonen) {
     super(vis, personen, wonen);
+  }
+
+  createLegenda() {
+    return new MarginaleDrukLegenda(this);
   }
 
   getYDomain() {
@@ -81,20 +86,20 @@ export class MarginaleDruk extends BeschikbaarInkomen {
     return nettoInkomensBelasting - (ΔalgemeneHeffingsKortin + Δarbeidskorting);
   }
 
-  marginaleDrukTotaal(alles, berekening1, berekening2, arbeidsinkomen_grafiek) {
+  marginaleDrukTotaal(alles, berekening1, berekening2, id) {
     let ΔNetto =
       berekening2.beschikbaarInkomen - berekening1.beschikbaarInkomen;
     let ΔBruto = berekening2.arbeidsinkomen - berekening1.arbeidsinkomen;
     let md = ΔNetto > 0 ? (100 - (ΔNetto / ΔBruto) * 100).toFixed(2) : 0;
 
     alles.push({
-      id: arbeidsinkomen_grafiek,
+      id: id,
       type: "marginale druk",
       getal: isNaN(md) ? 0 : md,
     });
   }
 
-  belastingdruk(alles, berekening1, arbeidsinkomen_grafiek) {
+  belastingdruk(alles, berekening1, id) {
     let belastingdruk =
       berekening1.arbeidsinkomen > 0
         ? functies.negatiefIsNul(
@@ -104,7 +109,7 @@ export class MarginaleDruk extends BeschikbaarInkomen {
           )
         : 0;
     alles.push({
-      id: arbeidsinkomen_grafiek,
+      id: id,
       type: "belastingdruk",
       getal: belastingdruk < 0 ? 0 : belastingdruk.toFixed(2),
     });
@@ -213,17 +218,15 @@ export class MarginaleDruk extends BeschikbaarInkomen {
     };
   }
 
-  verzamelGrafiekSeries(alles, marginaleDruk, arbeidsinkomen_grafiek, factor) {
+  verzamelGrafiekSeries(alles, marginaleDruk, id) {
     alles.push({
-      id: arbeidsinkomen_grafiek,
+      id: id,
       type: "netto belasting",
-      getal: this.afronden(marginaleDruk.nettoInkomensBelasting, factor),
+      getal: this.afronden(
+        marginaleDruk.nettoInkomensBelasting,
+        this.getFactor()
+      ),
     });
-    super.verzamelGrafiekSeries(
-      alles,
-      marginaleDruk,
-      arbeidsinkomen_grafiek,
-      factor
-    );
+    super.verzamelGrafiekSeries(alles, marginaleDruk, id);
   }
 }

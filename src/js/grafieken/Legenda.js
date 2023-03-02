@@ -21,9 +21,25 @@
 export class Legenda {
   static EURO = "€";
 
+  constructor(berekenen) {
+    this.berekenen = berekenen;
+  }
+
+  setColorFunction(colorFunction) {
+    this.colorFunction = colorFunction;
+  }
+
+  setLegendaFunction(legendaFunction) {
+    this.legendaFunction = legendaFunction;
+  }
+
+  setUpdateFunction(updateFunction) {
+    this.updateFunction = updateFunction;
+  }
+
   percentage(getal) {
     return (
-      (getal > 0 ? (1 * getal).toFixed(1) : "-").padStart(5, "\u00A0") + " %"
+      (getal > 0 ? (1 * getal).toFixed(2) : "-").padStart(5, "\u00A0") + " %"
     );
   }
 
@@ -35,6 +51,18 @@ export class Legenda {
 
   setLegendaText(data, length, offset) {}
 
+  setGetal() {
+    let b = this.berekenen.bereken(this.berekenen.vis.arbeidsInkomen);
+    let id = this.berekenen.vis.arbeidsInkomen * this.berekenen.getFactor();
+    var data = [];
+    this.berekenen.verzamelGrafiekSeries(data, b, id);
+    this.setLegendaText(data, data.length, 0);
+    this.updateFunction(id);
+  }
+
+  berekenGetallen(entry) {
+    return this.berekenen.bereken(entry.id / this.berekenen.getFactor());
+  }
   getLabelYAs() {
     return "";
   }

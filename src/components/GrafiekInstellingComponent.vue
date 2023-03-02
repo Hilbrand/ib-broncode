@@ -31,6 +31,16 @@
           <n-radio label="per Maand" key="maand" value="maand" size="small" />
         </n-space>
       </n-radio-group>
+      <p>Vul jaar inkomen in om dat bedrag te berekenen:</p>
+      <n-input-number
+        placeholder="Arbeidsinkomen"
+        min="0"
+        step="1"
+        size="small"
+        v-model:value="grafiek.arbeidsInkomen"
+      >
+        <template #prefix>&euro;</template>
+      </n-input-number>
     </n-space>
   </n-card>
 </template>
@@ -43,6 +53,7 @@ export default {
       grafiek: {
         periode: null,
         van_tot: [],
+        arbeidsInkomen: 0,
         svt: "p",
         sv_abs: 1000,
         sv_p: 3,

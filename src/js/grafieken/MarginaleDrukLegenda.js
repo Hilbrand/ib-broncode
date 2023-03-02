@@ -20,34 +20,32 @@ import { Legenda } from "@/js/grafieken/Legenda";
  * Legenda voor tonen marginale druk.
  */
 export class MarginaleDrukLegenda extends Legenda {
-  setLegendaText(
-    data,
-    length,
-    offset,
-    colorFunction,
-    legendaFunction,
-    berekening
-  ) {
+  constructor(berekenen) {
+    super(berekenen);
+  }
+
+  setLegendaText(data, length, offset) {
     let totaal = 0;
-    let b = berekening.bereken(data[offset].id);
+    let b = this.berekenGetallen(data[offset]);
     let ld = {
       grafiek: [],
       titel: "Salarisverhoging",
-      arbeidsInkomen: data[offset].id,
+      arbeidsInkomen: data[offset].id.toFixed(),
     };
+    let factor = this.berekenen.getFactor();
 
     for (let j = 0; j < length; j++) {
       let entry = data[offset + j];
       let getal = entry.getal;
       totaal += getal;
       ld.grafiek.unshift({
-        color: colorFunction(j),
+        color: this.colorFunction(j),
         naam: entry.type,
         percentage: this.percentage(getal),
-        bedrag: this.geld(b.arbeidsinkomen * (getal / 100)),
+        bedrag: this.geld(b.arbeidsinkomen * factor * (getal / 100)),
       });
     }
-    let md = b.arbeidsinkomen * 0.01 * totaal;
+    let md = b.arbeidsinkomen * factor * 0.01 * totaal;
     ld.totals = [
       {
         naam: "marginale druk",
@@ -57,15 +55,15 @@ export class MarginaleDrukLegenda extends Legenda {
       {
         naam: "netto",
         percentage: this.percentage(100 - totaal),
-        bedrag: this.geld(b.arbeidsinkomen.toFixed() - md),
+        bedrag: this.geld((b.arbeidsinkomen * factor).toFixed() - md),
       },
       {
         naam: "bruto",
         percentage: this.percentage(100),
-        bedrag: this.geld(b.arbeidsinkomen),
+        bedrag: this.geld(b.arbeidsinkomen * factor),
       },
     ];
-    legendaFunction(ld);
+    this.legendaFunction(ld);
   }
 
   getLabelYAs() {

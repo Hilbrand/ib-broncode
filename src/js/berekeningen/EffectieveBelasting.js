@@ -17,10 +17,15 @@
 
 import functies from "@/js/functies";
 import { BeschikbaarInkomen } from "@/js/berekeningen/BeschikbaarInkomen";
+import { EffectieveBelastingLegenda } from "@/js/grafieken/EffectieveBelastingLegenda";
 
 export class EffectieveBelasting extends BeschikbaarInkomen {
   constructor(vis, personen, wonen) {
     super(vis, personen, wonen);
+  }
+
+  createLegenda() {
+    return new EffectieveBelastingLegenda(this);
   }
 
   getYDomain() {
@@ -49,18 +54,13 @@ export class EffectieveBelasting extends BeschikbaarInkomen {
     };
   }
 
-  verzamelGrafiekSeries(
-    alles,
-    beschikbaarInkomen,
-    arbeidsinkomen_grafiek,
-    factor
-  ) {
+  verzamelGrafiekSeries(alles, beschikbaarInkomen, id) {
     alles.push({
-      id: arbeidsinkomen_grafiek,
+      id: id,
       type: "effectieve belasting",
       getal: this.afronden(
         beschikbaarInkomen.effectieveBelastingPercentage,
-        factor
+        this.getFactor()
       ),
     });
   }

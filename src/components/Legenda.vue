@@ -8,10 +8,8 @@
     </n-space>
     <n-space vertical v-else>
       <p>
-        <!-- <n-input-number :value="data.arbeidsInkomen" /> -->
-        Arbeidsinkomen (Salaris): &euro; {{ data.arbeidsInkomen }} <br />{{
-          data.titel
-        }}
+        <h4>Arbeidsinkomen (Salaris): &euro; {{ data.arbeidsInkomen }} </h4>
+        <h4>{{ data.titel }}</h4>
       </p>
       <n-table :single-line="false" size="tiny" class="table">
         <tbody>

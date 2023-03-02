@@ -11,9 +11,8 @@ import * as d3 from "d3";
 
 function StackedAreaChart(
   id,
-  ad,
+  data,
   legenda,
-  legendaFunction,
   {
     x = ([x]) => x, // given d in data, returns the (ordinal) x-value
     y = ([, y]) => y, // given d in data, returns the (quantitative) y-value
@@ -40,11 +39,11 @@ function StackedAreaChart(
     colors = d3.schemeTableau10, // array of colors for z
   } = {}
 ) {
-  const data = ad.series;
   // Compute values.
   const X = d3.map(data, x);
   const Y = d3.map(data, y);
   const Z = d3.map(data, z);
+  legenda.setColorFunction((i) => color(Z[i]));
 
   // Compute default x- and z-domains, and unique the z-domain.
   if (xDomain === undefined) xDomain = d3.extent(X);
@@ -172,12 +171,15 @@ function StackedAreaChart(
     .attr("width", width)
     .attr("height", height);
 
+  legenda.setUpdateFunction((i) => {
+    let x = xScale(i);
+    hoverLine.attr("x1", x).attr("x2", x);
+  });
   // rectHover
   svg.on("mouseout", hoverMouseOff).on("mousemove", hoverMouseOn);
 
   function hoverMouseOn(event) {
     var mouse_x = d3.pointer(event)[0];
-    var mouse_y = d3.pointer(event)[1];
     var mouseXInvert = xScale.invert(mouse_x);
     var bisectX = d3.bisector((d) => d.id).left;
     var i = bisectX(data, mouseXInvert); // returns the index to the current data item
@@ -191,15 +193,7 @@ function StackedAreaChart(
     if (d == undefined) {
       return;
     }
-    let colorFunction = (i) => color(Z[i]);
-    legenda.setLegendaText(
-      data,
-      series.length,
-      i,
-      colorFunction,
-      legendaFunction,
-      ad.bereken
-    );
+    legenda.setLegendaText(data, series.length, i);
     hoverLine.attr("x1", mouse_x).attr("x2", mouse_x);
 
     hoverLineGroup.style("opacity", 1);
@@ -212,17 +206,21 @@ function StackedAreaChart(
   return Object.assign(svg.node(), { scales: { color } });
 }
 
-function makeChart(id, data, width, legendaFunction) {
-  return StackedAreaChart(id, data, data.legenda, legendaFunction, {
+function makeChart(id, gegevens, width, legendaFunction) {
+  let legenda = gegevens.berekenen.getLegenda();
+  legenda.setLegendaFunction(legendaFunction);
+
+  StackedAreaChart(id, gegevens.series, legenda, {
     x: (d) => d.id,
-    y: (d) => d.getal * data.legenda.getFactorYas(),
+    y: (d) => d.getal * legenda.getFactorYas(),
     z: (d) => d.type,
-    yDomain: data.bereken.getYDomain(),
+    yDomain: gegevens.berekenen.getYDomain(),
     xLabel: "Arbeidsinkomen",
-    yLabel: data.legenda.getLabelYAs(),
+    yLabel: legenda.getLabelYAs(),
     width: width,
     height: 500,
   });
+  legenda.setGetal();
 }
 
 export default {

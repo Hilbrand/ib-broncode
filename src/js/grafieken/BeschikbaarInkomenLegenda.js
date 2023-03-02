@@ -21,20 +21,17 @@ import { Legenda } from "@/js/grafieken/Legenda";
  * Legenda voor tonen beschikbaar inkomen.
  */
 export class BeschikbaarInkomenLegenda extends Legenda {
-  setLegendaText(
-    data,
-    length,
-    offset,
-    colorFunction,
-    legendaFunction,
-    berekening
-  ) {
+  constructor(berekenen) {
+    super(berekenen);
+  }
+
+  setLegendaText(data, length, offset) {
     let totaal = 0;
-    let b = berekening.bereken(data[offset].id);
+    let b = this.berekenGetallen(data[offset]);
     let ld = {
       grafiek: [],
-      titel: "Beschikbaar inkomen" + b.id,
-      arbeidsInkomen: data[offset].id,
+      titel: "Beschikbaar inkomen",
+      arbeidsInkomen: data[offset].id.toFixed(),
     };
 
     for (let j = 0; j < length; j++) {
@@ -42,17 +39,19 @@ export class BeschikbaarInkomenLegenda extends Legenda {
       let getal = entry.getal;
       totaal += getal;
       ld.grafiek.unshift({
-        color: colorFunction(j),
+        color: this.colorFunction(j),
         naam: entry.type,
         bedrag: this.geld(entry.getal),
       });
     }
-    let bi = totaal;
     ld.totals = [
-      { naam: "beschikbaar inkomen", bedrag: this.geld(bi) },
-      { naam: "bruto", bedrag: this.geld(b.arbeidsinkomen) },
+      { naam: "beschikbaar inkomen", bedrag: this.geld(totaal) },
+      {
+        naam: "bruto",
+        bedrag: this.geld(b.arbeidsinkomen * this.berekenen.getFactor()),
+      },
     ];
-    legendaFunction(ld);
+    this.legendaFunction(ld);
   }
 
   getLabelYAs() {
