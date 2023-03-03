@@ -13,7 +13,8 @@
       v-model:value="gegevens.tab"
     >
       <n-tab-pane name="intro" tab="Introductie">
-        <IntroPagina />
+        <IntroBluemink v-if="$route.path == '/ib/bluemink'" />
+        <IntroPagina v-else />
       </n-tab-pane>
       <n-tab-pane name="bi" tab="Beschikbaar Inkomen" key="bi">
         <n-space>
@@ -79,6 +80,7 @@
 <script>
 import { ref, nextTick } from "vue";
 import IntroPagina from "./IntroPagina.vue";
+import IntroBluemink from "./IntroBluemink.vue";
 import HuishoudenComponent from "./HuishoudenComponent.vue";
 import WonenComponent from "./WonenComponent.vue";
 import GrafiekInstellingComponent from "./GrafiekInstellingComponent.vue";
@@ -94,8 +96,8 @@ export default {
     GrafiekInstellingComponent,
     IntroPagina,
     Legenda,
+    IntroBluemink,
   },
-  props: ["route"],
   data() {
     return {
       tabsRef: ref(null),
@@ -110,6 +112,7 @@ export default {
         grafiek: {
           periode: null,
           van_tot: [],
+          arbeidsInkomen: 0,
           svt: "p",
           sv_abs: 1000,
           sv_p: 3,
@@ -170,6 +173,7 @@ export default {
       stacked_chart.makeChart(
         "#" + this.gegevens.tab,
         algemeen.berekenGrafiekData(
+          this.$route.path,
           this.gegevens.tab,
           this.gegevens.grafiek,
           this.gegevens.personen,

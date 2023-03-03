@@ -19,21 +19,26 @@ import functies from "@/js/functies";
 import { BeschikbaarInkomen } from "@/js/berekeningen/BeschikbaarInkomen";
 import { MarginaleDruk } from "@/js/berekeningen/MarginaleDruk";
 import { EffectieveBelasting } from "@/js/berekeningen/EffectieveBelasting";
+import { BlueminkBeschikbaarInkomen } from "@/bluemink/BlueminkBeschikbaarInkomen";
 
 const stap = 100;
 
-function berekenGrafiekData(type, vis, personen, wonen) {
+function berekenGrafiekData(path, type, vis, personen, wonen) {
   let berekenen = null;
+  let bi =
+    path == "/ib/bluemink"
+      ? new BlueminkBeschikbaarInkomen(vis, personen, wonen)
+      : new BeschikbaarInkomen(vis, personen, wonen);
 
   switch (type) {
     case "bi":
-      berekenen = new BeschikbaarInkomen(vis, personen, wonen);
+      berekenen = bi;
       break;
     case "md":
-      berekenen = new MarginaleDruk(vis, personen, wonen);
+      berekenen = new MarginaleDruk(vis, personen, wonen, bi);
       break;
     case "eb":
-      berekenen = new EffectieveBelasting(vis, personen, wonen);
+      berekenen = new EffectieveBelasting(vis, personen, wonen, bi);
       break;
   }
   berekenen.factor = functies.factorBerekening(vis.periode);

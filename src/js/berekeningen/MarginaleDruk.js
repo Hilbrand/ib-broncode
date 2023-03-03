@@ -16,12 +16,13 @@
  */
 
 import functies from "@/js/functies";
-import { BeschikbaarInkomen } from "@/js/berekeningen/BeschikbaarInkomen";
 import { MarginaleDrukLegenda } from "@/js/grafieken/MarginaleDrukLegenda";
+import { Berekenen } from "@/js/berekeningen/Berekenen";
 
-export class MarginaleDruk extends BeschikbaarInkomen {
-  constructor(vis, personen, wonen) {
+export class MarginaleDruk extends Berekenen {
+  constructor(vis, personen, wonen, bi) {
     super(vis, personen, wonen);
+    this.bi = bi;
   }
 
   createLegenda() {
@@ -33,8 +34,8 @@ export class MarginaleDruk extends BeschikbaarInkomen {
   }
 
   bereken(arbeidsInkomen) {
-    const berekening1 = this.berekenBeschikbaarInkomen(arbeidsInkomen);
-    const berekening2 = this.berekenBeschikbaarInkomen(
+    const berekening1 = this.bi.bereken(arbeidsInkomen);
+    const berekening2 = this.bi.bereken(
       arbeidsInkomen + this.salarisVerhoging(arbeidsInkomen)
     );
 
@@ -227,6 +228,6 @@ export class MarginaleDruk extends BeschikbaarInkomen {
         this.getFactor()
       ),
     });
-    super.verzamelGrafiekSeries(alles, marginaleDruk, id);
+    this.bi.verzamelGrafiekSeries(alles, marginaleDruk, id);
   }
 }

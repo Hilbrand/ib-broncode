@@ -17,7 +17,8 @@
 
 import { assert, expect, test } from 'vitest'
 import algemeen from '../../../src/js/berekeningen/algemeen.js'
-import {MarginaleDruk} from '../../../src/js/berekeningen/MarginaleDruk.js'
+import { BeschikbaarInkomen } from "../../../src/js/berekeningen/BeschikbaarInkomen";
+import { MarginaleDruk } from '../../../src/js/berekeningen/MarginaleDruk.js'
 
 test('Marginale Druk Details ', () => {
   const vis = {periode:'jaar', svt: 'p', sv_p: 3};
@@ -25,7 +26,7 @@ test('Marginale Druk Details ', () => {
   const wonen = {woning_type:'huur', huur:600};
    
   const ai = 27800;
-  const md = new MarginaleDruk(vis, personen, wonen); 
+  const md = new MarginaleDruk(vis, personen, wonen, new BeschikbaarInkomen(vis, personen, wonen));
   let mdd = md.bereken(ai);
 
   let expected = {

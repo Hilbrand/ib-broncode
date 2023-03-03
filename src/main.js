@@ -23,6 +23,7 @@ import HoofdPanel from "./components/HoofdPanel.vue";
 
 const routes = [
   { path: "/ib", component: HoofdPanel, props: (route) => route.query },
+  { path: "/ib/bluemink", component: HoofdPanel, props: (route) => route },
 ];
 
 const router = createRouter({
