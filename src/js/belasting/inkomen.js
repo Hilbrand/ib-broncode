@@ -18,71 +18,27 @@
 /**
  * Berekeing van inkomen, arbeidskorting en algemeneheffingskorting
  *
- * https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_tarieven/heffingskortingen/algemene_heffingskorting/tabel-algemene-heffingskorting-2023
- * https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_tarieven/heffingskortingen/arbeidskorting/tabel-arbeidskorting-2023
+ * AHK https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_tarieven/heffingskortingen/algemene_heffingskorting/tabel-algemene-heffingskorting-2023
+ * AK https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_tarieven/heffingskortingen/arbeidskorting/tabel-arbeidskorting-2023
  * IB AOW: https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_tarieven/boxen_en_tarieven/overzicht_tarieven_en_schijven/u-hebt-voor-2023-aow-leeftijd
  */
 
 import data from "@/js/belasting/belasting_data";
-import d from "@/js/details";
+import ikd from "@/js/belasting/inkomen_details";
 
 const AHK = data.AHK[data.JAAR];
 const AK = data.AK[data.JAAR];
 const IB = data.IB[data.JAAR];
 
-function algemeneHeffingsKortingDetail(
-  toetsingsinkomen,
-  maxBelasting,
-  aow,
-  ahk,
-  ahkBerekend
-) {
-  let conditie =
-    (ahk.inkomen.van > 0 ? "vanaf " + d.euro(ahk.inkomen.van) : "") +
-    (" tot " + d.euro(ahk.inkomen.tot));
-  let berekening =
-    (ahk.minimum > 0 ? d.euro(ahk.minimum) : "") +
-    (ahk.factor > 0
-      ? " - " +
-        (ahk.factor * 100).toFixed(3) +
-        "% x (" +
-        d.euro(toetsingsinkomen) +
-        " - " +
-        d.euro(ahk.minus) +
-        ")"
-      : "");
-  let ahkMax = d.euro(Math.round(algemeneHeffingsKorting));
-  var condities = [d.aow(aow) + conditie];
-  if (maxBelasting < algemeneHeffingsKorting) {
-    condities.push(
-      "Begrensd op te betalen belasting " +
-        d.euro(maxBelasting) +
-        ", berekend: " +
-        ahkMax
-    );
-  }
-
-  return {
-    "algenene heffingskorting": {
-      condities: condities,
-      berekening: berekening,
-      getal: d.euro(ahkBerekend),
-    },
-  };
-}
-
-function algemeneHeffingsKortingDetailBoven(aow) {
-  let ahkt = aow ? AHK.AOW : AHK.V;
-  let conditie = "vanaf " + d.euro(ahkt.slice(-1).pop().inkomen.tot);
-  return {
-    "algenene heffingskorting": {
-      condities: conditie,
-      berekening: d.euro(0),
-      getal: d.euro(0),
-    },
-  };
-}
-
+/**
+ * Berekenen van Algemene hefffingskorting.
+ *
+ * @param {*} toetsingsinkomen
+ * @param {*} maxBelasting maximum belasting dat betaald kan worden
+ * @param {boolean} aow true als aow leeftijd
+ * @param {boolean} details true om detail berekening terug te krijgen
+ * @returns
+ */
 function algemeneHeffingsKorting(
   toetsingsinkomen,
   maxBelasting,
@@ -99,31 +55,63 @@ function algemeneHeffingsKorting(
       );
 
       return details
-        ? algemeneHeffingsKortingDetail(
+        ? ikd.algemeneHeffingsKortingDetails(
             toetsingsinkomen,
             maxBelasting,
             aow,
             ahk,
+            algemeneHeffingsKorting,
             ahkBerekend
           )
         : ahkBerekend;
     }
   }
-  return details ? algemeneHeffingsKortingDetailBoven(aow) : 0;
+  return details ? ikd.algemeneHeffingsKortingDetailsBoven(aow) : 0;
 }
 
-function arbeidskorting(arbeidsinkomen, maxArbeidsinkomen, aow) {
+/**
+ * Berekenen van arbeidskorting
+ *
+ * @param {B} arbeidsinkomen
+ * @param {*} maxArbeidsinkomen
+ * @param {boolean} aow true als aow leeftijd
+ * @param {boolean} details true om detail berekening terug te krijgen
+ * @returns
+ */
+function arbeidskorting(
+  arbeidsinkomen,
+  maxArbeidsinkomen,
+  aow,
+  details = false
+) {
   let akt = aow ? AK.AOW : AK.V;
   for (let ak of akt) {
     if (arbeidsinkomen < ak.inkomen.tot) {
       let arbeidskorting = ak.minimum + (arbeidsinkomen - ak.minus) * ak.factor;
+      let akBerekend = Math.round(Math.min(maxArbeidsinkomen, arbeidskorting));
 
-      return Math.round(Math.min(maxArbeidsinkomen, arbeidskorting));
+      return details
+        ? ikd.arbeidskortingDetails(
+            arbeidsinkomen,
+            maxArbeidsinkomen,
+            aow,
+            akt,
+            arbeidskorting,
+            arbeidskortingakBerekend
+          )
+        : akBerekend;
     }
   }
-  return 0;
+  return details ? ikd.arbeidskortingDetailsBoven(aow) : 0;
 }
 
+/**
+ *
+ * @param {*} toetsingsInkomen
+ * @param {*} maxBelasting
+ * @param {*} aow
+ * @returns
+ */
 function maxArbeidsKorting(toetsingsInkomen, maxBelasting, aow) {
   return (
     inkomstenBelasting(toetsingsInkomen, aow) -
@@ -131,10 +119,22 @@ function maxArbeidsKorting(toetsingsInkomen, maxBelasting, aow) {
   );
 }
 
+/**
+ *
+ * @param {*} arbeidsinkomen
+ * @param {*} hypotheekRenteAftrek
+ * @returns
+ */
 function toetsingsinkomen(arbeidsinkomen, hypotheekRenteAftrek) {
   return Math.max(0, arbeidsinkomen + (hypotheekRenteAftrek || 0));
 }
 
+/**
+ *
+ * @param {*} arbeidsinkomen
+ * @param {*} personen
+ * @returns
+ */
 function toeslagenToetsInkomen(arbeidsinkomen, personen) {
   return (
     arbeidsinkomen +

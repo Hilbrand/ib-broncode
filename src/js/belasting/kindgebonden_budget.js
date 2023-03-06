@@ -27,6 +27,10 @@ import functies from "@/js/functies";
 const TABEL = data.TABEL[data.JAAR];
 const MAXKGB = data.MAXKGB[data.JAAR];
 
+const KGB_BRONNEN = [
+  "https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/themaoverstijgend/brochures_en_publicaties/berekening-kindgebonden-budget-2023",
+];
+
 function rekenBasis(aantalKinderen, toeslagenPartner) {
   return aantalKinderen > 0
     ? MAXKGB[aantalKinderen] + (toeslagenPartner ? 0 : TABEL.VHgeenTP)

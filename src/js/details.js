@@ -19,11 +19,27 @@ function euro(getal) {
   return "&euro; " + getal;
 }
 
+function f2p(factor, precisie) {
+  return (factor * 100).toFixed(precisie);
+}
+
 function aow(aow) {
   return (aow ? "" : "Niet ") + "AOW-leeftijd: ";
 }
 
+function bouw(name, condities, berekeningen, getal, bronnen) {
+  return {
+    name: name,
+    condities: condities,
+    berekening: berekeningen,
+    getal: euro(getal),
+    bronnen: bronnen,
+  };
+}
+
 export default {
   euro,
+  f2p,
   aow,
+  bouw,
 };

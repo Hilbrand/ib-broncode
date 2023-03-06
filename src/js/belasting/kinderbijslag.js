@@ -17,13 +17,19 @@
 
 /**
  * Berekeing van kinderbijslag.
- *
+ * De kinderbijslag wordt berekent per kwartaal.
  */
 
 import data from "@/js/belasting/belasting_data";
 import functies from "../functies";
 
 const KBS = data.KBS[data.JAAR];
+
+const KBS_BRONNEN = [
+  "https://www.svb.nl/nl/kinderbijslag/bedragen-betaaldagen/bedragen-kinderbijslag",
+];
+
+const KWARTALEN = 4;
 
 function kinderbijslag(personen) {
   let k05 = functies.telPersonen(personen, "K05");
@@ -32,7 +38,7 @@ function kinderbijslag(personen) {
   let k1617 = functies.telPersonen(personen, "K1617");
 
   return Math.floor(
-    4 * (k05 * KBS.K05 + k611 * KBS.K611 + (k1215 + k1617) * KBS.K1217)
+    KWARTALEN * (k05 * KBS.K05 + k611 * KBS.K611 + (k1215 + k1617) * KBS.K1217)
   );
 }
 

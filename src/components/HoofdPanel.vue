@@ -49,7 +49,7 @@
                 min="0"
                 step="1"
                 size="tiny"
-                style="width: 100px"
+                style="width: 110px"
               >
                 <template #prefix>€</template></n-input-number
               >
