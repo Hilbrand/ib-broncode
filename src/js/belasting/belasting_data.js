@@ -687,7 +687,7 @@ const AHK = {
         inkomen: { van: 22661, tot: 73031 },
         minimum: 3070,
         minus: 22660,
-        factor: -0.06095,
+        factor: 0.06095,
       },
     ],
     AOW: [
@@ -701,7 +701,7 @@ const AHK = {
         inkomen: { van: 22661, tot: 73031 },
         minimum: 1583,
         minus: 22660,
-        factor: -0.03141,
+        factor: 0.03141,
       },
     ],
   },

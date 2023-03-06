@@ -35,9 +35,29 @@ test('Algemene Heffings Korting 40.000', () => {
   expect(inkomen.algemeneHeffingsKorting(40000, 10000, true)).toEqual(1038)
 })
 
+test('Algemene Heffings Korting 40.000', () => {
+  expect(inkomen.algemeneHeffingsKorting(40000, 1000, false)).toEqual(1000)
+  expect(inkomen.algemeneHeffingsKorting(40000, 1000, true)).toEqual(1000)
+})
+
 test('Algemene Heffings Korting 100.000', () => {
   expect(inkomen.algemeneHeffingsKorting(100000, 10000, false)).toEqual(0)
   expect(inkomen.algemeneHeffingsKorting(100000, 10000, true)).toEqual(0)
+})
+
+test('Algemene Heffings Korting 40.000 details', () => {
+  // expect(inkomen.algemeneHeffingsKorting(40000, 10000, false, true)).toEqual(2013)
+  expect(inkomen.algemeneHeffingsKorting(40000, 10000, true, true)).toEqual(1038)
+})
+
+test('Algemene Heffings Korting 40.000 details', () => {
+  // expect(inkomen.algemeneHeffingsKorting(40000, 1000, false, true)).toEqual(1000)
+  expect(inkomen.algemeneHeffingsKorting(40000, 1000, true, true)).toEqual(1000)
+})
+
+test('Algemene Heffings Korting 100.000 details', () => {
+  // expect(inkomen.algemeneHeffingsKorting(100000, 10000, false, true)).toEqual(0)
+  expect(inkomen.algemeneHeffingsKorting(100000, 10000, true, true)).toEqual(0)
 })
 
 // test arbeidskorting

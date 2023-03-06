@@ -24,22 +24,92 @@
  */
 
 import data from "@/js/belasting/belasting_data";
+import d from "@/js/details";
 
 const AHK = data.AHK[data.JAAR];
 const AK = data.AK[data.JAAR];
 const IB = data.IB[data.JAAR];
 
-function algemeneHeffingsKorting(toetsingsinkomen, maxBelasting, aow) {
+function algemeneHeffingsKortingDetail(
+  toetsingsinkomen,
+  maxBelasting,
+  aow,
+  ahk,
+  ahkBerekend
+) {
+  let conditie =
+    (ahk.inkomen.van > 0 ? "vanaf " + d.euro(ahk.inkomen.van) : "") +
+    (" tot " + d.euro(ahk.inkomen.tot));
+  let berekening =
+    (ahk.minimum > 0 ? d.euro(ahk.minimum) : "") +
+    (ahk.factor > 0
+      ? " - " +
+        (ahk.factor * 100).toFixed(3) +
+        "% x (" +
+        d.euro(toetsingsinkomen) +
+        " - " +
+        d.euro(ahk.minus) +
+        ")"
+      : "");
+  let ahkMax = d.euro(Math.round(algemeneHeffingsKorting));
+  var condities = [d.aow(aow) + conditie];
+  if (maxBelasting < algemeneHeffingsKorting) {
+    condities.push(
+      "Begrensd op te betalen belasting " +
+        d.euro(maxBelasting) +
+        ", berekend: " +
+        ahkMax
+    );
+  }
+
+  return {
+    "algenene heffingskorting": {
+      condities: condities,
+      berekening: berekening,
+      getal: d.euro(ahkBerekend),
+    },
+  };
+}
+
+function algemeneHeffingsKortingDetailBoven(aow) {
+  let ahkt = aow ? AHK.AOW : AHK.V;
+  let conditie = "vanaf " + d.euro(ahkt.slice(-1).pop().inkomen.tot);
+  return {
+    "algenene heffingskorting": {
+      condities: conditie,
+      berekening: d.euro(0),
+      getal: d.euro(0),
+    },
+  };
+}
+
+function algemeneHeffingsKorting(
+  toetsingsinkomen,
+  maxBelasting,
+  aow,
+  details = false
+) {
   let ahkt = aow ? AHK.AOW : AHK.V;
   for (let ahk of ahkt) {
     if (toetsingsinkomen < ahk.inkomen.tot) {
       let algemeneHeffingsKorting =
-        ahk.minimum + (toetsingsinkomen - ahk.minus) * ahk.factor;
+        ahk.minimum - (toetsingsinkomen - ahk.minus) * ahk.factor;
+      let ahkBerekend = Math.round(
+        Math.min(maxBelasting, algemeneHeffingsKorting)
+      );
 
-      return Math.round(Math.min(maxBelasting, algemeneHeffingsKorting));
+      return details
+        ? algemeneHeffingsKortingDetail(
+            toetsingsinkomen,
+            maxBelasting,
+            aow,
+            ahk,
+            ahkBerekend
+          )
+        : ahkBerekend;
     }
   }
-  return 0;
+  return details ? algemeneHeffingsKortingDetailBoven(aow) : 0;
 }
 
 function arbeidskorting(arbeidsinkomen, maxArbeidsinkomen, aow) {
