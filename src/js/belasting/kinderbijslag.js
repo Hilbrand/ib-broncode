@@ -24,12 +24,14 @@ import data from "@/js/belasting/belasting_data";
 import functies from "../functies";
 
 const KBS = data.KBS[data.JAAR];
-
 const KBS_BRONNEN = [
   "https://www.svb.nl/nl/kinderbijslag/bedragen-betaaldagen/bedragen-kinderbijslag",
 ];
 
 const KWARTALEN = 4;
+
+function kinderbijslagDetails(personen) {
+}
 
 function kinderbijslag(personen) {
   let k05 = functies.telPersonen(personen, "K05");

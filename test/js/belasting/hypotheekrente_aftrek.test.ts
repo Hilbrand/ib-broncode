@@ -21,6 +21,12 @@ import ha from '../../../src/js/belasting/hypotheekrente_aftrek.js'
 // (400 - 1050) * 83.33
 test('Hypotheek kleine schuld is optelling', () => {
   expect(ha.hypotheekRenteAftrek(400, 300000)).toEqual(541)
+  expect(ha.hypotheekRenteAftrek(400, 300000, true)).toEqual(541)
+})
+
+// (400 - 1050) * 83.33
+test('Hypotheek kleine schuld is optelling', () => {
+  expect(ha.hypotheekRenteAftrek(1000, 342857)).toEqual(165)
 })
 
 // 4000 - 1050 = 2950

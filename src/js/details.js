@@ -31,7 +31,7 @@ function bouw(name, condities, berekeningen, getal, bronnen) {
   return {
     name: name,
     condities: condities,
-    berekening: berekeningen,
+    berekeningen: berekeningen,
     getal: euro(getal),
     bronnen: bronnen,
   };

@@ -21,29 +21,63 @@
  *  https://www.belastingdienst.nl/wps/wcm/connect/nl/koopwoning/content/hoe-werkt-eigenwoningforfait
  */
 import data from "@/js/belasting/belasting_data";
+import d from "@/js/details";
 
 const EWF = data.EWF[data.JAAR].ewf;
 const KSF = data.EWF[data.JAAR].kSchuldFactor;
+const EWF_BRONNEN = [
+  'Eigenwoningforfait berekening',
+  "https://www.belastingdienst.nl/wps/wcm/connect/nl/koopwoning/content/hoe-werkt-eigenwoningforfait"
+];
+
+function eigenwoningforfaitDetails(wozWaarde, ewf, ewfBerekend) {
+  let berekening;
+  let conditie;
+  if (ewf.minimum) {
+    conditie = "WOZ waarde " + d.euro(wozWaarde) + " boven " + d.euro(ewf.woz.van);
+    berekening = d.eur(ewf.minimum) + " + " + d.f2p(ewf.factor, 2) + " x (" + d.euro(wozWaarde) +
+     " - " - d.euro(ewoz.van) + ")";
+
+  } else {
+    conditie = "WOZ waarde " + d.euro(wozWaarde) + " tussen " + d.euro(ewf.woz.van) + " en " + d.euro(ewf.woz.tm);
+    berekening = "Eigenwoning forfait " + d.f2p(ewf.factor, 2) + "% x " + d.euro(wozWaarde); 
+  }
+  return d.bouw("Eigenwoning forfait", [conditie], [berekening], ewfBerekend, EWF_BRONNEN);
+}
 
 //  Eigenwoning forfait
-function eigenwoningforfait(wozWaarde) {
+function eigenwoningforfait(wozWaarde, details = false) {
   for (let ewf of EWF) {
     if (wozWaarde < ewf.woz.tm) {
-      return Math.floor(
+      let ewfBerekend = Math.floor(
         ewf.minimum
           ? ewf.minimum + ewf.factor * (wozWaarde - ewf.woz.van)
           : ewf.factor * wozWaarde
       );
+      return details ? [ewfBerekend, eigenwoningforfaitDetails(wozWaarde, ewf, ewfBerekend)] : [ewfBerekend];
     }
   }
 }
 
-// Rente moet worden opgesteld bij inkomen (aftrek geeft negative waarde)
-function hypotheekRenteAftrek(rente, wozWaarde) {
-  let ewf = eigenwoningforfait(wozWaarde);
-  let ew = -rente + ewf;
+function hypotheekRenteAftrekDetails(rente, ewf, ew, hra) {
+  var berekening = "Eigenwoningforfait " + d.euro(ewf[0]) + " - Rente " + d.euro(rente); 
 
-  return Math.floor(ew > 0 ? ew * KSF : ew);
+  if (ew > 0) {
+    berekening = "(" + berekening + ") x " + d.f2p(KSF);
+  } else {
+  }
+  console.log(ewf)
+  let ewf1 = ewf[1];
+  return d.bouw("Hypotheek Renteaftrek", [ewf1.condities[0]], [ewf1.berekeningen[0], berekening], hra, EWF_BRONNEN);
+}
+
+// Rente moet worden opgesteld bij inkomen (aftrek geeft negative waarde)
+function hypotheekRenteAftrek(rente, wozWaarde, details = false) {
+  let ewf = eigenwoningforfait(wozWaarde, details);
+  let ew = ewf[0] - rente;
+  let hra = Math.floor(ew > 0 ? ew * KSF : ew);
+
+  return details ? hypotheekRenteAftrekDetails(rente, ewf, ew, hra) : hra;
 }
 
 export default {
