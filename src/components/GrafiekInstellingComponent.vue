@@ -31,7 +31,14 @@
           <n-radio label="per Maand" key="maand" value="maand" size="small" />
         </n-space>
       </n-radio-group>
-      <p>Vul jaar inkomen in om dat bedrag te berekenen:</p>
+      <br/>
+      Vul jaar inkomen in of klik op de grafiek om een inkomensberekening te doen:
+      <n-slider
+        v-model:value="grafiek.arbeidsInkomen"
+        :step="100"
+        :min="grafiek.van_tot[0]"
+        :max="grafiek.van_tot[1]"
+      />
       <n-input-number
         placeholder="Arbeidsinkomen"
         min="0"
