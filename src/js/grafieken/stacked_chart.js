@@ -176,27 +176,32 @@ function StackedAreaChart(
     hoverLine.attr("x1", x).attr("x2", x);
   });
   // rectHover
-  svg.on("mouseout", hoverMouseOff).on("mousemove", hoverMouseOn);
+  svg.on("mouseout", hoverMouseOff).on("mousemove", hoverMouseOn).on("mouseup", mouseUp);
 
   function hoverMouseOn(event) {
+    onMouse(event, false);
+  }
+
+  function mouseUp(event) {
+    onMouse(event, true);
+  }
+
+  function onMouse(event, legendaVast) {
     var mouse_x = d3.pointer(event)[0];
     var mouseXInvert = xScale.invert(mouse_x);
     var bisectX = d3.bisector((d) => d.id).left;
     var i = bisectX(data, mouseXInvert); // returns the index to the current data item
-
-    var d0 = data[i - 1];
-    var d1 = data[i];
-
-    // work out which date value is closest to the mouse
-    var d = d1; //['id'] > d1['id'] ? d1 : d0;
+    var d = data[i];
 
     if (d == undefined) {
       return;
     }
-    legenda.setLegendaText(data, series.length, i);
+    if (legendaVast) {
+      legenda.setLegendaVast(data, series.length, i);
+    } else {
+      legenda.setLegendaText(data, series.length, i);
+    }
     hoverLine.attr("x1", mouse_x).attr("x2", mouse_x);
-
-    hoverLineGroup.style("opacity", 1);
   }
 
   function hoverMouseOff() {
