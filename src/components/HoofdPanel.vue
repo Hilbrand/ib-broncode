@@ -73,7 +73,13 @@
 <style scoped>
 .grid {
   display: grid;
-  grid-template-columns: 300px auto 400px;
+  grid-template-columns: 100vw;
+}
+
+@media (min-width: 1280px) {
+  .grid {
+    grid-template-columns: 300px auto 400px;
+  }
 }
 </style>
 
