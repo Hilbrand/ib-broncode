@@ -41,7 +41,6 @@ function berekenGrafiekData(path, type, vis, personen, wonen) {
       berekenen = new EffectieveBelasting(vis, personen, wonen, bi);
       break;
   }
-  berekenen.factor = functies.factorBerekening(vis.periode);
   let series = [];
 
   for (let i = vis.van_tot[0]; i <= vis.van_tot[1]; i += stap) {

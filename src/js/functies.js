@@ -40,7 +40,7 @@ function negatiefIsNul(getal) {
 }
 
 function factorBerekening(periode) {
-  return "maand" == periode ? 1 / 12 : 1;
+  return "maand" == periode ? (1 / 12) : 1;
 }
 
 export default {

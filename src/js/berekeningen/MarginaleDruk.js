@@ -23,6 +23,7 @@ export class MarginaleDruk extends Berekenen {
   constructor(vis, personen, wonen, bi) {
     super(vis, personen, wonen);
     this.bi = bi;
+    this.bi.factor = 1; // Maak berekeningen altijd op jaarbasis. Visualisatie berekening per maand of jaar.
   }
 
   createLegenda() {
@@ -46,10 +47,6 @@ export class MarginaleDruk extends Berekenen {
     return this.vis.svt == "a"
       ? this.vis.sv_abs
       : arbeidsInkomen * (this.vis.sv_p / 100);
-  }
-
-  getFactor() {
-    return 1;
   }
 
   mdPercentage(netto1, netto2, Δbudget, inverse) {
@@ -225,7 +222,7 @@ export class MarginaleDruk extends Berekenen {
       type: "netto belasting",
       getal: this.afronden(
         marginaleDruk.nettoInkomensBelasting,
-        this.getFactor()
+        this.bi.factor
       ),
     });
     this.bi.verzamelGrafiekSeries(alles, marginaleDruk, id);
