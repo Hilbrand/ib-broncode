@@ -18,7 +18,7 @@
 /**
  * Berekeing van zorgtoeslag
  *
- * https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/toeslagen/hoe_werken_toeslagen/uitbetaling_toeslagen/berekening/
+ * https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/themaoverstijgend/brochures_en_publicaties/informatieblad-zorgtoeslag-2023
  */
 
 import data from "@/js/belasting/belasting_data";

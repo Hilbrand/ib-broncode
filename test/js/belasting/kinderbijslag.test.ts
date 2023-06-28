@@ -23,5 +23,5 @@ const A3K = [{leeftijd: 'V'}, {leeftijd: 'K05'}, {leeftijd: 'K611'}, {leeftijd: 
 // Test Kinderbijslag
 
 test('test Kinderbijslag, 4 kinderen', () => {
-  expect(kbs.kinderbijslag(A3K)).toEqual(Math.floor(4 * 1368.06))
+  expect(kbs.kinderbijslag(A3K)).toEqual(Math.floor(4 * (261.70 + 317.77 + 373.85 * 2)))
 })
