@@ -23,16 +23,15 @@
 import data from "@/js/belasting/belasting_data";
 import functies from "../functies";
 
-const KBS = data.KBS[data.JAAR];
-
-function kinderbijslag(personen) {
+function kinderbijslag(jaar, personen) {
+  const kbsj = data.KBS[jaar];
   let k05 = functies.telPersonen(personen, "K05");
   let k611 = functies.telPersonen(personen, "K611");
   let k1215 = functies.telPersonen(personen, "K1215");
   let k1617 = functies.telPersonen(personen, "K1617");
 
   return Math.floor(
-    4 * (k05 * KBS.K05 + k611 * KBS.K611 + (k1215 + k1617) * KBS.K1217)
+    4 * (k05 * kbsj.K05 + k611 * kbsj.K611 + (k1215 + k1617) * kbsj.K1217)
   );
 }
 

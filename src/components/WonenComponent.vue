@@ -67,7 +67,7 @@ import belasting_data from "@/js/belasting/belasting_data";
 import hra from "@/js/belasting/hypotheekrente_aftrek";
 
 export default {
-  props: ["wonen"],
+  props: ["jaar", "wonen"],
   data() {
     return {
       gegevens: {
@@ -82,6 +82,7 @@ export default {
     renteaftrek() {
       if (this.gegevens.woning_type == "koop") {
         return -hra.hypotheekRenteAftrek(
+          this.jaar,
           this.gegevens.rente,
           this.gegevens.woz
         );
@@ -97,7 +98,7 @@ export default {
   },
   methods: {
     setMaxHuur(event) {
-      this.gegevens.huur = belasting_data.MAX_HUUR;
+      this.gegevens.huur = belasting_data.HT[jaar].MaxHuur;
     },
     setAvgHuur(event) {
       this.gegevens.huur = belasting_data.AVG_HUUR;

@@ -24,21 +24,19 @@
 import data from "@/js/belasting/belasting_data";
 import functies from "../functies";
 
-const TABEL = data.TABEL[data.JAAR];
-const KOTT = data.KOTT[data.JAAR];
+function kinderopvangToeslag(jaar, toestingsInkomen, personen) {
+  const kqttj = data.KOTT[jaar];
+  const k05 = functies.telPersonen(personen, "K05");
+  const k611 = functies.telPersonen(personen, "K611");
+  const k1215 = functies.telPersonen(personen, "K1215");
+  const k1617 = functies.telPersonen(personen, "K1617");
 
-function kinderopvangToeslag(toestingsInkomen, personen) {
-  let k05 = functies.telPersonen(personen, "K05");
-  let k611 = functies.telPersonen(personen, "K611");
-  let k1215 = functies.telPersonen(personen, "K1215");
-  let k1617 = functies.telPersonen(personen, "K1617");
-
-  let kinderen = k05 + k611 + k1215 + k1617;
+  const kinderen = k05 + k611 + k1215 + k1617;
 
   if (kinderen == 0) {
     return 0;
   }
-  KOTT.forEach((kott) => {
+  kqttj.forEach((kott) => {
     if (toestingsInkomen < kott.inkomen.tm) {
       return kott.kinderopvangtoeslag;
     }

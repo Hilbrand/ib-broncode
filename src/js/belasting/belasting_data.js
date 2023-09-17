@@ -16,7 +16,7 @@
  */
 
 /*
-Bron data overgenomen uit JavaScript van proefberekeing toeslagen van Belastingdienst website: 
+Bron data overgenomen uit JavaScript van proefberekeing toeslagen van Belastingdienst website:
   https://www.belastingdienst.nl/common/js/iah/proefberekening_toeslagen.js
 */
 
@@ -805,11 +805,9 @@ const LEEFTIJDEN = {
   AOW: "AOW Leeftijd",
 };
 
-const JAAR = 2023;
 const BALKENENDENORM = 223000;
 const AVG_HUUR = 600;
 const AVG_WOZ = 315000;
-const MAX_HUUR = HT[JAAR].MaxHuur;
 const AVG_RENTE = AVG_WOZ * 0.0428;
 
 export default {
@@ -825,10 +823,8 @@ export default {
   AK: AK,
   IB,
   LEEFTIJDEN: LEEFTIJDEN,
-  JAAR: JAAR,
   BALKENENDENORM: BALKENENDENORM,
   AVG_HUUR,
   AVG_WOZ,
   AVG_RENTE,
-  MAX_HUUR,
 };

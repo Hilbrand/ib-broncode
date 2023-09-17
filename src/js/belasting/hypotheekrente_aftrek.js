@@ -22,12 +22,11 @@
  */
 import data from "@/js/belasting/belasting_data";
 
-const EWF = data.EWF[data.JAAR].ewf;
-const KSF = data.EWF[data.JAAR].kSchuldFactor;
-
 //  Eigenwoning forfait
-function eigenwoningforfait(wozWaarde) {
-  for (let ewf of EWF) {
+function eigenwoningforfait(jaar, wozWaarde) {
+  const ewfj = data.EWF[jaar].ewf;
+
+  for (let ewf of ewfj) {
     if (wozWaarde < ewf.woz.tm) {
       return Math.floor(
         ewf.minimum
@@ -39,11 +38,12 @@ function eigenwoningforfait(wozWaarde) {
 }
 
 // Rente moet worden opgesteld bij inkomen (aftrek geeft negative waarde)
-function hypotheekRenteAftrek(rente, wozWaarde) {
-  let ewf = eigenwoningforfait(wozWaarde);
-  let ew = -rente + ewf;
+function hypotheekRenteAftrek(jaar, rente, wozWaarde) {
+  const ksfj = data.EWF[jaar].kSchuldFactor;
+  const ewf = eigenwoningforfait(jaar, wozWaarde);
+  const ew = -rente + ewf;
 
-  return Math.floor(ew > 0 ? ew * KSF : ew);
+  return Math.floor(ew > 0 ? ew * ksfj : ew);
 }
 
 export default {

@@ -18,6 +18,7 @@
 import { assert, expect, test } from 'vitest'
 import iack from '../../../src/js/belasting/inkomensafhankelijke_combinatiekorting.js'
 
+const JAAR = 2023;
 
 // Bepaal Laagste Arbeidsinkomen Inkomen Anderen
 
@@ -50,13 +51,13 @@ test('Laagste Arbeidsinkomen Inkomen, inkomen 1000', () => {
 // Test Inkomensafhankelijke Combinatiekorting
 
 test('Inkomensafhankelijke Combinatiekorting 5.000', () => {
-  expect(iack.inkomensafhankelijkeCombinatiekorting(5000, Number.MAX_VALUE)).toEqual(0)
+  expect(iack.inkomensafhankelijkeCombinatiekorting(JAAR, 5000, Number.MAX_VALUE)).toEqual(0)
 })
 
 test('Inkomensafhankelijke Combinatiekorting 20.000', () => {
-  expect(iack.inkomensafhankelijkeCombinatiekorting(20000, Number.MAX_VALUE)).toEqual(1654)
+  expect(iack.inkomensafhankelijkeCombinatiekorting(JAAR, 20000, Number.MAX_VALUE)).toEqual(1654)
 })
 
 test('Inkomensafhankelijke Combinatiekorting 50.000', () => {
-  expect(iack.inkomensafhankelijkeCombinatiekorting(50000, Number.MAX_VALUE)).toEqual(2694)
+  expect(iack.inkomensafhankelijkeCombinatiekorting(JAAR, 50000, Number.MAX_VALUE)).toEqual(2694)
 })

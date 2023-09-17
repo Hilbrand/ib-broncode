@@ -62,11 +62,11 @@ const IB = [
   },
 ];
 
-function algemeneHeffingsKorting(toetsingsinkomen, maxBelasting, aow) {
+function algemeneHeffingsKorting(jaar, toetsingsinkomen, maxBelasting, aow) {
   return ALGEMENE_HEFFINGS_KORTING;
 }
 
-function arbeidskorting(arbeidsinkomen, maxArbeidsinkomen, aow) {
+function arbeidskorting(jaar, arbeidsinkomen, maxArbeidsinkomen, aow) {
   for (let p of ARBEIDS_KORTING) {
     if (
       arbeidsinkomen < (p.tot || Number.POSITIVE_INFINITY) &&

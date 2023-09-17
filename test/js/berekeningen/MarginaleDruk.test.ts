@@ -21,7 +21,7 @@ import { BeschikbaarInkomen } from "../../../src/js/berekeningen/BeschikbaarInko
 import { MarginaleDruk } from '../../../src/js/berekeningen/MarginaleDruk.js'
 
 test('Marginale Druk Details ', () => {
-  const vis = {periode:'jaar', svt: 'p', sv_p: 3};
+  const vis = {jaar: 2023, periode:'jaar', svt: 'p', sv_p: 3};
   const personen = [{leeftijd:'V'}];
   const wonen = {woning_type:'huur', huur:600};
    

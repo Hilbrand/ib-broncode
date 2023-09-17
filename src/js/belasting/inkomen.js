@@ -25,15 +25,12 @@
 
 import data from "@/js/belasting/belasting_data";
 
-const AHK = data.AHK[data.JAAR];
-const AK = data.AK[data.JAAR];
-const IB = data.IB[data.JAAR];
+function algemeneHeffingsKorting(jaar, toetsingsinkomen, maxBelasting, aow) {
+  const ahkt = aow ? data.AHK[jaar].AOW : data.AHK[jaar].V;
 
-function algemeneHeffingsKorting(toetsingsinkomen, maxBelasting, aow) {
-  let ahkt = aow ? AHK.AOW : AHK.V;
   for (let ahk of ahkt) {
     if (toetsingsinkomen < ahk.inkomen.tot) {
-      let algemeneHeffingsKorting =
+      const algemeneHeffingsKorting =
         ahk.minimum + (toetsingsinkomen - ahk.minus) * ahk.factor;
 
       return Math.round(Math.min(maxBelasting, algemeneHeffingsKorting));
@@ -42,8 +39,9 @@ function algemeneHeffingsKorting(toetsingsinkomen, maxBelasting, aow) {
   return 0;
 }
 
-function arbeidskorting(arbeidsinkomen, maxArbeidsinkomen, aow) {
-  let akt = aow ? AK.AOW : AK.V;
+function arbeidskorting(jaar, arbeidsinkomen, maxArbeidsinkomen, aow) {
+  const akt = aow ? data.AK[jaar].AOW : data.AK[jaar].V;
+
   for (let ak of akt) {
     if (arbeidsinkomen < ak.inkomen.tot) {
       let arbeidskorting = ak.minimum + (arbeidsinkomen - ak.minus) * ak.factor;
@@ -54,10 +52,10 @@ function arbeidskorting(arbeidsinkomen, maxArbeidsinkomen, aow) {
   return 0;
 }
 
-function maxArbeidsKorting(toetsingsInkomen, maxBelasting, aow) {
+function maxArbeidsKorting(jaar, toetsingsInkomen, maxBelasting, aow) {
   return (
-    inkomstenBelasting(toetsingsInkomen, aow) -
-    algemeneHeffingsKorting(toetsingsInkomen, maxBelasting, aow)
+    inkomstenBelasting(jaar, toetsingsInkomen, aow) -
+    algemeneHeffingsKorting(jaar, toetsingsInkomen, maxBelasting, aow)
   );
 }
 
@@ -77,25 +75,25 @@ function toeslagenToetsInkomen(arbeidsinkomen, personen) {
 }
 
 function ibRange(toetsingsInkomen, p) {
-  let top = Math.min(p.tot || toetsingsInkomen, toetsingsInkomen);
-  let range = Math.max(0, top - (p.vanaf || 0));
+  const top = Math.min(p.tot || toetsingsInkomen, toetsingsInkomen);
+  const range = Math.max(0, top - (p.vanaf || 0));
 
   return p.percentage * range;
 }
 
-function inkomstenBelasting(toetsingsInkomen, aow) {
-  let ibTabel = aow ? IB.AOW : IB.V;
+function inkomstenBelasting(jaar, toetsingsInkomen, aow) {
+  const ibTabel = aow ? data.IB[jaar].AOW : data.IB[jaar].V;
 
   return Math.round(
     ibTabel.reduce((ib, p) => ib + ibRange(toetsingsInkomen, p), 0)
   );
 }
 
-function netto(bruto, aow) {
-  return Math.min(bruto, bruto - inkomstenBelasting(bruto, aow));
+function netto(jaar, bruto, aow) {
+  return Math.min(bruto, bruto - inkomstenBelasting(jaar, bruto, aow));
 }
 
-function nettoKortingenInkomens(personen) {
+function nettoKortingenInkomens(jaar, personen) {
   let nk = [];
   for (let idx in personen) {
     if (idx == 0) {
@@ -109,17 +107,17 @@ function nettoKortingenInkomens(personen) {
       // Echter hypotheek aftrek wordt gedaan bij eerste persoon en niet hier
       // Het kan zijn dat een deel of alles hyppotheek aftrek bij anderen te leggen,
       // de totale belasting gunstiger uitkomt. Maar die optie is hier niet meegenomen.
-      let tib = inkomstenBelasting(inkomen, aow);
+      let tib = inkomstenBelasting(jaar, inkomen, aow);
 
       nk.push({
         bruto: inkomen,
-        netto: netto(inkomen, aow),
-        arbeidskorting: arbeidskorting(inkomen, aow),
-        algemeneHeffingsKorting: algemeneHeffingsKorting(inkomen, tib, aow),
+        netto: netto(jaar, inkomen, aow),
+        arbeidskorting: arbeidskorting(jaar, inkomen, aow),
+        algemeneHeffingsKorting: algemeneHeffingsKorting(jaar, inkomen, tib, aow),
       });
     }
   }
-  let sum = nk.reduce((s, a) => {
+  const sum = nk.reduce((s, a) => {
     s.brutto += a.brutto;
     s.netto += a.netto;
     s.arbeidskorting += a.arbeidskorting;

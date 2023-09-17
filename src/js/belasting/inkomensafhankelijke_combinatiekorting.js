@@ -23,8 +23,6 @@
 
 import data from "@/js/belasting/belasting_data";
 
-const tabel = data.IACK[data.JAAR];
-
 /**
  * Bepaalt laagste inkomen van alle personen, behalve de eerste.
  * De eerste persoon wordt overgeslagen, want daarvoor wordt het inkomen dynamisch berekend.
@@ -49,15 +47,17 @@ function bepaalLaagsteArbeidsInkomenAnderen(personen) {
 }
 
 function inkomensafhankelijkeCombinatiekorting(
+  jaar,
   toetsinkomen,
   laagstePartnerinkomen,
   aow = false
 ) {
-  let arbeidsinkomen =
+  const tabel = data.IACK[jaar];
+  const arbeidsinkomen =
     laagstePartnerinkomen < 0
       ? toetsinkomen
       : Math.min(toetsinkomen, laagstePartnerinkomen);
-  let t = aow ? tabel.HAOW : tabel.H;
+  const t = aow ? tabel.HAOW : tabel.H;
 
   return arbeidsinkomen < t.MinAInk
     ? 0

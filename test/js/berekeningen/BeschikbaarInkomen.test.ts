@@ -19,7 +19,7 @@ import { assert, expect, test } from 'vitest'
 import algemeen from '../../../src/js/berekeningen/algemeen.js'
 import { BeschikbaarInkomen } from '../../../src/js/berekeningen/BeschikbaarInkomen.js'
 
-const vis = {periode:'jaar'};
+const vis = {jaar:2023, periode:'jaar'};
 const personen = [{leeftijd:'V'}, {leeftijd:'V', inkomen:0}, {leeftijd:'K611'}, {leeftijd:'K611'}];
 const wonen = {woning_type:'huur', huur:1100};
 const arbeidsinkomen = 46377;
@@ -35,10 +35,10 @@ test('Bereken beschikbaar inkomen eenverdiener, 2 kinderen', () => {
     arbeidskorting: 4486,
     zorgtoeslag: 275,
     wonen: 0,
-    kinderbijslag: 2620,
+    kinderbijslag: 2542,
     kindgebondenBudget: 2984,
     inkomensafhankelijkeCombinatiekorting: 0,
-    beschikbaarInkomen: 38255,
+    beschikbaarInkomen: 41161,
   };
 
   expect(berekening).toEqual(expected);

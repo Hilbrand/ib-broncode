@@ -25,7 +25,7 @@ export class BlueminkBeschikbaarInkomen extends BeschikbaarInkomen {
   }
 
   berekenBeschikbaarInkomen(arbeidsinkomen) {
-    let toetsingsInkomenBelasting = inkomen.inkomstenBelasting(arbeidsinkomen);
+    let toetsingsInkomenBelasting = inkomen.inkomstenBelasting(this.vis.jaar, arbeidsinkomen);
     let nettoArbeidsinkomen = arbeidsinkomen - toetsingsInkomenBelasting;
     let toeslagenToetsInkomen = inkomen.toeslagenToetsInkomen(
       arbeidsinkomen,
@@ -36,11 +36,12 @@ export class BlueminkBeschikbaarInkomen extends BeschikbaarInkomen {
       arbeidsinkomen: arbeidsinkomen,
       brutoInkomstenBelasting: toetsingsInkomenBelasting,
       netto: nettoArbeidsinkomen,
-      algemeneHeffingsKorting: inkomen.algemeneHeffingsKorting(arbeidsinkomen),
-      arbeidskorting: inkomen.arbeidskorting(arbeidsinkomen),
+      algemeneHeffingsKorting: inkomen.algemeneHeffingsKorting(this.vis.jaar, arbeidsinkomen),
+      arbeidskorting: inkomen.arbeidskorting(this.vis.jaar, arbeidsinkomen),
       zorgtoeslag: 0,
       wonen: this.algemeneGegevens.huren
         ? ht.huurtoeslag(
+            this.vis.jaar,
             toeslagenToetsInkomen,
             this.wonen.huur,
             this.personen.length,

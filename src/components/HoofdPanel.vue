@@ -2,7 +2,7 @@
   <div class="grid">
     <n-scrollbar id="infoBar">
       <HuishoudenComponent :personen="gegevens.personen" />
-      <WonenComponent :wonen="gegevens.wonen" />
+      <WonenComponent :jaar="gegevens.grafiek.jaar" :wonen="gegevens.wonen" />
       <GrafiekInstellingComponent :grafiekInstellingen="gegevens.grafiek" />
     </n-scrollbar>
     <n-tabs
@@ -116,6 +116,7 @@ export default {
         wonen: {},
         // Visualisatie
         grafiek: {
+          jaar: gegevens.JAAR,
           periode: null,
           van_tot: [],
           arbeidsInkomen: 0,

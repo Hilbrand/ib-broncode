@@ -18,10 +18,11 @@
 import { assert, expect, test } from 'vitest'
 import kbs from '../../../src/js/belasting/kinderbijslag.js'
 
+const JAAR = 2023;
 const A3K = [{leeftijd: 'V'}, {leeftijd: 'K05'}, {leeftijd: 'K611'}, {leeftijd: 'K1215'}, {leeftijd: 'K1617'}];
 
 // Test Kinderbijslag
 
 test('test Kinderbijslag, 4 kinderen', () => {
-  expect(kbs.kinderbijslag(A3K)).toEqual(Math.floor(4 * (261.70 + 317.77 + 373.85 * 2)))
+  expect(kbs.kinderbijslag(JAAR, A3K)).toEqual(Math.floor(4 * (261.70 + 317.77 + 373.85 * 2)))
 })

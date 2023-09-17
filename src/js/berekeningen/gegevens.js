@@ -21,6 +21,8 @@ const DEFAULT_WOON_TYPE = "huur";
 const AVG_HUUR = 600;
 const AVG_WOZ = 315000;
 const AVG_RENTE = AVG_WOZ * 0.0428;
+const JAAR = 2023;
+const JAREN = [2023]; //, 2024];
 
 function lengte(a) {
   return (a && a.length) || 0;
@@ -72,10 +74,17 @@ function wonenNavigatieToJson(queryParams) {
 }
 
 function grafiekNavigatieToJson(p) {
+  let jaar = JAAR;
+
+  if (lengte(p) == 6) {
+    jaar = p[0];
+    p.shift();
+  }
   if (lengte(p) != 5) {
     return {};
   }
   let json = {
+    jaar: jaar,
     periode: p[0],
     van_tot: p[1],
     svt: p[2],
@@ -103,6 +112,7 @@ function navigatieToJson(query) {
     },
     // Visualisatie instellingen
     grafiek: {
+      jaar: JAAR,
       periode: "jaar",
       van_tot: [10000, 100000],
       arbeidsInkomen: 0,
@@ -151,7 +161,7 @@ function wonenJsonToNavigatie(json) {
 
 function grafiekJsonToNavigatie(json) {
   let sv = json.svt == "a" ? json.sv_abs : json.sv_p;
-  return [json.periode, json.van_tot, json.svt, sv, json.arbeidsInkomen];
+  return [json.jaar, json.periode, json.van_tot, json.svt, sv, json.arbeidsInkomen];
 }
 
 function jsonToNavigatie(json) {
@@ -166,6 +176,8 @@ function jsonToNavigatie(json) {
 }
 
 export default {
+  JAAR,
+  JAREN,
   navigatieToJson,
   jsonToNavigatie,
 };

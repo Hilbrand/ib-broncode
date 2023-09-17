@@ -1,6 +1,12 @@
 <template>
   <n-card title="Grafiek Instellingen" size="small">
     <n-space vertical>
+      Gegevens Jaar:
+      <n-select
+        v-model:value="grafiek.jaar"
+        :options="jaren"
+        :consistent-menu-width="false"
+      />
       <n-slider
         v-model:value="grafiek.van_tot"
         range
@@ -53,14 +59,27 @@
 </template>
 
 <script>
+import gegevens from "@/js/berekeningen/gegevens";
+
+const jaren = [];
+for (const jaar of gegevens.JAREN) {
+  jaren.push({ label: jaar, value: jaar });
+}
+
 export default {
   props: ["grafiekInstellingen"],
+  setup() {
+    return {
+      jaren,
+    }
+  },
   data() {
     return {
       grafiek: {
         periode: null,
         van_tot: [],
         arbeidsInkomen: 0,
+        jaar: gegevens.JAAR,
         svt: "p",
         sv_abs: 1000,
         sv_p: 3,

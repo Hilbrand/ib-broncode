@@ -24,12 +24,12 @@
 import data from "@/js/belasting/belasting_data";
 import functies from "@/js/functies";
 
-const TABEL = data.TABEL[data.JAAR];
-const MAXKGB = data.MAXKGB[data.JAAR];
+function rekenBasis(jaar, aantalKinderen, toeslagenPartner) {
+  const tabelj = data.TABEL[jaar];
+  const maxkgbj = data.MAXKGB[jaar];
 
-function rekenBasis(aantalKinderen, toeslagenPartner) {
   return aantalKinderen > 0
-    ? MAXKGB[aantalKinderen] + (toeslagenPartner ? 0 : TABEL.VHgeenTP)
+    ? maxkgbj[aantalKinderen] + (toeslagenPartner ? 0 : tabelj.VHgeenTP)
     : 0;
 }
 
@@ -41,31 +41,35 @@ function rekenBasis(aantalKinderen, toeslagenPartner) {
  * @returns
  */
 
-function maxKindgebondenBudget(personen, toeslagenPartner) {
-  let k05 = functies.telPersonen(personen, "K05");
-  let k611 = functies.telPersonen(personen, "K611");
-  let k1215 = functies.telPersonen(personen, "K1215");
-  let k1617 = functies.telPersonen(personen, "K1617");
-  let kinderen = k05 + k611 + k1215 + k1617;
-  let basis = rekenBasis(kinderen, toeslagenPartner);
+function maxKindgebondenBudget(jaar, personen, toeslagenPartner) {
+  const tabelj = data.TABEL[jaar];
+  const k05 = functies.telPersonen(personen, "K05");
+  const k611 = functies.telPersonen(personen, "K611");
+  const k1215 = functies.telPersonen(personen, "K1215");
+  const k1617 = functies.telPersonen(personen, "K1617");
+  const kinderen = k05 + k611 + k1215 + k1617;
+  const basis = rekenBasis(jaar, kinderen, toeslagenPartner);
 
-  return basis + k1215 * TABEL.VH12Plus + k1617 * TABEL.VH16Plus;
+  return basis + k1215 * tabelj.VH12Plus + k1617 * tabelj.VH16Plus;
 }
 
 function kindgebondenBudget(
+  jaar,
   toetsinkomen,
   maxKindergebondenBudget,
   toeslagenPartner
 ) {
+  const tabelj = data.TABEL[jaar];
+
   if (maxKindergebondenBudget > 0) {
-    let maxInk =
-      (toeslagenPartner ? TABEL.VerhoogdDrempelInkomen : 0) +
-      TABEL.DrempelinkomenKGB;
+    const maxInk =
+      (toeslagenPartner ? tabelj.VerhoogdDrempelInkomen : 0) +
+      tabelj.DrempelinkomenKGB;
     if (toetsinkomen > maxInk) {
       return Math.max(
         0,
         maxKindergebondenBudget -
-          Math.floor((toetsinkomen - maxInk) * (TABEL.TslgTP / 100))
+          Math.floor((toetsinkomen - maxInk) * (tabelj.TslgTP / 100))
       );
     } else {
       return maxKindergebondenBudget;

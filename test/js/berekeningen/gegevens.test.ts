@@ -21,8 +21,8 @@ import gegevens from '../../../src/js/berekeningen/gegevens.js'
 const personenQuery = "V;V,10000;K612";
 const personenJson = [{leeftijd: 'V'}, {leeftijd: 'V', bruto_inkomen:10000}, {leeftijd: 'K612'}];
 
-const grafiekJson = { periode: "jaar", van_tot: [1, 2], svt:'p', sv_p:4, sv_abs:1000, arbeidsInkomen: 12345};
-const grafiekQuery = "jaar;1,2;p;4;12345";
+const grafiekJson = { jaar: 2000, periode: "jaar", van_tot: [1, 2], svt:'p', sv_p:4, sv_abs:1000, arbeidsInkomen: 12345};
+const grafiekQuery = "2000;jaar;1,2;p;4;12345";
 
 const queryHuur = { tab: "ib", p: personenQuery, w: "huur;123", grafiek: grafiekQuery}
 const jsonHuur = { tab: "ib", personen: personenJson, wonen: {woning_type:"huur", huur:"123"}, grafiek: grafiekJson};
@@ -55,6 +55,7 @@ test('lege navigatie naar json', () => {
           periode: "jaar",
           van_tot: [10000, 100000],
           arbeidsInkomen: 0,
+          jaar: 2023,
           svt: 'p',
           sv_p: 3,
           sv_abs: 1000,

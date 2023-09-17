@@ -50,10 +50,12 @@ export class BeschikbaarInkomen extends Berekenen {
       this.algemeneGegevens.hypotheekRenteAftrek
     );
     let toetsingsInkomenBelasting = inkomen.inkomstenBelasting(
+      this.vis.jaar,
       toetsingsInkomen,
       aow
     );
     let arbeidsinkomenBelasting = inkomen.inkomstenBelasting(
+      this.vis.jaar,
       arbeidsinkomen,
       aow
     );
@@ -63,6 +65,7 @@ export class BeschikbaarInkomen extends Berekenen {
     );
     let nettoArbeidsinkomen = arbeidsinkomen - toetsingsInkomenBelasting;
     let algemeneHeffingsKorting = inkomen.algemeneHeffingsKorting(
+      this.vis.jaar,
       toetsingsInkomen,
       toetsingsInkomenBelasting,
       aow
@@ -71,6 +74,7 @@ export class BeschikbaarInkomen extends Berekenen {
       toetsingsInkomenBelasting - algemeneHeffingsKorting
     );
     let arbeidskorting = inkomen.arbeidskorting(
+      this.vis.jaar,
       arbeidsinkomen,
       maxBelastingTeruggave,
       aow
@@ -84,6 +88,7 @@ export class BeschikbaarInkomen extends Berekenen {
       toetsingsInkomenBelasting
     );
     let kindgebondenBudget = kgb.kindgebondenBudget(
+      this.vis.jaar,
       toeslagenToetsInkomen,
       this.algemeneGegevens.maxKindgebondenBudget,
       this.algemeneGegevens.toeslagenpartner
@@ -103,6 +108,7 @@ export class BeschikbaarInkomen extends Berekenen {
       ),
       wonen: this.algemeneGegevens.huren
         ? ht.huurtoeslag(
+          this.vis.jaar,
             toeslagenToetsInkomen,
             this.wonen.huur,
             this.personen.length,
@@ -114,6 +120,7 @@ export class BeschikbaarInkomen extends Berekenen {
       inkomensafhankelijkeCombinatiekorting:
         this.algemeneGegevens.kinderbijslag > 0
           ? iack.inkomensafhankelijkeCombinatiekorting(
+              this.vis.jaar,
               arbeidsinkomen,
               this.algemeneGegevens.iacbInkomen,
               this.algemeneGegevens.aow

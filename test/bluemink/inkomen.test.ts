@@ -18,38 +18,40 @@
 import { assert, expect, test } from 'vitest'
 import inkomen from '../../src/bluemink/inkomen.js'
 
+const JAAR = 2023;
+
 // test algemeneHeffingsKorting
 
 test('Algemene Heffings Korting 1.000', () => {
-  expect(inkomen.algemeneHeffingsKorting(1000, 10000, false)).toEqual(2000)
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 1000, 10000, false)).toEqual(2000)
 })
 
 test('Algemene Heffings Korting 10.000', () => {
-  expect(inkomen.algemeneHeffingsKorting(10000, 10000, false)).toEqual(2000)
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 10000, 10000, false)).toEqual(2000)
 })
 
 test('Algemene Heffings Korting 40.000', () => {
-  expect(inkomen.algemeneHeffingsKorting(40000, 10000, false)).toEqual(2000)
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 40000, 10000, false)).toEqual(2000)
 })
 
 test('Algemene Heffings Korting 100.000', () => {
-  expect(inkomen.algemeneHeffingsKorting(100000, 10000, false)).toEqual(2000)
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 100000, 10000, false)).toEqual(2000)
 })
 
 // test arbeidskorting
 
 test('Arbeidskorting 1.000', () => {
-  expect(inkomen.arbeidskorting(1000, 10000, false)).toEqual(0)
+  expect(inkomen.arbeidskorting(JAAR, 1000, 10000, false)).toEqual(0)
 })
 
 test('Arbeidskorting 15.000', () => {
-  expect(inkomen.arbeidskorting(15000, 10000, false)).toEqual(1230)
+  expect(inkomen.arbeidskorting(JAAR, 15000, 10000, false)).toEqual(1230)
 })
 
 test('Arbeidskorting 30.000', () => {
-  expect(inkomen.arbeidskorting(26000, 10000, false)).toEqual(2880)
+  expect(inkomen.arbeidskorting(JAAR, 26000, 10000, false)).toEqual(2880)
 })
 
 test('Arbeidskorting 60.000', () => {
-  expect(inkomen.arbeidskorting(27000, 10000, false)).toEqual(3000)
+  expect(inkomen.arbeidskorting(JAAR, 27000, 10000, false)).toEqual(3000)
 })

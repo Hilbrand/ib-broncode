@@ -23,47 +23,46 @@
 
 import data from "@/js/belasting/belasting_data";
 
-const HT = data.HT[data.JAAR];
-const HTBP = data.HTBP[data.JAAR];
-
-function huurtoeslag(rekeninkomen, rekenhuur, aantalPersonen, aow) {
-  // als jonger 23 dan HT.KwKrtGrns
-  if (rekenhuur > HT.MaxHuur) {
+function huurtoeslag(jaar, rekeninkomen, rekenhuur, aantalPersonen, aow) {
+  const htj = data.HT[jaar];
+  const htbpj = data.HTBP[jaar];
+  // als jonger 23 dan htj.KwKrtGrns
+  if (rekenhuur > htj.MaxHuur) {
     return 0;
   }
-  let mph = aantalPersonen > 1;
-  let htbp = aow
+  const mph = aantalPersonen > 1;
+  const htbp = aow
     ? mph
-      ? HTBP.MPHAOW
-      : HTBP.EPHAOW
+      ? htbpj.MPHAOW
+      : htbpj.EPHAOW
     : mph
-    ? HTBP.MPH
-    : HTBP.EPH;
-  let basishuur =
+    ? htbpj.MPH
+    : htbpj.EPH;
+  const basishuur =
     (rekeninkomen > htbp.MinInkGr
       ? htbp["Factor a"] * rekeninkomen * rekeninkomen +
         htbp["Factor b"] * rekeninkomen
       : htbp.MinNrmHr) + htbp.TaakStBedr;
-  let a = Math.max(0, Math.min(HT.KwKrtGrns, rekenhuur) - basishuur);
-  let aftopGrens = aantalPersonen > 2 ? HT.AftopB : HT.AftopA;
-  let b =
-    rekenhuur > HT.KwKrtGrns
+  const a = Math.max(0, Math.min(htj.KwKrtGrns, rekenhuur) - basishuur);
+  const aftopGrens = aantalPersonen > 2 ? htj.AftopB : htj.AftopA;
+  const b =
+    rekenhuur > htj.KwKrtGrns
       ? Math.max(
           0,
-          Math.min(rekenhuur, aftopGrens) - Math.max(HT.KwKrtGrns, basishuur)
+          Math.min(rekenhuur, aftopGrens) - Math.max(htj.KwKrtGrns, basishuur)
         )
       : 0;
-  let c =
+  const c =
     !mph && rekenhuur > aftopGrens
       ? Math.max(0, rekenhuur - Math.max(aftopGrens, basishuur))
       : 0;
   return 12 * Math.floor(a + 0.65 * b + 0.4 * c);
 }
 
-function huurtoeslagMax(rekeninkomen) {
-  let maxhuur = HT.MaxHuur;
+function huurtoeslagMax(jaar, rekeninkomen) {
+  const maxhuur = data.HT[jaar].MaxHuur;
 
-  return huurtoeslag(rekeninkomen, maxhuur, 1, false);
+  return huurtoeslag(jaar, rekeninkomen, maxhuur, 1, false);
 }
 
 export default {
