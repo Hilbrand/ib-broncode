@@ -51,7 +51,7 @@ export class Legenda {
 
   setLegendaVast(data, length, offset) {
     this.berekenen.vis.arbeidsInkomen = data[offset].id;
-    setLegendaText(ata, length, offset);
+    this.setLegendaText(data, length, offset);
   }
 
   setLegendaText(data, length, offset) {}
