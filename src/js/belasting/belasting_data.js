@@ -21,6 +21,57 @@ Bron data overgenomen uit JavaScript van proefberekeing toeslagen van Belastingd
 */
 
 const TABEL = {
+  2024: {
+    Aanvraagdatum: "01-09-2022",
+    HT: !0,
+    KGB: !0,
+    KOT: !0,
+    ZT: !0,
+    UitbetGrns: 24,
+    HTjaar: "2024",
+    HDCP: "Ja",
+    Garage: !1,
+    Onderhuur: !1,
+    VrijHT65enkel: 36992,
+    VrijHT65gez: 73984,
+    TslgTP: 6.75,
+    DrempelinkomenKGB: 26819,
+    VerhoogdDrempelInkomen: 9030,
+    Tslg: 6.75,
+    OHGA: 0,
+    IGTA: 0,
+    IGUA: 0,
+    OHGB: 0,
+    IGTB: 0,
+    IGUB: 0,
+    VSVB: 0,
+    WTOS: !0,
+    VH12Plus: 694,
+    VH16Plus: 924,
+    VHgeenTP: 3480,
+    MaxUPDOKC: 10.25,
+    MaxUPDOGO: 7.53,
+    MaxUPBOKC: 9.12,
+    MaxUPBOGO: 7.53,
+    MaxUren: 230,
+    WrkgvrBdr: "Nee",
+    Middelen: "Nee",
+    ETP: "Nee",
+    OM: "Nee",
+    WLF: "Ja",
+    RepWlfT: "Ja",
+    SP: 1889,
+    Drempel: 26820,
+    TDA: 1.879,
+    BDA: 13.67,
+    TDMT: 4.256,
+    BDMT: 13.67,
+    MxInk1: 22961,
+    MxInk2: 18297,
+    VrijZTKGB65enkel: 140213,
+    VrijZTKGB65gez: 177301,
+    ZT_norm_geldig: "nee",
+  },
   2023: {
     Aanvraagdatum: "01-09-2022",
     HT: true,
@@ -128,6 +179,21 @@ const TABEL = {
 //  Huurtoeslag
 
 const HT = {
+  2024: {
+    HTjaar: "2024",
+    MxSK: "48",
+    MaxHuur: 879.66,
+    GK: "",
+    AftopA: 650.43,
+    AftopB: 697.07,
+    KwKrtGrns: 454.47,
+    VrKndInk: 5970,
+    OHKort: "",
+    HTB: "F",
+    MxRubr: 12,
+    TslTmAftop: 65,
+    TslBovenAftop: 40,
+  },
   2023: {
     HTjaar: "2023",
     MxSK: "48",
@@ -161,6 +227,40 @@ const HT = {
 };
 
 const HTBP = {
+  2024: {
+    EPH: {
+      "Factor a": 4.1337e-7,
+      "Factor b": 0.002393492603,
+      MinInkGr: 20700,
+      DoelGrpGr: 0,
+      TaakStBedr: -34.67,
+      MinNrmHr: 226.67,
+    },
+    EPHAOW: {
+      "Factor a": 5.59775e-7,
+      "Factor b": -0.002120192534,
+      MinInkGr: 22025,
+      DoelGrpGr: 0,
+      TaakStBedr: -34.67,
+      MinNrmHr: 224.85,
+    },
+    MPH: {
+      "Factor a": 2.4449e-7,
+      "Factor b": 0.001807837711,
+      MinInkGr: 26975,
+      DoelGrpGr: 0,
+      TaakStBedr: -34.67,
+      MinNrmHr: 226.67,
+    },
+    MPHAOW: {
+      "Factor a": 3.63503e-7,
+      "Factor b": -0.003053924481,
+      MinInkGr: 29325,
+      DoelGrpGr: 0,
+      TaakStBedr: -34.67,
+      MinNrmHr: 223.04,
+    },
+  },
   2023: {
     EPH: {
       "Factor a": 0.000000474433,
@@ -234,6 +334,21 @@ const HTBP = {
 // Inkomsten afhankelijk combinatie korting
 
 const IACK = {
+  2024: {
+    H: {
+      MinAInk: 6080,
+      InkKorting: 0.1145,
+      MaxAInk: 29076,
+      MaxInkAfKrt: 2953,
+    },
+    // 2024 nog gegevens van 2023
+    HAOW: {
+      MinAInk: 5548,
+      InkKorting: 0.059,
+      MaxAInk: 29076,
+      MaxInkAfKrt: 1389,
+    },
+  },
   2023: {
     H: {
       MinAInk: 5548,
@@ -253,6 +368,16 @@ const IACK = {
 // Maximum Kindergebonden budget
 
 const MAXKGB = {
+  2024: {
+    1: 2436,
+    2: 4872,
+    3: 7308,
+    4: 9744,
+    5: 12180,
+    6: 14616,
+    7: 17052,
+    8: 19488,
+  },
   2023: {
     1: 1653,
     2: 3185,
@@ -278,6 +403,974 @@ const MAXKGB = {
 // Kinderopvang toeslag
 
 const KOTT = {
+  2024: [
+    {
+      inkomen: {
+        van: 0,
+        tm: 22346,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 96,
+        tweedeEvKind: 96,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 22347,
+        tm: 23834,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 96,
+        tweedeEvKind: 96,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 23835,
+        tm: 25320,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 96,
+        tweedeEvKind: 96,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 25321,
+        tm: 26810,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 96,
+        tweedeEvKind: 96,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 26811,
+        tm: 28297,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 96,
+        tweedeEvKind: 96,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 28298,
+        tm: 29786,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 95.5,
+        tweedeEvKind: 95.6,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 29787,
+        tm: 31273,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 94.4,
+        tweedeEvKind: 95.4,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 31274,
+        tm: 32757,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 93.4,
+        tweedeEvKind: 95.2,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 32758,
+        tm: 34357,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 92.5,
+        tweedeEvKind: 95,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 34358,
+        tm: 35955,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 91.9,
+        tweedeEvKind: 94.9,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 35956,
+        tm: 37557,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 90.9,
+        tweedeEvKind: 94.7,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 37558,
+        tm: 39155,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 90.4,
+        tweedeEvKind: 94.5,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 39156,
+        tm: 40759,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 89.5,
+        tweedeEvKind: 94.5,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 40760,
+        tm: 42359,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 88.7,
+        tweedeEvKind: 94.5,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 42360,
+        tm: 43997,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 88.1,
+        tweedeEvKind: 94.5,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 43998,
+        tm: 45637,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 87.3,
+        tweedeEvKind: 94.5,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 45638,
+        tm: 47278,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 86.6,
+        tweedeEvKind: 94.5,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 47279,
+        tm: 48918,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 85.9,
+        tweedeEvKind: 94.5,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 48919,
+        tm: 50562,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 85,
+        tweedeEvKind: 94.5,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 50563,
+        tm: 52201,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 84.5,
+        tweedeEvKind: 94.5,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 52202,
+        tm: 53841,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 83.7,
+        tweedeEvKind: 94.5,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 53842,
+        tm: 55482,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 83,
+        tweedeEvKind: 94.5,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 55483,
+        tm: 57275,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 82.1,
+        tweedeEvKind: 94.5,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 57276,
+        tm: 60791,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 80.6,
+        tweedeEvKind: 94.5,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 60792,
+        tm: 64305,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 79.8,
+        tweedeEvKind: 94.1,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 64306,
+        tm: 67821,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 78.7,
+        tweedeEvKind: 93.5,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 67822,
+        tm: 71339,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 76.4,
+        tweedeEvKind: 93.1,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 71340,
+        tm: 74853,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 74.1,
+        tweedeEvKind: 92.8,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 74854,
+        tm: 78371,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 71.9,
+        tweedeEvKind: 92.1,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 78372,
+        tm: 81886,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 69.4,
+        tweedeEvKind: 91.6,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 81887,
+        tm: 85402,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 67.1,
+        tweedeEvKind: 91.1,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 85403,
+        tm: 88919,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 64.9,
+        tweedeEvKind: 90.4,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 88920,
+        tm: 92433,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 62.5,
+        tweedeEvKind: 89.8,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 92434,
+        tm: 95954,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 60.3,
+        tweedeEvKind: 89.4,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 95955,
+        tm: 99469,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 57.8,
+        tweedeEvKind: 89.1,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 99470,
+        tm: 102983,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 55.5,
+        tweedeEvKind: 88.4,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 102984,
+        tm: 106499,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 53.3,
+        tweedeEvKind: 88,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 106500,
+        tm: 110084,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 50.9,
+        tweedeEvKind: 87.5,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 110085,
+        tm: 113686,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 48.8,
+        tweedeEvKind: 86.8,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 113687,
+        tm: 117286,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 46.7,
+        tweedeEvKind: 86.3,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 117287,
+        tm: 120887,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 44.6,
+        tweedeEvKind: 85.9,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 120888,
+        tm: 124485,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 42.4,
+        tweedeEvKind: 85.6,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 124486,
+        tm: 128088,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 40.5,
+        tweedeEvKind: 84.9,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 128089,
+        tm: 131690,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 38.6,
+        tweedeEvKind: 84.3,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 131691,
+        tm: 135292,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 36.7,
+        tweedeEvKind: 83.9,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 135293,
+        tm: 138889,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 34.7,
+        tweedeEvKind: 83.3,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 138890,
+        tm: 142489,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 82.9,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 142490,
+        tm: 146092,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 82.2,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 146093,
+        tm: 149691,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 81.6,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 149692,
+        tm: 153292,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 80.6,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 153293,
+        tm: 156891,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 80.3,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 156892,
+        tm: 160494,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 79.5,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 160495,
+        tm: 164098,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 78.6,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 164099,
+        tm: 167696,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 78,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 167697,
+        tm: 171297,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 77.1,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 171298,
+        tm: 174895,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 76.6,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 174896,
+        tm: 178498,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 75.8,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 178499,
+        tm: 182100,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 75.1,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 182101,
+        tm: 185701,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 74.4,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 185702,
+        tm: 189301,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 73.4,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 189302,
+        tm: 192898,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 72.9,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 192899,
+        tm: 196502,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 72.2,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 196503,
+        tm: 200101,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 71.4,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 200102,
+        tm: 203703,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 70.7,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 203704,
+        tm: 207304,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 70.1,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 207305,
+        tm: 210903,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 69.3,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 210904,
+        tm: 214505,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 68.5,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 214506,
+        tm: 218104,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 68,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+    {
+      inkomen: {
+        van: 218105,
+        tm: 99999999,
+      },
+      kinderopvangtoeslag: {
+        eersteKind: 33.3,
+        tweedeEvKind: 67.1,
+      },
+      extraToeslag: {
+        eersteKind: 0,
+        tweedeEvKind: 0,
+      },
+    },
+  ],
   2023: [
     {
       inkomen: { van: 0, tm: 21278 },
@@ -630,6 +1723,12 @@ const KOTT = {
 // Kinderbijslag per kwartaal
 
 const KBS = {
+  // Kinderbijslag 2024 is van 3e kwartaal 2024
+  2024: {
+    K05: 261.7,
+    K611: 317.77,
+    K1217: 373.85,
+  },
   2023: {
     K05: 261.7,
     K611: 317.77,
@@ -638,8 +1737,38 @@ const KBS = {
 };
 
 // Eigenwoningforfait
-
+// TODO: Eigenwoningforfait is nog kopie van 2023
 const EWF = {
+  2024: {
+    kSchuldFactor: 0.8001,
+    ewf: [
+      {
+        woz: { van: 0, tm: 12500 },
+        factor: 0,
+      },
+      {
+        woz: { van: 12500, tm: 25000 },
+        factor: 0.001,
+      },
+      {
+        woz: { van: 25000, tm: 50000 },
+        factor: 0.002,
+      },
+      {
+        woz: { van: 50000, tm: 75000 },
+        factor: 0.0025,
+      },
+      {
+        woz: { van: 75000, tm: 1200000 },
+        factor: 0.0035,
+      },
+      {
+        woz: { van: 1200000, tm: Number.MAX_VALUE },
+        minimum: 4200,
+        factor: 0.0235,
+      },
+    ],
+  },
   2023: {
     kSchuldFactor: 0.8333,
     ewf: [
@@ -673,8 +1802,38 @@ const EWF = {
 };
 
 // Algemene Heffingskorting
-
+// TODO: Algemene Heffingskorting controleren
 const AHK = {
+  2024: {
+    V: [
+      {
+        inkomen: { van: 0, tot: 22661 },
+        minimum: 3070,
+        minus: 0,
+        factor: 0,
+      },
+      {
+        inkomen: { van: 22661, tot: 73031 },
+        minimum: 3070,
+        minus: 22660,
+        factor: -0.06095,
+      },
+    ],
+    AOW: [
+      {
+        inkomen: { van: 0, tot: 22661 },
+        minimum: 1583,
+        minus: 0,
+        factor: 0,
+      },
+      {
+        inkomen: { van: 22661, tot: 73031 },
+        minimum: 1583,
+        minus: 22660,
+        factor: -0.03141,
+      },
+    ],
+  },
   2023: {
     V: [
       {
@@ -708,8 +1867,62 @@ const AHK = {
 };
 
 // Arbeidskorting
-
+// TODO: Arbeidskorting uitwerken
 const AK = {
+  2024: {
+    V: [
+      {
+        inkomen: { van: 0, tot: 10741 },
+        minimum: 0,
+        minus: 0,
+        factor: 0.08231,
+      },
+      {
+        inkomen: { van: 10741, tot: 23201 },
+        minimum: 884,
+        minus: 10740,
+        factor: 0.29861,
+      },
+      {
+        inkomen: { van: 23201, tot: 39939 },
+        minimum: 4720,
+        minus: 23200,
+        factor: 0.03085,
+      },
+      {
+        inkomen: { van: 39939, tot: 115295 },
+        minimum: 5538,
+        minus: 39938,
+        factor: -0.0651,
+      },
+    ],
+    AOW: [
+      {
+        inkomen: { van: 0, tot: 10728 },
+        minimum: 0,
+        minus: 0,
+        factor: 0.04241,
+      },
+      {
+        inkomen: { van: 10728, tot: 23201 },
+        minimum: 457,
+        minus: 10727,
+        factor: 0.15388,
+      },
+      {
+        inkomen: { van: 23201, tot: 37691 },
+        minimum: 2374,
+        minus: 23200,
+        factor: 0.01589,
+      },
+      {
+        inkomen: { van: 37691, tot: 115295 },
+        minimum: 2604,
+        minus: 37690,
+        factor: -0.03355,
+      },
+    ],
+  },
   2023: {
     V: [
       {
@@ -766,7 +1979,36 @@ const AK = {
   },
 };
 
+// AOW 1e schijf is inkomstenbelasting + volksverzekering premie.
+// TODO: Inkomstenbelasting controleren
 const IB = {
+  2024: {
+    V: [
+      {
+        tot: 75519,
+        percentage: 0.3697,
+      },
+      {
+        vanaf: 75519,
+        percentage: 0.495,
+      },
+    ],
+    AOW: [
+      {
+        tot: 40022,
+        percentage: 0.1907,
+      },
+      {
+        vanaf: 40022,
+        tot: 75519,
+        percentage: 0.3697,
+      },
+      {
+        vanaf: 75519,
+        percentage: 0.495,
+      },
+    ],
+  },
   2023: {
     V: [
       {

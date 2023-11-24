@@ -33,7 +33,7 @@ const AVG_HUUR: number = 600;
 const AVG_WOZ: number = 315000;
 const AVG_RENTE: number = AVG_WOZ * 0.0428;
 const JAAR: number = 2023;
-const JAREN: number[] = [2023]; //, 2024];
+const JAREN: number[] = [2023, 2024];
 
 function lengte(a: any): number {
   return (a && a.length) || 0;
