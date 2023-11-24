@@ -37,8 +37,9 @@
           <n-radio label="per Maand" key="maand" value="maand" size="small" />
         </n-space>
       </n-radio-group>
-      <br/>
-      Vul jaar inkomen in of klik op de grafiek om een inkomensberekening te doen:
+      <br />
+      Vul jaar inkomen in of klik op de grafiek om een inkomensberekening te
+      doen:
       <n-slider
         v-model:value="grafiek.arbeidsInkomen"
         :step="100"
@@ -71,7 +72,7 @@ export default {
   setup() {
     return {
       jaren,
-    }
+    };
   },
   data() {
     return {

@@ -15,19 +15,19 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
-import { assert, expect, test } from 'vitest'
-import algemeen from '../../../src/js/berekeningen/algemeen.js'
-import { BeschikbaarInkomen } from '../../../src/js/berekeningen/BeschikbaarInkomen.js'
+import { expect, test } from "vitest"
+import { BeschikbaarInkomen } from "../../../src/js/berekeningen/BeschikbaarInkomen"
+import { BeschikbaarInkomenResultaatType, GrafiekType, LeeftijdType, PeriodeType, PersoonType, WonenType, WoningType } from "../../../src/types";
 
-const vis = {jaar:2023, periode:'jaar'};
-const personen = [{leeftijd:'V'}, {leeftijd:'V', inkomen:0}, {leeftijd:'K611'}, {leeftijd:'K611'}];
-const wonen = {woning_type:'huur', huur:1100};
-const arbeidsinkomen = 46377;
-const bekenen = new BeschikbaarInkomen(vis, personen, wonen);
-const berekening = bekenen.bereken(arbeidsinkomen);
+const vis: GrafiekType = {jaar:2023, periode:PeriodeType.JAAR};
+const personen: PersoonType[] = [{leeftijd:LeeftijdType.V}, {leeftijd:LeeftijdType.V}, {leeftijd:LeeftijdType.K611}, {leeftijd:LeeftijdType.K611}];
+const wonen: WonenType = {woning_type:WoningType.HUUR, huur:1100};
+const arbeidsinkomen: number = 46377;
+const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(vis, personen, wonen);
+const berekening: BeschikbaarInkomenResultaatType = berekenen.bereken(arbeidsinkomen);
 
 test('Bereken beschikbaar inkomen eenverdiener, 2 kinderen', () => {
-  let expected = {
+  let expected: BeschikbaarInkomenResultaatType = {
     arbeidsinkomen: arbeidsinkomen,
     brutoInkomstenBelasting: 17127,
     netto: 29250,

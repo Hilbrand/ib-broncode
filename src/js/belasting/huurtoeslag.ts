@@ -16,14 +16,20 @@
  */
 
 /**
- * Berekeing van huurtoeslag
+ * Berekening van huurtoeslag
  *
  * https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/toeslagen/huurtoeslag/
  */
 
-import data from "@/js/belasting/belasting_data";
+import data from "./belasting_data.js";
 
-function huurtoeslag(jaar, rekeninkomen, rekenhuur, aantalPersonen, aow) {
+function huurtoeslag(
+  jaar: number,
+  rekeninkomen: number,
+  rekenhuur: number,
+  aantalPersonen: number,
+  aow: boolean
+): number {
   const htj = data.HT[jaar];
   const htbpj = data.HTBP[jaar];
   // als jonger 23 dan htj.KwKrtGrns
@@ -59,7 +65,7 @@ function huurtoeslag(jaar, rekeninkomen, rekenhuur, aantalPersonen, aow) {
   return 12 * Math.floor(a + 0.65 * b + 0.4 * c);
 }
 
-function huurtoeslagMax(jaar, rekeninkomen) {
+function huurtoeslagMax(jaar: number, rekeninkomen: number): number {
   const maxhuur = data.HT[jaar].MaxHuur;
 
   return huurtoeslag(jaar, rekeninkomen, maxhuur, 1, false);

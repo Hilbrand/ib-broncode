@@ -16,18 +16,21 @@
  */
 
 /**
- * Berekeing van zorgtoeslag
+ * Berekening van zorgtoeslag
  *
  * https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/themaoverstijgend/brochures_en_publicaties/informatieblad-zorgtoeslag-2023
  */
 
-import data from "@/js/belasting/belasting_data";
+import data from "./belasting_data";
 
-const jaar = "2023";
-const tabel = data.TABEL[jaar];
-const drempel = tabel.Drempel;
+function zorgtoeslag(
+  jaar: number,
+  inkomen: number,
+  toeslagpartner: boolean
+): number {
+  const tabel = data.TABEL[jaar];
+  const drempel = tabel.Drempel;
 
-function zorgtoeslag(inkomen, toeslagpartner) {
   if (
     (toeslagpartner && inkomen > tabel.MxInk2) ||
     (!toeslagpartner && inkomen > tabel.MxInk1)

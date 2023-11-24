@@ -14,11 +14,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-
-import functies from "@/js/functies";
 import { BeschikbaarInkomen } from "@/js/berekeningen/BeschikbaarInkomen";
 import { EffectieveBelastingLegenda } from "@/js/grafieken/EffectieveBelastingLegenda";
 
+/**
+ * Berekend het belastingbedrag na verrekening van alle kortingen en toeslagen.
+ */
 export class EffectieveBelasting extends BeschikbaarInkomen {
   constructor(vis, personen, wonen) {
     super(vis, personen, wonen);

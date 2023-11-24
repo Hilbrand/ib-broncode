@@ -16,15 +16,20 @@
  */
 
 /**
- * Berekeing van kinder gebonden budget.
+ * Berekening van kinder gebonden budget.
  *
  * https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/themaoverstijgend/brochures_en_publicaties/informatieblad-kindgebonden-budget-2023
  */
 
-import data from "@/js/belasting/belasting_data";
-import functies from "@/js/functies";
+import { LeeftijdType, PersoonType } from "../../types";
+import data from "./belasting_data.js";
+import functies from "../functies";
 
-function rekenBasis(jaar, aantalKinderen, toeslagenPartner) {
+function rekenBasis(
+  jaar: number,
+  aantalKinderen: number,
+  toeslagenPartner: boolean
+): number {
   const tabelj = data.TABEL[jaar];
   const maxkgbj = data.MAXKGB[jaar];
 
@@ -41,12 +46,16 @@ function rekenBasis(jaar, aantalKinderen, toeslagenPartner) {
  * @returns
  */
 
-function maxKindgebondenBudget(jaar, personen, toeslagenPartner) {
+function maxKindgebondenBudget(
+  jaar: number,
+  personen: PersoonType[],
+  toeslagenPartner: boolean
+): number {
   const tabelj = data.TABEL[jaar];
-  const k05 = functies.telPersonen(personen, "K05");
-  const k611 = functies.telPersonen(personen, "K611");
-  const k1215 = functies.telPersonen(personen, "K1215");
-  const k1617 = functies.telPersonen(personen, "K1617");
+  const k05 = functies.telPersonen(personen, LeeftijdType.K05);
+  const k611 = functies.telPersonen(personen, LeeftijdType.K611);
+  const k1215 = functies.telPersonen(personen, LeeftijdType.K1215);
+  const k1617 = functies.telPersonen(personen, LeeftijdType.K1617);
   const kinderen = k05 + k611 + k1215 + k1617;
   const basis = rekenBasis(jaar, kinderen, toeslagenPartner);
 
@@ -54,11 +63,11 @@ function maxKindgebondenBudget(jaar, personen, toeslagenPartner) {
 }
 
 function kindgebondenBudget(
-  jaar,
-  toetsinkomen,
-  maxKindergebondenBudget,
-  toeslagenPartner
-) {
+  jaar: number,
+  toetsinkomen: number,
+  maxKindergebondenBudget: number,
+  toeslagenPartner: boolean
+): number {
   const tabelj = data.TABEL[jaar];
 
   if (maxKindergebondenBudget > 0) {

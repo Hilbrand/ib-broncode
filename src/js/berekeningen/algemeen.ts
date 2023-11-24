@@ -14,30 +14,44 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
+import { Berekenen } from "./Berekenen";
+import { BeschikbaarInkomen } from "./BeschikbaarInkomen";
+import { MarginaleDruk } from "./MarginaleDruk";
+import { EffectieveBelasting } from "./EffectieveBelasting";
+import { BlueminkBeschikbaarInkomen } from "../../bluemink/BlueminkBeschikbaarInkomen";
+import {
+  GrafiekType,
+  LeeftijdType,
+  PeriodeType,
+  PersoonType,
+  TabType,
+  WonenType,
+  WoningType,
+} from "../../types";
 
-import functies from "@/js/functies";
-import { BeschikbaarInkomen } from "@/js/berekeningen/BeschikbaarInkomen";
-import { MarginaleDruk } from "@/js/berekeningen/MarginaleDruk";
-import { EffectieveBelasting } from "@/js/berekeningen/EffectieveBelasting";
-import { BlueminkBeschikbaarInkomen } from "@/bluemink/BlueminkBeschikbaarInkomen";
+const stap: number = 100;
 
-const stap = 100;
-
-function berekenGrafiekData(path, type, vis, personen, wonen) {
-  let berekenen = null;
+function berekenGrafiekData(
+  path: string,
+  type: TabType,
+  vis: GrafiekType,
+  personen: PersoonType[],
+  wonen: WoningType
+) {
+  let berekenen: Berekenen = null;
   let bi =
     path == "/bluemink"
       ? new BlueminkBeschikbaarInkomen(vis, personen, wonen)
       : new BeschikbaarInkomen(vis, personen, wonen);
 
   switch (type) {
-    case "bi":
+    case TabType.BI:
       berekenen = bi;
       break;
-    case "md":
+    case TabType.MD:
       berekenen = new MarginaleDruk(vis, personen, wonen, bi);
       break;
-    case "eb":
+    case TabType.EB:
       berekenen = new EffectieveBelasting(vis, personen, wonen, bi);
       break;
   }

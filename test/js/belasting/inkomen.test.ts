@@ -15,10 +15,10 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
-import { assert, expect, test } from 'vitest'
-import inkomen from '../../../src/js/belasting/inkomen.js'
+import { expect, test } from "vitest"
+import inkomen from "../../../src/js/belasting/inkomen"
 
-const JAAR = 2023;
+const JAAR: number = 2023;
 
 // test algemeneHeffingsKorting
 

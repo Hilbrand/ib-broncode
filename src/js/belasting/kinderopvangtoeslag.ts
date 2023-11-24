@@ -16,20 +16,25 @@
  */
 
 /**
- * Berekeing van kinderopvang toeslag
+ * Berekening van kinderopvang toeslag
  *
- * NIET INGEBRUIK
+ * NIET IN GEBRUIK
  */
 
-import data from "@/js/belasting/belasting_data";
+import data from "./belasting_data";
+import { LeeftijdType, PersoonType } from "../../types";
 import functies from "../functies";
 
-function kinderopvangToeslag(jaar, toestingsInkomen, personen) {
+function kinderopvangToeslag(
+  jaar: number,
+  toestingsInkomen: number,
+  personen: PersoonType[]
+): number {
   const kqttj = data.KOTT[jaar];
-  const k05 = functies.telPersonen(personen, "K05");
-  const k611 = functies.telPersonen(personen, "K611");
-  const k1215 = functies.telPersonen(personen, "K1215");
-  const k1617 = functies.telPersonen(personen, "K1617");
+  const k05 = functies.telPersonen(personen, LeeftijdType.K05);
+  const k611 = functies.telPersonen(personen, LeeftijdType.K611);
+  const k1215 = functies.telPersonen(personen, LeeftijdType.K1215);
+  const k1617 = functies.telPersonen(personen, LeeftijdType.K1617);
 
   const kinderen = k05 + k611 + k1215 + k1617;
 

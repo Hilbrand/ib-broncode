@@ -15,29 +15,31 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
-import { assert, expect, test } from 'vitest'
-import zt from '../../../src/js/belasting/zorgtoeslag.js'
+import { expect, test } from "vitest"
+import zt from "../../../src/js/belasting/zorgtoeslag"
+
+const JAAR : number = 2023;
 
 // Zorgtoeslag alleenstaande
 
 test('Zorgtoeslag alleen 40.000', () => {
-  expect(zt.zorgtoeslag(40000, false)).toEqual(0)
+  expect(zt.zorgtoeslag(JAAR, 40000, false)).toEqual(0)
 })
 
 test('Zorgtoeslag alleen 19.000', () => {
-  expect(zt.zorgtoeslag(19000, false)).toEqual(1858)
+  expect(zt.zorgtoeslag(JAAR, 19000, false)).toEqual(1858)
 })
  
 // Zorgtoeslag met toeslagpartner
 
 test('Zorgtoeslag samen 50.000', () => {
-  expect(zt.zorgtoeslag(50000, true)).toEqual(0)
+  expect(zt.zorgtoeslag(JAAR, 50000, true)).toEqual(0)
 })
 
 test('Zorgtoeslag samen 40.000', () => {
-  expect(zt.zorgtoeslag(40000, true)).toEqual(1145)
+  expect(zt.zorgtoeslag(JAAR, 40000, true)).toEqual(1145)
 })
 
 test('Zorgtoeslag samen 20.000', () => {
-  expect(zt.zorgtoeslag(20000, true)).toEqual(3181)
+  expect(zt.zorgtoeslag(JAAR, 20000, true)).toEqual(3181)
 })

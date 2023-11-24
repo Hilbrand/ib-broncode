@@ -15,17 +15,18 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
-import { assert, expect, test } from 'vitest'
-import kgb from '../../../src/js/belasting/kindgebonden_budget.js'
+import { expect, test } from "vitest"
+import { LeeftijdType, PersoonType } from "../../../src/types";
+import kgb from "../../../src/js/belasting/kindgebonden_budget";
 
 // 2023 getallen
-const JAAR = 2023;
-const A1K = [{leeftijd: 'V'}, {leeftijd: 'K611'}];
-const A1K_MAX = 3848 + 1653;
-const M1K = [{leeftijd: 'V'}, {leeftijd: 'V'}, {leeftijd: 'K611'}];
-const M1K_MAX = 1653;
-const A3K = [{leeftijd: 'V'}, {leeftijd: 'K611'}, {leeftijd: 'K1215'}, {leeftijd: 'K1617'}];
-const A3K_MAX = 3848 + 4717 + 267 + 476;
+const JAAR : number = 2023;
+const A1K : PersoonType[] = [{leeftijd: LeeftijdType.V}, {leeftijd: LeeftijdType.K611}];
+const A1K_MAX : number = 3848 + 1653;
+const M1K : PersoonType[] = [{leeftijd: LeeftijdType.V}, {leeftijd: LeeftijdType.V}, {leeftijd: LeeftijdType.K611}];
+const M1K_MAX : number = 1653;
+const A3K : PersoonType[] = [{leeftijd: LeeftijdType.V}, {leeftijd: LeeftijdType.K611}, {leeftijd: LeeftijdType.K1215}, {leeftijd: LeeftijdType.K1617}];
+const A3K_MAX : number = 3848 + 4717 + 267 + 476;
 
 // Test Max Kindgebonden Budget
 

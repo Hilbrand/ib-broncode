@@ -19,7 +19,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(p, index) in gegevens" size="small">
+          <tr v-for="(p, index) in gegevens" :key="p" size="small">
             <td>{{ index + 1 }}</td>
             <td>
               <n-select

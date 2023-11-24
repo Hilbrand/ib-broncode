@@ -16,7 +16,7 @@
  */
 
 import { assert, expect, test } from 'vitest'
-import ht from '../../../src/js/belasting/huurtoeslag.js'
+import ht from '../../../src/js/belasting/huurtoeslag'
 
 const JAAR = 2023;
 

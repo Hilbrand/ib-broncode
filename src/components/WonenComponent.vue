@@ -71,7 +71,7 @@ export default {
   data() {
     return {
       gegevens: {
-        wt: "huur",
+        woning_type: "huur",
         huur: 0,
         woz: 0,
         rente: 0,
@@ -98,7 +98,7 @@ export default {
   },
   methods: {
     setMaxHuur(event) {
-      this.gegevens.huur = belasting_data.HT[jaar].MaxHuur;
+      this.gegevens.huur = belasting_data.HT[this.jaar].MaxHuur;
     },
     setAvgHuur(event) {
       this.gegevens.huur = belasting_data.AVG_HUUR;

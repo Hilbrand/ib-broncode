@@ -15,11 +15,12 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
-import { assert, expect, test } from 'vitest'
-import kbs from '../../../src/js/belasting/kinderbijslag.js'
+import { expect, test } from "vitest"
+import { LeeftijdType, PersoonType } from "../../../src/types";
+import kbs from "../../../src/js/belasting/kinderbijslag"
 
-const JAAR = 2023;
-const A3K = [{leeftijd: 'V'}, {leeftijd: 'K05'}, {leeftijd: 'K611'}, {leeftijd: 'K1215'}, {leeftijd: 'K1617'}];
+const JAAR : number = 2023;
+const A3K : PersoonType[] = [{leeftijd: LeeftijdType.V}, {leeftijd: LeeftijdType.K05}, {leeftijd: LeeftijdType.K611}, {leeftijd: LeeftijdType.K1215}, {leeftijd: LeeftijdType.K1617}];
 
 // Test Kinderbijslag
 

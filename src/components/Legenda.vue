@@ -7,10 +7,10 @@
       Beweeg de muis over de grafiek om de legenda te tonen.
     </n-space>
     <n-space vertical v-else>
-      <p>
-        <h4>Arbeidsinkomen (Salaris): &euro; {{ data.arbeidsInkomen }} </h4>
+      <div>
+        <h4>Arbeidsinkomen (Salaris): &euro; {{ data.arbeidsInkomen }}</h4>
         <h4>{{ data.titel }}</h4>
-      </p>
+      </div>
       <n-table :single-line="false" size="tiny" class="table">
         <tbody>
           <tr v-for="gd in data.grafiek" :key="gd.naam">

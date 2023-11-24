@@ -14,33 +14,43 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
+import {
+  LeeftijdType,
+  PeriodeType,
+  PersoonType,
+  WonenType,
+  WoningType,
+} from "../types";
 
-function telPersonen(personen, controleLeeftijd) {
+function telPersonen(personen: PersoonType[], controleLeeftijd: LeeftijdType) {
   return personen.filter((p) => p.leeftijd == controleLeeftijd).length;
 }
 
-function telVolwassenen(personen) {
-  return telPersonen(personen, "V") + telPersonen(personen, "AOW");
+function telVolwassenen(personen: PersoonType[]): number {
+  return (
+    telPersonen(personen, LeeftijdType.V) +
+    telPersonen(personen, LeeftijdType.AOW)
+  );
 }
 
-function toeslagenPartner(personen) {
+function toeslagenPartner(personen: PersoonType[]): boolean {
   return telVolwassenen(personen) > 1;
 }
 
-function aow(personen) {
-  return telPersonen(personen, "AOW") > 0;
+function aow(personen: PersoonType[]): boolean {
+  return telPersonen(personen, LeeftijdType.AOW) > 0;
 }
 
-function isHuur(wonen) {
-  return wonen.woning_type == "huur";
+function isHuur(wonen: WonenType): boolean {
+  return wonen.woning_type == WoningType.HUUR;
 }
 
-function negatiefIsNul(getal) {
+function negatiefIsNul(getal: number): number {
   return Math.max(0, getal);
 }
 
-function factorBerekening(periode) {
-  return "maand" == periode ? (1 / 12) : 1;
+function factorBerekening(periode: PeriodeType): number {
+  return PeriodeType.MAAND == periode ? 1 / 12 : 1;
 }
 
 export default {

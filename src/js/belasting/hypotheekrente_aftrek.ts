@@ -16,14 +16,14 @@
  */
 
 /**
- * Berekeing van eigen woning forfait
+ * Berekening van eigen woning forfait
  *
  *  https://www.belastingdienst.nl/wps/wcm/connect/nl/koopwoning/content/hoe-werkt-eigenwoningforfait
  */
-import data from "@/js/belasting/belasting_data";
+import data from "./belasting_data";
 
 //  Eigenwoning forfait
-function eigenwoningforfait(jaar, wozWaarde) {
+function eigenwoningforfait(jaar: number, wozWaarde: number): number {
   const ewfj = data.EWF[jaar].ewf;
 
   for (let ewf of ewfj) {
@@ -38,7 +38,11 @@ function eigenwoningforfait(jaar, wozWaarde) {
 }
 
 // Rente moet worden opgesteld bij inkomen (aftrek geeft negative waarde)
-function hypotheekRenteAftrek(jaar, rente, wozWaarde) {
+function hypotheekRenteAftrek(
+  jaar: number,
+  rente: number,
+  wozWaarde: number
+): number {
   const ksfj = data.EWF[jaar].kSchuldFactor;
   const ewf = eigenwoningforfait(jaar, wozWaarde);
   const ew = -rente + ewf;

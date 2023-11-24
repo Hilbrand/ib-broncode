@@ -14,37 +14,47 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-
-import functies from "@/js/functies";
-import inkomen from "@/js/belasting/inkomen";
-import ht from "@/js/belasting//huurtoeslag";
-import iack from "@/js/belasting/inkomensafhankelijke_combinatiekorting";
-import kgb from "@/js/belasting/kindgebonden_budget";
-import zt from "@/js/belasting/zorgtoeslag";
-import { Berekenen } from "@/js/berekeningen/Berekenen";
-import { BeschikbaarInkomenLegenda } from "@/js/grafieken/BeschikbaarInkomenLegenda";
+import functies from "../functies";
+import inkomen from "../belasting/inkomen";
+import ht from "../belasting//huurtoeslag";
+import iack from "../belasting/inkomensafhankelijke_combinatiekorting";
+import kgb from "../belasting/kindgebonden_budget";
+import zt from "../belasting/zorgtoeslag";
+import { Berekenen } from "../berekeningen/Berekenen";
+import { BeschikbaarInkomenLegenda } from "../grafieken/BeschikbaarInkomenLegenda";
+import {
+  BeschikbaarInkomenResultaatType,
+  GrafiekType,
+  LeeftijdType,
+  PersoonType,
+  WonenType,
+  WoningType,
+} from "../../types";
+import { Legenda } from "../grafieken/Legenda";
 
 export class BeschikbaarInkomen extends Berekenen {
-  constructor(vis, personen, wonen) {
+  beschikbaarInkomen: number;
+
+  constructor(vis: GrafiekType, personen: PersoonType[], wonen: WonenType) {
     super(vis, personen, wonen);
   }
 
-  createLegenda() {
+  createLegenda(): Legenda {
     return new BeschikbaarInkomenLegenda(this);
   }
 
-  getYDomain() {
-    let yDomain = super.getYDomain();
+  getYDomain(): number[] {
+    let yDomain: number[] = super.getYDomain();
 
-    return yDomain[(0, Math.round(yDomain[1] / 1000))];
+    return [0, Math.round(yDomain[1] / 1000)];
   }
 
-  bereken(arbeidsInkomen) {
+  bereken(arbeidsInkomen: number): BeschikbaarInkomenResultaatType {
     return this.berekenBeschikbaarInkomen(arbeidsInkomen);
   }
 
-  berekenBeschikbaarInkomen(arbeidsinkomen) {
-    let aow = this.personen[0].leeftijd == "AOW";
+  berekenBeschikbaarInkomen(arbeidsinkomen): BeschikbaarInkomenResultaatType {
+    let aow = this.personen[0].leeftijd == LeeftijdType.AOW;
     let toetsingsInkomen = inkomen.toetsingsinkomen(
       arbeidsinkomen,
       this.algemeneGegevens.hypotheekRenteAftrek
@@ -94,7 +104,7 @@ export class BeschikbaarInkomen extends Berekenen {
       this.algemeneGegevens.toeslagenpartner
     );
 
-    let beschikbaarInkomen = {
+    let beschikbaarInkomen: BeschikbaarInkomenResultaatType = {
       arbeidsinkomen: arbeidsinkomen,
       brutoInkomstenBelasting: toetsingsInkomenBelasting,
       netto:
@@ -103,12 +113,13 @@ export class BeschikbaarInkomen extends Berekenen {
       algemeneHeffingsKorting: algemeneHeffingsKorting,
       arbeidskorting: arbeidskorting,
       zorgtoeslag: zt.zorgtoeslag(
+        this.vis.jaar,
         toeslagenToetsInkomen,
         this.algemeneGegevens.toeslagenpartner
       ),
       wonen: this.algemeneGegevens.huren
         ? ht.huurtoeslag(
-          this.vis.jaar,
+            this.vis.jaar,
             toeslagenToetsInkomen,
             this.wonen.huur,
             this.personen.length,

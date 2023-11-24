@@ -15,21 +15,20 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
-import { assert, expect, test } from 'vitest'
-import algemeen from '../../../src/js/berekeningen/algemeen.js'
-import { BeschikbaarInkomen } from "../../../src/js/berekeningen/BeschikbaarInkomen";
+import { expect, test } from 'vitest'
+import { BeschikbaarInkomen } from "../../../src/js/berekeningen/BeschikbaarInkomen.js";
 import { MarginaleDruk } from '../../../src/js/berekeningen/MarginaleDruk.js'
+import { GrafiekType, LeeftijdType, MarginaleDrukResultaatType, PeriodeType, PersoonType, WonenType, WoningType } from "../../../src/types";
 
 test('Marginale Druk Details ', () => {
-  const vis = {jaar: 2023, periode:'jaar', svt: 'p', sv_p: 3};
-  const personen = [{leeftijd:'V'}];
-  const wonen = {woning_type:'huur', huur:600};
-   
-  const ai = 27800;
-  const md = new MarginaleDruk(vis, personen, wonen, new BeschikbaarInkomen(vis, personen, wonen));
-  let mdd = md.bereken(ai);
+  const vis: GrafiekType = {jaar:2023, periode:PeriodeType.JAAR, svt: 'p', sv_p: 3};
+  const personen: PersoonType[] = [{leeftijd:LeeftijdType.V}];
+  const wonen: WonenType = {woning_type:WoningType.HUUR, huur:600};
+  const ai: number = 27800;
+  const md:MarginaleDruk = new MarginaleDruk(vis, personen, wonen, new BeschikbaarInkomen(vis, personen, wonen));
+  let mdd: MarginaleDrukResultaatType = md.bereken(ai);
 
-  let expected = {
+  let expected: MarginaleDrukResultaatType = {
     arbeidsinkomen: ai * 0.03,
     nettoInkomensBelasting: 33.81,
     algemeneHeffingsKorting: 6.12,

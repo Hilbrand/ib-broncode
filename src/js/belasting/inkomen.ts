@@ -16,16 +16,22 @@
  */
 
 /**
- * Berekeing van inkomen, arbeidskorting en algemeneheffingskorting
+ * Berekening van inkomen, arbeidskorting en algemeneheffingskorting
  *
  * https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_tarieven/heffingskortingen/algemene_heffingskorting/tabel-algemene-heffingskorting-2023
  * https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_tarieven/heffingskortingen/arbeidskorting/tabel-arbeidskorting-2023
  * IB AOW: https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_tarieven/boxen_en_tarieven/overzicht_tarieven_en_schijven/u-hebt-voor-2023-aow-leeftijd
  */
 
-import data from "@/js/belasting/belasting_data";
+import { LeeftijdType, PersoonType } from "../../types";
+import data from "./belasting_data";
 
-function algemeneHeffingsKorting(jaar, toetsingsinkomen, maxBelasting, aow) {
+function algemeneHeffingsKorting(
+  jaar: number,
+  toetsingsinkomen: number,
+  maxBelasting: number,
+  aow: boolean
+): number {
   const ahkt = aow ? data.AHK[jaar].AOW : data.AHK[jaar].V;
 
   for (let ahk of ahkt) {
@@ -39,7 +45,12 @@ function algemeneHeffingsKorting(jaar, toetsingsinkomen, maxBelasting, aow) {
   return 0;
 }
 
-function arbeidskorting(jaar, arbeidsinkomen, maxArbeidsinkomen, aow) {
+function arbeidskorting(
+  jaar: number,
+  arbeidsinkomen: number,
+  maxArbeidsinkomen: number,
+  aow: boolean
+): number {
   const akt = aow ? data.AK[jaar].AOW : data.AK[jaar].V;
 
   for (let ak of akt) {
@@ -52,18 +63,29 @@ function arbeidskorting(jaar, arbeidsinkomen, maxArbeidsinkomen, aow) {
   return 0;
 }
 
-function maxArbeidsKorting(jaar, toetsingsInkomen, maxBelasting, aow) {
+function maxArbeidsKorting(
+  jaar: number,
+  toetsingsInkomen: number,
+  maxBelasting: number,
+  aow: boolean
+): number {
   return (
     inkomstenBelasting(jaar, toetsingsInkomen, aow) -
     algemeneHeffingsKorting(jaar, toetsingsInkomen, maxBelasting, aow)
   );
 }
 
-function toetsingsinkomen(arbeidsinkomen, hypotheekRenteAftrek) {
+function toetsingsinkomen(
+  arbeidsinkomen: number,
+  hypotheekRenteAftrek: number
+): number {
   return Math.max(0, arbeidsinkomen + (hypotheekRenteAftrek || 0));
 }
 
-function toeslagenToetsInkomen(arbeidsinkomen, personen) {
+function toeslagenToetsInkomen(
+  arbeidsinkomen: number,
+  personen: PersoonType[]
+): number {
   return (
     arbeidsinkomen +
     personen.reduce(
@@ -74,14 +96,18 @@ function toeslagenToetsInkomen(arbeidsinkomen, personen) {
   );
 }
 
-function ibRange(toetsingsInkomen, p) {
+function ibRange(toetsingsInkomen: number, p): number {
   const top = Math.min(p.tot || toetsingsInkomen, toetsingsInkomen);
   const range = Math.max(0, top - (p.vanaf || 0));
 
   return p.percentage * range;
 }
 
-function inkomstenBelasting(jaar, toetsingsInkomen, aow) {
+function inkomstenBelasting(
+  jaar: number,
+  toetsingsInkomen: number,
+  aow: boolean
+): number {
   const ibTabel = aow ? data.IB[jaar].AOW : data.IB[jaar].V;
 
   return Math.round(
@@ -89,19 +115,18 @@ function inkomstenBelasting(jaar, toetsingsInkomen, aow) {
   );
 }
 
-function netto(jaar, bruto, aow) {
+function netto(jaar: number, bruto: number, aow: boolean): number {
   return Math.min(bruto, bruto - inkomstenBelasting(jaar, bruto, aow));
 }
 
-function nettoKortingenInkomens(jaar, personen) {
+function nettoKortingenInkomens(jaar: number, personen: PersoonType[]) {
   let nk = [];
-  for (let idx in personen) {
+  personen.forEach((p, idx) => {
     if (idx == 0) {
-      continue;
+      return;
     }
-    let p = personen[idx];
-    let aow = p.leeftijd == "AOW";
-    if (p.leeftijd == "V" || aow) {
+    let aow = p.leeftijd == LeeftijdType.AOW;
+    if (p.leeftijd == LeeftijdType.V || aow) {
       let inkomen = p.bruto_inkomen !== undefined ? p.bruto_inkomen : 0;
       // Hier wordt toestings inkomensten belasting berekend van anderen
       // Echter hypotheek aftrek wordt gedaan bij eerste persoon en niet hier
@@ -112,19 +137,16 @@ function nettoKortingenInkomens(jaar, personen) {
       nk.push({
         bruto: inkomen,
         netto: netto(jaar, inkomen, aow),
-        arbeidskorting: arbeidskorting(jaar, inkomen, aow),
-        algemeneHeffingsKorting: algemeneHeffingsKorting(jaar, inkomen, tib, aow),
+        arbeidskorting: 0, //arbeidskorting(jaar, inkomen, aow),
+        algemeneHeffingsKorting: algemeneHeffingsKorting(
+          jaar,
+          inkomen,
+          tib,
+          aow
+        ),
       });
     }
-  }
-  const sum = nk.reduce((s, a) => {
-    s.brutto += a.brutto;
-    s.netto += a.netto;
-    s.arbeidskorting += a.arbeidskorting;
-    s.algemeneHeffingsKorting += a.algemeneHeffingsKorting;
-    return s;
-  }, {});
-
+  });
   return nk;
 }
 

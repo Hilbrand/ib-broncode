@@ -14,11 +14,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
+import { expect, test } from "vitest"
+import ha from "../../../src/js/belasting/hypotheekrente_aftrek"
 
-import { assert, expect, test } from 'vitest'
-import ha from '../../../src/js/belasting/hypotheekrente_aftrek.js'
-
-const JAAR = 2023;
+const JAAR : number = 2023;
 
 // (400 - 1050) * 83.33
 test('Hypotheek kleine schuld is optelling', () => {

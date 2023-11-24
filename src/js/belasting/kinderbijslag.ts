@@ -16,19 +16,19 @@
  */
 
 /**
- * Berekeing van kinderbijslag.
+ * Berekening van kinderbijslag.
  *
  */
-
-import data from "@/js/belasting/belasting_data";
+import { LeeftijdType, PersoonType } from "../../types";
+import data from "./belasting_data";
 import functies from "../functies";
 
-function kinderbijslag(jaar, personen) {
+function kinderbijslag(jaar: number, personen: PersoonType[]): number {
   const kbsj = data.KBS[jaar];
-  let k05 = functies.telPersonen(personen, "K05");
-  let k611 = functies.telPersonen(personen, "K611");
-  let k1215 = functies.telPersonen(personen, "K1215");
-  let k1617 = functies.telPersonen(personen, "K1617");
+  let k05 = functies.telPersonen(personen, LeeftijdType.K05);
+  let k611 = functies.telPersonen(personen, LeeftijdType.K611);
+  let k1215 = functies.telPersonen(personen, LeeftijdType.K1215);
+  let k1617 = functies.telPersonen(personen, LeeftijdType.K1617);
 
   return Math.floor(
     4 * (k05 * kbsj.K05 + k611 * kbsj.K611 + (k1215 + k1617) * kbsj.K1217)

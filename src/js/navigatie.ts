@@ -19,25 +19,27 @@
  * Helper JavaScript om navigatie van en naar JSON objecten om te zetten.
  */
 
-const KEY_VALUE_SPLIT = ";";
+const KEY_VALUE_SPLIT: string = ";";
 
-function toNumber(v) {
+function toNumber(v: any): number {
   return Number.isNaN(v * 1) ? v : v * 1;
 }
 
-function toJsonArray(q) {
+function toJsonArray(q: any) {
   let a = typeof q === "string" ? q.split(",").map((b) => toNumber(b)) : [q];
 
   return a.length == 1 ? toNumber(q) : a;
 }
 
-function splitParam(queryParam) {
-  let a = queryParam ? queryParam.split(KEY_VALUE_SPLIT) : queryParam;
+function splitParam(queryParam: string | any): string {
+  let a: string[] | any = queryParam
+    ? queryParam.split(KEY_VALUE_SPLIT)
+    : queryParam;
 
   return a ? a.map(toJsonArray) : a;
 }
 
-function copyNavigatieToJson(from, to, functionNavToJson) {
+function copyNavigatieToJson(from, to, functionNavToJson: (any) => any) {
   Object.entries(functionNavToJson(splitParam(from))).forEach(
     (a) => (to[a[0]] = toJsonArray(a[1]))
   );
@@ -45,7 +47,7 @@ function copyNavigatieToJson(from, to, functionNavToJson) {
 
 // -------------------
 
-function jsonArrayToNavigatie(jsonArray) {
+function jsonArrayToNavigatie(jsonArray: string[]): string {
   return jsonArray.join(KEY_VALUE_SPLIT);
 }
 

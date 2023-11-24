@@ -118,8 +118,6 @@ export class MarginaleDruk extends Berekenen {
   }
 
   marginaleDruk(berekening1, berekening2) {
-    let ΔNetto =
-      berekening2.beschikbaarInkomen - berekening1.beschikbaarInkomen;
     let ΔBruto = berekening2.arbeidsinkomen - berekening1.arbeidsinkomen;
     let md =
       100 -

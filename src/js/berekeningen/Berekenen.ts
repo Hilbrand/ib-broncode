@@ -14,45 +14,70 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-
-import functies from "@/js/functies";
-import hra from "@/js/belasting/hypotheekrente_aftrek";
-import iack from "@/js/belasting/inkomensafhankelijke_combinatiekorting";
-import inkomen from "@/js/belasting/inkomen";
-import kbs from "@/js/belasting/kinderbijslag";
-import kgb from "@/js/belasting/kindgebonden_budget";
+import functies from "../functies.js";
+import hra from "../belasting/hypotheekrente_aftrek.js";
+import iack from "../belasting/inkomensafhankelijke_combinatiekorting";
+import inkomen from "../belasting/inkomen";
+import kbs from "../belasting/kinderbijslag";
+import kgb from "../belasting/kindgebonden_budget";
+import {
+  BerekenInvoerType,
+  BerekenResultaatType,
+  GrafiekType,
+  LeeftijdType,
+  PeriodeType,
+  PersoonType,
+  WonenType,
+  WoningType,
+} from "../../types";
+import { Legenda } from "../grafieken/Legenda";
 
 export class Berekenen {
-  constructor(vis, personen, wonen) {
+  vis: GrafiekType;
+  personen: PersoonType[];
+  wonen: WonenType;
+  algemeneGegevens: BerekenInvoerType;
+  factor: number;
+  legenda: any;
+
+  constructor(vis: GrafiekType, personen: PersoonType[], wonen: WonenType) {
     this.vis = vis;
     this.personen = personen;
     this.wonen = wonen;
-    this.algemeneGegevens = this.berekenAlgemeneGegevens(vis.jaar, personen, wonen);
+    this.algemeneGegevens = this.berekenAlgemeneGegevens(
+      vis.jaar,
+      personen,
+      wonen
+    );
     this.factor = functies.factorBerekening(vis.periode);
   }
 
-  getLegenda() {
+  getLegenda(): Legenda {
     if (this.legenda === undefined) {
       this.legenda = this.createLegenda();
     }
     return this.legenda;
   }
 
-  createLegenda() {}
+  createLegenda(): Legenda {}
 
-  getYDomain() {
+  getYDomain(): number[] {
     return [0, this.vis.van_tot[1]];
   }
 
-  getAlgemeneGegevens() {
+  getAlgemeneGegevens(): BerekenInvoerType {
     return this.algemeneGegevens;
   }
 
-  getFactor() {
+  getFactor(): number {
     return this.factor;
   }
 
-  berekenAlgemeneGegevens(jaar, personen, wonen) {
+  berekenAlgemeneGegevens(
+    jaar: number,
+    personen: PersoonType[],
+    wonen: WonenType
+  ): BerekenInvoerType {
     let toeslagenpartner = functies.toeslagenPartner(personen);
     let aow = functies.aow(personen);
     let huren = functies.isHuur(wonen);
@@ -67,7 +92,7 @@ export class Berekenen {
         personen,
         toeslagenpartner
       ),
-      nk: inkomen.nettoKortingenInkomens(personen),
+      //nk: inkomen.nettoKortingenInkomens(personen),
       huren: huren,
       hypotheekRenteAftrek: huren
         ? 0
@@ -79,11 +104,20 @@ export class Berekenen {
    *
    * @param arbeidsInkomen jaar arbeidsinkomen
    */
-  bereken(arbeidsInkomen) {}
-
-  afronden(getal, factor) {
-    return (getal * factor).toFixed("2") * 1;
+  bereken(arbeidsInkomen: number): BerekenResultaatType {
+    return null;
   }
 
-  verzamelGrafiekSeries(alles, gegevens, id) {}
+  afronden(getal: number, factor: number): number {
+    return +(getal * factor).toFixed(2);
+  }
+
+  /**
+   * Zet de gegevens om in het formaat dat de grafiek gebruikt.
+   *
+   * @param {*} alles map object waarin de berekende gegevens moeten worden opgeslagen
+   * @param {*} gegevens gegevens die moeten worden opgeslagen
+   * @param {number} id id waaronder deze gegevens in het alles object moeten worden opgeslagen
+   */
+  verzamelGrafiekSeries(alles, gegevens, id: number) {}
 }

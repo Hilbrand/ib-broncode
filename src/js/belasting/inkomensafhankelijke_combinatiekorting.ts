@@ -16,42 +16,41 @@
  */
 
 /**
- * Berekeing van inkomens afhankelijke combinatie korting.
+ * Berekening van inkomens afhankelijke combinatie korting.
  *
  * https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_tarieven/heffingskortingen/inkomensafhankelijke_combikorting/
  */
 
-import data from "@/js/belasting/belasting_data";
+import data from "./belasting_data";
+import { LeeftijdType, PersoonType } from "../../types";
 
 /**
  * Bepaalt laagste inkomen van alle personen, behalve de eerste.
  * De eerste persoon wordt overgeslagen, want daarvoor wordt het inkomen dynamisch berekend.
  * Als er andere personen zijn dan geeft het terug Number.MAX_VALUE
  */
-function bepaalLaagsteArbeidsInkomenAnderen(personen) {
+function bepaalLaagsteArbeidsInkomenAnderen(personen: PersoonType[]): number {
   let laagsteInkomen = Number.MAX_VALUE;
 
-  for (let idx in personen) {
+  personen.forEach((p, idx) => {
     if (idx == 0) {
-      continue; // Sla eerste persoon over
+      return; // Sla eerste persoon over
     }
-    let p = personen[idx];
-
-    if (p.leeftijd == "V" || p.leeftijd == "AOW") {
+    if (p.leeftijd == LeeftijdType.V || p.leeftijd == LeeftijdType.AOW) {
       let pInkomen = p.bruto_inkomen === undefined ? 0 : p.bruto_inkomen;
 
       laagsteInkomen = Math.min(pInkomen, laagsteInkomen);
     }
-  }
+  });
   return laagsteInkomen;
 }
 
 function inkomensafhankelijkeCombinatiekorting(
-  jaar,
-  toetsinkomen,
-  laagstePartnerinkomen,
-  aow = false
-) {
+  jaar: number,
+  toetsinkomen: number,
+  laagstePartnerinkomen: number,
+  aow: boolean = false
+): number {
   const tabel = data.IACK[jaar];
   const arbeidsinkomen =
     laagstePartnerinkomen < 0
