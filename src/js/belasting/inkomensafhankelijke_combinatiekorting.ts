@@ -61,7 +61,7 @@ function inkomensafhankelijkeCombinatiekorting(
   return arbeidsinkomen < t.MinAInk
     ? 0
     : arbeidsinkomen < t.MaxAInk
-    ? Math.floor((arbeidsinkomen - t.MinAInk) * t.InkKorting)
+    ? Math.floor((arbeidsinkomen - (t.MinAInk-1)) * t.InkKorting)
     : t.MaxInkAfKrt;
 }
 

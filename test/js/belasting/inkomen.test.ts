@@ -76,6 +76,10 @@ test('Belasting 100.000', () => {
   expect(inkomen.inkomstenBelasting(JAAR, 100000, true)).toEqual(33392)
 })
 
+test('Belasting 40.021', () => {
+  expect(inkomen.inkomstenBelasting(2024, 40021, true)).toEqual(Math.round(7632.1837))
+})
+
 // test netto
 
 test('Netto 10.000', () => {

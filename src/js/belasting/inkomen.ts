@@ -97,9 +97,9 @@ function toeslagenToetsInkomen(
 }
 
 function ibRange(toetsingsInkomen: number, p): number {
-  const top = Math.min(p.tot || toetsingsInkomen, toetsingsInkomen);
-  const range = Math.max(0, top - (p.vanaf || 0));
+  const top = Math.min(p?.tot - 1 || toetsingsInkomen, toetsingsInkomen);
 
+  const range = Math.max(0, top - (p?.vanaf-1 || 0));
   return p.percentage * range;
 }
 
@@ -115,7 +115,7 @@ function inkomstenBelasting(
   );
 }
 
-function netto(jaar: number, bruto: number, aow: boolean): number {
+function netto(jaar: number, bruto: number, aow: boolean=false): number {
   return Math.min(bruto, bruto - inkomstenBelasting(jaar, bruto, aow));
 }
 
@@ -128,9 +128,9 @@ function nettoKortingenInkomens(jaar: number, personen: PersoonType[]) {
     let aow = p.leeftijd == LeeftijdType.AOW;
     if (p.leeftijd == LeeftijdType.V || aow) {
       let inkomen = p.bruto_inkomen !== undefined ? p.bruto_inkomen : 0;
-      // Hier wordt toestings inkomensten belasting berekend van anderen
+      // Hier wordt toetsingsinkomsten belasting berekend van anderen
       // Echter hypotheek aftrek wordt gedaan bij eerste persoon en niet hier
-      // Het kan zijn dat een deel of alles hyppotheek aftrek bij anderen te leggen,
+      // Het kan zijn dat een deel of alles hypotheek aftrek bij anderen te leggen,
       // de totale belasting gunstiger uitkomt. Maar die optie is hier niet meegenomen.
       let tib = inkomstenBelasting(jaar, inkomen, aow);
 

@@ -334,12 +334,13 @@ const HTBP = {
 // Inkomsten afhankelijk combinatie korting
 
 const IACK = {
+  // https://www.belastingdienst.nl/wps/wcm/connect/nl/voorlopige-aanslag/content/voorlopige-aanslag-tarieven-en-heffingskortingen
   2024: {
     H: {
-      MinAInk: 6080,
+      MinAInk: 6074,
       InkKorting: 0.1145,
-      MaxAInk: 29076,
-      MaxInkAfKrt: 2953,
+      MaxAInk: 31387,
+      MaxInkAfKrt: 2950,
     },
     // 2024 nog gegevens van 2023
     HAOW: {
@@ -1723,7 +1724,7 @@ const KOTT = {
 // Kinderbijslag per kwartaal
 
 const KBS = {
-  // Kinderbijslag 2024 is van 3e kwartaal 2024
+  // Kinderbijslag 2024 is van 3e kwartaal 2023
   2024: {
     K05: 261.7,
     K611: 317.77,
@@ -1737,7 +1738,6 @@ const KBS = {
 };
 
 // Eigenwoningforfait
-// TODO: Eigenwoningforfait is nog kopie van 2023
 const EWF = {
   2024: {
     kSchuldFactor: 0.8001,
@@ -1804,33 +1804,34 @@ const EWF = {
 // Algemene Heffingskorting
 // TODO: Algemene Heffingskorting controleren
 const AHK = {
+  //https://www.belastingdienst.nl/wps/wcm/connect/nl/voorlopige-aanslag/content/voorlopige-aanslag-tarieven-en-heffingskortingen
   2024: {
     V: [
       {
-        inkomen: { van: 0, tot: 22661 },
-        minimum: 3070,
+        inkomen: { van: 0, tot: 24812 },
+        minimum: 3362,
         minus: 0,
         factor: 0,
       },
       {
-        inkomen: { van: 22661, tot: 73031 },
-        minimum: 3070,
-        minus: 22660,
-        factor: -0.06095,
+        inkomen: { van: 24812, tot: 75518 },
+        minimum: 3362,
+        minus: 24812,
+        factor: -0.06630,
       },
     ],
     AOW: [
       {
-        inkomen: { van: 0, tot: 22661 },
-        minimum: 1583,
+        inkomen: { van: 0, tot: 24812 },
+        minimum: 1583, //TODO
         minus: 0,
         factor: 0,
       },
       {
-        inkomen: { van: 22661, tot: 73031 },
-        minimum: 1583,
-        minus: 22660,
-        factor: -0.03141,
+        inkomen: { van: 24812, tot: 75518 },
+        minimum: 1583, //TODO
+        minus: 24812,
+        factor: -0.03141, //TODO
       },
     ],
   },
@@ -1867,32 +1868,33 @@ const AHK = {
 };
 
 // Arbeidskorting
-// TODO: Arbeidskorting uitwerken
+// TODO: Arbeidskorting uitwerken WAO
 const AK = {
+  // https://open.overheid.nl/documenten/dbc8b701-05db-4f38-a3fb-ea0747e34d40/file
   2024: {
     V: [
       {
-        inkomen: { van: 0, tot: 10741 },
+        inkomen: { van: 0, tot: 11490 },
         minimum: 0,
         minus: 0,
-        factor: 0.08231,
+        factor: 0.08245,
       },
       {
-        inkomen: { van: 10741, tot: 23201 },
-        minimum: 884,
-        minus: 10740,
-        factor: 0.29861,
+        inkomen: { van: 11490, tot: 24820 },
+        minimum: 968,
+        minus: 11489,
+        factor: 0.31433,
       },
       {
-        inkomen: { van: 23201, tot: 39939 },
-        minimum: 4720,
-        minus: 23200,
+        inkomen: { van: 24820, tot: 39957 },
+        minimum: 5158,
+        minus: 24819,
         factor: 0.03085,
       },
       {
-        inkomen: { van: 39939, tot: 115295 },
-        minimum: 5538,
-        minus: 39938,
+        inkomen: { van: 39957, tot: 124934 },
+        minimum: 5532,
+        minus: 39956,
         factor: -0.0651,
       },
     ],
@@ -1980,31 +1982,31 @@ const AK = {
 };
 
 // AOW 1e schijf is inkomstenbelasting + volksverzekering premie.
-// TODO: Inkomstenbelasting controleren
 const IB = {
   2024: {
+    // https://www.belastingdienst.nl/wps/wcm/connect/nl/voorlopige-aanslag/content/voorlopige-aanslag-tarieven-en-heffingskortingen
     V: [
       {
-        tot: 75519,
+        tot: 75518,
         percentage: 0.3697,
       },
       {
-        vanaf: 75519,
+        vanaf: 75518,
         percentage: 0.495,
       },
     ],
     AOW: [
       {
-        tot: 40022,
+        tot: 40021,
         percentage: 0.1907,
       },
       {
-        vanaf: 40022,
-        tot: 75519,
+        vanaf: 40021,
+        tot: 75518,
         percentage: 0.3697,
       },
       {
-        vanaf: 75519,
+        vanaf: 75518,
         percentage: 0.495,
       },
     ],
