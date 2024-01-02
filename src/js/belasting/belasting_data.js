@@ -16,7 +16,7 @@
  */
 
 /*
-Bron data overgenomen uit JavaScript van proefberekeing toeslagen van Belastingdienst website:
+Bron data overgenomen uit JavaScript van proefberekening toeslagen van Belastingdienst website:
   https://www.belastingdienst.nl/common/js/iah/proefberekening_toeslagen.js
 */
 
@@ -1802,19 +1802,18 @@ const EWF = {
 };
 
 // Algemene Heffingskorting
-// TODO: Algemene Heffingskorting controleren
 const AHK = {
-  //https://www.belastingdienst.nl/wps/wcm/connect/nl/voorlopige-aanslag/content/voorlopige-aanslag-tarieven-en-heffingskortingen
+  // https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_tarieven/heffingskortingen/algemene_heffingskorting/tabel-algemene-heffingskorting-2024
   2024: {
     V: [
       {
-        inkomen: { van: 0, tot: 24812 },
+        inkomen: { van: 0, tot: 24813 },
         minimum: 3362,
         minus: 0,
         factor: 0,
       },
       {
-        inkomen: { van: 24812, tot: 75518 },
+        inkomen: { van: 24813, tot: 75518 },
         minimum: 3362,
         minus: 24812,
         factor: -0.06630,
@@ -1822,16 +1821,16 @@ const AHK = {
     ],
     AOW: [
       {
-        inkomen: { van: 0, tot: 24812 },
-        minimum: 1583, //TODO
+        inkomen: { van: 0, tot: 24813 },
+        minimum: 1735,
         minus: 0,
         factor: 0,
       },
       {
-        inkomen: { van: 24812, tot: 75518 },
-        minimum: 1583, //TODO
-        minus: 24812,
-        factor: -0.03141, //TODO
+        inkomen: { van: 24813, tot: 75518 },
+        minimum: 1735,
+        minus: 24813,
+        factor: -0.03421,
       },
     ],
   },
@@ -1868,60 +1867,60 @@ const AHK = {
 };
 
 // Arbeidskorting
-// TODO: Arbeidskorting uitwerken WAO
 const AK = {
   // https://open.overheid.nl/documenten/dbc8b701-05db-4f38-a3fb-ea0747e34d40/file
+  // https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_tarieven/heffingskortingen/arbeidskorting/tabel-arbeidskorting-2024
   2024: {
     V: [
       {
-        inkomen: { van: 0, tot: 11490 },
+        inkomen: { van: 0, tot: 11491 },
         minimum: 0,
         minus: 0,
         factor: 0.08245,
       },
       {
-        inkomen: { van: 11490, tot: 24820 },
+        inkomen: { van: 11491, tot: 24821 },
         minimum: 968,
-        minus: 11489,
+        minus: 11490,
         factor: 0.31433,
       },
       {
-        inkomen: { van: 24820, tot: 39957 },
+        inkomen: { van: 24821, tot: 39958 },
         minimum: 5158,
-        minus: 24819,
-        factor: 0.03085,
+        minus: 24820,
+        factor: 0.02471,
       },
       {
-        inkomen: { van: 39957, tot: 124934 },
+        inkomen: { van: 39958, tot: 124935 },
         minimum: 5532,
-        minus: 39956,
+        minus: 39957,
         factor: -0.0651,
       },
     ],
     AOW: [
       {
-        inkomen: { van: 0, tot: 10728 },
+        inkomen: { van: 0, tot: 11491 },
         minimum: 0,
         minus: 0,
-        factor: 0.04241,
+        factor: 0.04346,
       },
       {
-        inkomen: { van: 10728, tot: 23201 },
-        minimum: 457,
-        minus: 10727,
-        factor: 0.15388,
+        inkomen: { van: 11491, tot: 24821 },
+        minimum: 501,
+        minus: 11490,
+        factor: 0.16214,
       },
       {
-        inkomen: { van: 23201, tot: 37691 },
-        minimum: 2374,
-        minus: 23200,
-        factor: 0.01589,
+        inkomen: { van: 24821, tot: 39958 },
+        minimum: 2662,
+        minus: 24820,
+        factor: 0.01275,
       },
       {
-        inkomen: { van: 37691, tot: 115295 },
-        minimum: 2604,
-        minus: 37690,
-        factor: -0.03355,
+        inkomen: { van: 39958, tot: 124935 },
+        minimum: 2854,
+        minus: 39957,
+        factor: -0.03358,
       },
     ],
   },

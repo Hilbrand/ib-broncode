@@ -1,10 +1,10 @@
 <template>
   <div class="grid">
-    <n-scrollbar id="infoBar">
+    <div id="infoBar">
       <HuishoudenComponent :personen="gegevens.personen" />
       <WonenComponent :jaar="gegevens.grafiek.jaar" :wonen="gegevens.wonen" />
       <GrafiekInstellingComponent :grafiekInstellingen="gegevens.grafiek" />
-    </n-scrollbar>
+    </div>
     <n-tabs
       ref="tabsRef"
       type="line"
@@ -58,11 +58,13 @@
           <div id="md"></div>
         </n-space>
       </n-tab-pane>
+<!--
       <n-tab-pane name="eb" tab="Effectieve Belasting" key="eb">
         <n-space vertical>
           <div id="eb"></div>
         </n-space>
       </n-tab-pane>
+-->
     </n-tabs>
     <n-scrollbar id="legenda" v-if="gegevens.tab != 'intro'">
       <Legenda :data="legendaData" />
@@ -70,15 +72,23 @@
   </div>
 </template>
 
-<style scoped>
+<style>
+#infoBar {
+  max-height: 100% !important;
+}
 .grid {
   display: grid;
-  grid-template-columns: 100vw;
 }
 
 @media (min-width: 1280px) {
+  #infoBar {
+    overflow-y: scroll;
+    max-height: calc(100vh - 25px) !important;
+  }
   .grid {
     grid-template-columns: 300px auto 400px;
+    max-height: calc(100vh - 25px);
+    overflow-y: hidden;
   }
 }
 </style>

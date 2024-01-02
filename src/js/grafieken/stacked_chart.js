@@ -159,9 +159,22 @@ function StackedAreaChart(
     .attr("y1", 0)
     .attr("y2", height);
 
-  hoverLineGroup.style("opacity", 1); //1e-6);
+  hoverLineGroup.style("opacity", 1);
 
   svg.style("pointer-events", "all");
+
+  // Salaris lijn
+  if (yLabel.startsWith("Beschikbaar")) {
+    svg
+      .append("g")
+      .attr("class", "hover-line")
+      .append("line")
+      .attr("stroke", "#333")
+      .attr("x1", xScale(xDomain[0]))
+      .attr("x2", xScale(xDomain[1]))
+      .attr("y1", yScale(xDomain[0]/1000))
+      .attr("y2", yScale(yDomain[1]));
+  }
 
   svg
     .append("rect")

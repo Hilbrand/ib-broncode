@@ -4,9 +4,9 @@
       <n-message-provider>
         <n-notification-provider>
           <n-dialog-provider>
-            <n-layout>
+            <n-layout content-style="overflow-y:hidden">
               <n-layout-content>
-                <router-view></router-view>
+                <router-view />
               </n-layout-content>
               <n-layout-footer><FooterPaneel /></n-layout-footer>
             </n-layout>

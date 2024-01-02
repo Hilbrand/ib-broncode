@@ -46,7 +46,7 @@ export class BeschikbaarInkomen extends Berekenen {
   getYDomain(): number[] {
     let yDomain: number[] = super.getYDomain();
 
-    return [0, Math.round(yDomain[1] / 1000)];
+    return [0, Math.round(yDomain[1] / (1000 / this.factor))];
   }
 
   bereken(arbeidsInkomen: number): BeschikbaarInkomenResultaatType {

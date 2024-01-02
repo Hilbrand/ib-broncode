@@ -45,12 +45,12 @@ export class Legenda {
 
   geld(bedrag) {
     return bedrag > 0
-      ? Legenda.EURO + " " + bedrag.toFixed().padStart(4, "\u00A0")
+      ? Legenda.EURO + " " + bedrag.toFixed().padStart(5, "\u00A0")
       : "-";
   }
 
   setLegendaVast(data, length, offset) {
-    this.berekenen.vis.arbeidsInkomen = data[offset].id;
+    this.berekenen.vis.arbeidsInkomen = data[offset].id / this.berekenen.getFactor();
     this.setLegendaText(data, length, offset);
   }
 
@@ -60,7 +60,7 @@ export class Legenda {
     let ab = this.berekenen.vis.arbeidsInkomen;
     if (ab > 0) {
       let b = this.berekenen.bereken(ab);
-      let id = ab * this.berekenen.getFactor();
+      let id = ab;
       var data = [];
       this.berekenen.verzamelGrafiekSeries(data, b, id);
       this.setLegendaText(data, data.length, 0);

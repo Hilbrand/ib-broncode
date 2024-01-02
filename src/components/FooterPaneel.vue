@@ -1,12 +1,12 @@
 <template>
   <n-collapse>
-    <n-collapse-item title="Colofon" name="colofoon">
+    <n-collapse-item title="Colofon" name="colofon">
       <n-card :bordered="false" size="small">
         <p>
           De berekeningen zijn met zorg samengesteld, maar het is mogelijk dat
           er nog fouten in zitten. In de berekeningen wordt uitgegaan dat de
           personen in 1 huishouden in hetzelfde huis(houden) wonen. Daardoor
-          zijn niet alle mogelijke variaties meengenomen die invloed hebben op
+          zijn niet alle mogelijke variaties meegenomen die invloed hebben op
           toeslagen. Zo hebben onder andere eigen vermogen, leeftijds
           verandering binnen een jaar, en wonen in buitenland invloed op de
           toeslagen.
