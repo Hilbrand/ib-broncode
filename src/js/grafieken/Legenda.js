@@ -60,7 +60,7 @@ export class Legenda {
     let ab = this.berekenen.vis.arbeidsInkomen;
     if (ab > 0) {
       let b = this.berekenen.bereken(ab);
-      let id = ab;
+      let id = ab * this.berekenen.getFactor();
       var data = [];
       this.berekenen.verzamelGrafiekSeries(data, b, id);
       this.setLegendaText(data, data.length, 0);
