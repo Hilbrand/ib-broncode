@@ -41,6 +41,13 @@ npm run build
 ```sh
 npm run lint
 ```
+
+### Run Prettier
+
+```sh
+npx prettier -w src test
+```
+
 ### Run tests
 
 ```sh

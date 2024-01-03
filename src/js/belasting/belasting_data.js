@@ -70,7 +70,7 @@ const TABEL = {
     MxInk2: 47368,
     VrijZTKGB65enkel: 140213,
     VrijZTKGB65gez: 177301,
-    ZT_norm_geldig: "ja"
+    ZT_norm_geldig: "ja",
   },
   2023: {
     Aanvraagdatum: "01-09-2022",
@@ -1816,7 +1816,7 @@ const AHK = {
         inkomen: { van: 24813, tot: 75518 },
         minimum: 3362,
         minus: 24812,
-        factor: -0.06630,
+        factor: -0.0663,
       },
     ],
     AOW: [

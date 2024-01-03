@@ -59,43 +59,66 @@ export class BeschikbaarInkomen extends Berekenen {
       arbeidsinkomen,
       this.algemeneGegevens.hypotheekRenteAftrek
     );
-    let toetsingsInkomenBelasting = inkomen.inkomstenBelasting(
-      this.vis.jaar,
-      toetsingsInkomen,
-      aow
-    );
     let arbeidsinkomenBelasting = inkomen.inkomstenBelasting(
       this.vis.jaar,
       arbeidsinkomen,
       aow
     );
-    let toeslagenToetsInkomen = inkomen.toeslagenToetsInkomen(
-      arbeidsinkomen,
-      this.personen
-    );
-    let nettoArbeidsinkomen = arbeidsinkomen - toetsingsInkomenBelasting;
+    let toetsingsinkomenBelasting =
+      arbeidsinkomenBelasting -
+      inkomen.inkomstenBelasting(
+        this.vis.jaar,
+        this.algemeneGegevens.hypotheekRenteAftrek,
+        aow
+      );
+
+    // Algemene heffingskorting gaat over arbeidsinkomen + woning inkomen.
+    // Maar kan niet hoger zijn dan maximum te betalen belasting.
     let algemeneHeffingsKorting = inkomen.algemeneHeffingsKorting(
       this.vis.jaar,
       toetsingsInkomen,
-      toetsingsInkomenBelasting,
+      toetsingsinkomenBelasting,
       aow
     );
-    let maxBelastingTeruggave = functies.negatiefIsNul(
-      toetsingsInkomenBelasting - algemeneHeffingsKorting
+    // Maximum belasting na aftrek van algemene heffings korting.
+    let maxBelastingNaAHK = functies.negatiefIsNul(
+      arbeidsinkomenBelasting - algemeneHeffingsKorting
     );
+    // Arbeidskorting gaat over alleen arbeidsinkomen
+    // Maar kan niet hoger zijn dan maximum te betalen belasting.
     let arbeidskorting = inkomen.arbeidskorting(
       this.vis.jaar,
       arbeidsinkomen,
-      maxBelastingTeruggave,
+      maxBelastingNaAHK,
       aow
     );
-    let effectieveRenteVerschil = functies.negatiefIsNul(
-      arbeidsinkomenBelasting - toetsingsInkomenBelasting
+    // Inkomen als hypotheek rente ervan afgetrokken is.
+    let hypotheekInkomen = inkomen.toetsingsinkomen(
+      arbeidsinkomen,
+      this.algemeneGegevens.hypotheekRenteAftrek
     );
+    // Berekende belasting als hypotheek rente van inkomen is afgetrokken.
+    // Dit is maximum te betalen belasting.
+    let hypotheekInkomenBelasting = inkomen.inkomstenBelasting(
+      this.vis.jaar,
+      hypotheekInkomen,
+      aow
+    );
+    // Potentiel aftrekbare hypotheekrente is verschil tussen arbeidsinkomen belasting
+    // en belasting van inkomen met hypotheekrente verekend in het inkomen.
+    let hypotheekRenteAftrek =
+      arbeidsinkomenBelasting - hypotheekInkomenBelasting;
+    // Maximum te betalen belasting is arbeidsinkomen belasting minus AHK en AK.
+    let maxBelasting = maxBelastingNaAHK - arbeidskorting;
+    // Maximum hypotheek rente aftrek kan niet hoger zijn dan te betalen belasting
+    let maxHypotheekRenteAftrek = Math.min(maxBelasting, hypotheekRenteAftrek);
+    // Netto inkomen is arbeidsinkomen minus arbeidsinkomenbelasting.
+    let nettoArbeidsinkomen = arbeidsinkomen - arbeidsinkomenBelasting;
 
-    let effectieveHypotheekRenteAftrek = Math.min(
-      effectieveRenteVerschil == 0 ? 0 : effectieveRenteVerschil,
-      toetsingsInkomenBelasting
+    // Inkomen berekening inclusief fiscale partnes.
+    let toeslagenToetsInkomen = inkomen.toeslagenToetsInkomen(
+      arbeidsinkomen,
+      this.personen
     );
     let kindgebondenBudget = kgb.kindgebondenBudget(
       this.vis.jaar,
@@ -106,10 +129,8 @@ export class BeschikbaarInkomen extends Berekenen {
 
     let beschikbaarInkomen: BeschikbaarInkomenResultaatType = {
       arbeidsinkomen: arbeidsinkomen,
-      brutoInkomstenBelasting: toetsingsInkomenBelasting,
-      netto:
-        nettoArbeidsinkomen -
-        functies.negatiefIsNul(-effectieveHypotheekRenteAftrek),
+      brutoInkomstenBelasting: toetsingsinkomenBelasting,
+      netto: nettoArbeidsinkomen,
       algemeneHeffingsKorting: algemeneHeffingsKorting,
       arbeidskorting: arbeidskorting,
       zorgtoeslag: zt.zorgtoeslag(
@@ -125,7 +146,7 @@ export class BeschikbaarInkomen extends Berekenen {
             this.personen.length,
             this.algemeneGegevens.aow
           )
-        : effectieveHypotheekRenteAftrek,
+        : maxHypotheekRenteAftrek,
       kinderbijslag: this.algemeneGegevens.kinderbijslag,
       kindgebondenBudget: kindgebondenBudget,
       inkomensafhankelijkeCombinatiekorting:

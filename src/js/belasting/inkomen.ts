@@ -99,7 +99,7 @@ function toeslagenToetsInkomen(
 function ibRange(toetsingsInkomen: number, p): number {
   const top = Math.min(p?.tot - 1 || toetsingsInkomen, toetsingsInkomen);
 
-  const range = Math.max(0, top - (p?.vanaf-1 || 0));
+  const range = Math.max(0, top - (p?.vanaf - 1 || 0));
   return p.percentage * range;
 }
 
@@ -115,7 +115,7 @@ function inkomstenBelasting(
   );
 }
 
-function netto(jaar: number, bruto: number, aow: boolean=false): number {
+function netto(jaar: number, bruto: number, aow: boolean = false): number {
   return Math.min(bruto, bruto - inkomstenBelasting(jaar, bruto, aow));
 }
 

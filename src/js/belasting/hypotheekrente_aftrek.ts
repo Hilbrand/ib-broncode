@@ -47,9 +47,13 @@ function hypotheekRenteAftrek(
   const ewf = eigenwoningforfait(jaar, wozWaarde);
   const ew = -rente + ewf;
 
+  // Als uw eigenwoningforfait hoger is dan uw hypotheekrenteaftrek.
+  // Dan telt uw eigenwoningforfait maar voor een klein deel mee.
+  // Vanwege de zogenoemde ‘Wet Hillen’
   return Math.floor(ew > 0 ? ew * ksfj : ew);
 }
 
 export default {
+  eigenwoningforfait,
   hypotheekRenteAftrek,
 };

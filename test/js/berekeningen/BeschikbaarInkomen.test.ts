@@ -15,31 +15,110 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
-import { expect, test } from "vitest"
-import { BeschikbaarInkomen } from "../../../src/js/berekeningen/BeschikbaarInkomen"
-import { BeschikbaarInkomenResultaatType, GrafiekType, LeeftijdType, PeriodeType, PersoonType, WonenType, WoningType } from "../../../src/types";
+import { expect, test } from "vitest";
+import { BeschikbaarInkomen } from "../../../src/js/berekeningen/BeschikbaarInkomen";
+import {
+  BeschikbaarInkomenResultaatType,
+  GrafiekType,
+  LeeftijdType,
+  PeriodeType,
+  PersoonType,
+  WonenType,
+  WoningType,
+} from "../../../src/types";
 
-const vis: GrafiekType = {jaar:2023, periode:PeriodeType.JAAR};
-const personen: PersoonType[] = [{leeftijd:LeeftijdType.V}, {leeftijd:LeeftijdType.V}, {leeftijd:LeeftijdType.K611}, {leeftijd:LeeftijdType.K611}];
-const wonen: WonenType = {woning_type:WoningType.HUUR, huur:1100};
-const arbeidsinkomen: number = 46377;
-const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(vis, personen, wonen);
-const berekening: BeschikbaarInkomenResultaatType = berekenen.bereken(arbeidsinkomen);
+const vis: GrafiekType = { jaar: 2024, periode: PeriodeType.JAAR };
+const personen: PersoonType[] = [
+  { leeftijd: LeeftijdType.V },
+  { leeftijd: LeeftijdType.V },
+  { leeftijd: LeeftijdType.K611 },
+  { leeftijd: LeeftijdType.K611 },
+];
+const huur: WonenType = { woning_type: WoningType.HUUR, huur: 1100 };
+const koop: WonenType = {
+  woning_type: WoningType.KOOP,
+  rente: 13482,
+  woz: 315000,
+};
 
-test('Bereken beschikbaar inkomen eenverdiener, 2 kinderen', () => {
+test("Bereken beschikbaar inkomen eenverdiener, 2 kinderen, huur", () => {
+  const arbeidsinkomen: number = 46377;
+  const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(
+    vis,
+    personen,
+    huur
+  );
+  const berekening: BeschikbaarInkomenResultaatType =
+    berekenen.bereken(arbeidsinkomen);
+
   let expected: BeschikbaarInkomenResultaatType = {
+    algemeneHeffingsKorting: 1932,
     arbeidsinkomen: arbeidsinkomen,
-    brutoInkomstenBelasting: 17127,
-    netto: 29250,
-    algemeneHeffingsKorting: 1624,
-    arbeidskorting: 4486,
-    zorgtoeslag: 275,
-    wonen: 0,
-    kinderbijslag: 2542,
-    kindgebondenBudget: 2984,
+    arbeidskorting: 5114,
+    beschikbaarInkomen: 43140,
+    brutoInkomstenBelasting: 17146,
     inkomensafhankelijkeCombinatiekorting: 0,
-    beschikbaarInkomen: 41161,
+    kinderbijslag: 2542,
+    kindgebondenBudget: 4162,
+    netto: 29231,
+    wonen: 0,
+    zorgtoeslag: 159,
   };
 
   expect(berekening).toEqual(expected);
-})
+});
+
+test("Bereken beschikbaar inkomen 10000 eenverdiener, 2 kinderen, koop", () => {
+  const arbeidsinkomen: number = 10000;
+  const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(
+    vis,
+    personen,
+    koop
+  );
+  const berekening: BeschikbaarInkomenResultaatType =
+    berekenen.bereken(arbeidsinkomen);
+
+  let expected: BeschikbaarInkomenResultaatType = {
+    algemeneHeffingsKorting: 3362,
+    arbeidsinkomen: arbeidsinkomen,
+    arbeidskorting: 335,
+    beschikbaarInkomen: 20246,
+    brutoInkomstenBelasting: 3697,
+    inkomensafhankelijkeCombinatiekorting: 0,
+    kinderbijslag: 2542,
+    kindgebondenBudget: 4872,
+    netto: 6303,
+    wonen: 0,
+    zorgtoeslag: 2832,
+  };
+
+  expect(berekening).toEqual(expected);
+});
+
+test("Bereken beschikbaar inkomen 30000 eenverdiener, koop", () => {
+  const arbeidsinkomen: number = 30000;
+  const eenverdiener: PersoonType[] = [{ leeftijd: LeeftijdType.V }];
+  const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(
+    vis,
+    eenverdiener,
+    koop
+  );
+  const berekening: BeschikbaarInkomenResultaatType =
+    berekenen.bereken(arbeidsinkomen);
+
+  let expected: BeschikbaarInkomenResultaatType = {
+    algemeneHeffingsKorting: 3362,
+    arbeidsinkomen: arbeidsinkomen,
+    arbeidskorting: 5286,
+    beschikbaarInkomen: 31048,
+    brutoInkomstenBelasting: 11091,
+    inkomensafhankelijkeCombinatiekorting: 0,
+    kinderbijslag: 0,
+    kindgebondenBudget: 0,
+    netto: 18909,
+    wonen: 2443,
+    zorgtoeslag: 1048,
+  };
+
+  expect(berekening).toEqual(expected);
+});

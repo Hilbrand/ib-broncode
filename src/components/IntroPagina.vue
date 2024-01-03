@@ -25,7 +25,7 @@
         marginale druk hoog is, dan zal minder werken bij een salarisverhoging
         niet direct tot veel minder inkomen zorgen.
       </dd>
-<!--
+      <!--
       <dt><b>Effectieve Belasting</b></dt>
       <dd>
         Dit geeft weer hoeveel procent belasting betaald moet worden na

@@ -57,6 +57,7 @@
           </n-input-number>
         </n-space>
         <div>Berekende renteaftrek: &euro; {{ renteaftrek }}</div>
+        <div>Eigenwoningforfait: &euro; {{ eigenwoningforfait }}</div>
       </n-space>
     </div>
   </n-card>
@@ -86,6 +87,13 @@ export default {
           this.gegevens.rente,
           this.gegevens.woz
         );
+      } else {
+        return "";
+      }
+    },
+    eigenwoningforfait() {
+      if (this.gegevens.woning_type == "koop") {
+        return hra.eigenwoningforfait(this.jaar, this.gegevens.woz);
       } else {
         return "";
       }

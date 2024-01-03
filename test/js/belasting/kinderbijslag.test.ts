@@ -15,15 +15,23 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
-import { expect, test } from "vitest"
+import { expect, test } from "vitest";
 import { LeeftijdType, PersoonType } from "../../../src/types";
-import kbs from "../../../src/js/belasting/kinderbijslag"
+import kbs from "../../../src/js/belasting/kinderbijslag";
 
-const JAAR : number = 2023;
-const A3K : PersoonType[] = [{leeftijd: LeeftijdType.V}, {leeftijd: LeeftijdType.K05}, {leeftijd: LeeftijdType.K611}, {leeftijd: LeeftijdType.K1215}, {leeftijd: LeeftijdType.K1617}];
+const JAAR: number = 2023;
+const A3K: PersoonType[] = [
+  { leeftijd: LeeftijdType.V },
+  { leeftijd: LeeftijdType.K05 },
+  { leeftijd: LeeftijdType.K611 },
+  { leeftijd: LeeftijdType.K1215 },
+  { leeftijd: LeeftijdType.K1617 },
+];
 
 // Test Kinderbijslag
 
-test('test Kinderbijslag, 4 kinderen', () => {
-  expect(kbs.kinderbijslag(JAAR, A3K)).toEqual(Math.floor(4 * (261.70 + 317.77 + 373.85 * 2)))
-})
+test("test Kinderbijslag, 4 kinderen", () => {
+  expect(kbs.kinderbijslag(JAAR, A3K)).toEqual(
+    Math.floor(4 * (261.7 + 317.77 + 373.85 * 2))
+  );
+});

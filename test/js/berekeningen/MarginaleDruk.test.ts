@@ -15,17 +15,35 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
-import { expect, test } from 'vitest'
+import { expect, test } from "vitest";
 import { BeschikbaarInkomen } from "../../../src/js/berekeningen/BeschikbaarInkomen.js";
-import { MarginaleDruk } from '../../../src/js/berekeningen/MarginaleDruk.js'
-import { GrafiekType, LeeftijdType, MarginaleDrukResultaatType, PeriodeType, PersoonType, WonenType, WoningType } from "../../../src/types";
+import { MarginaleDruk } from "../../../src/js/berekeningen/MarginaleDruk.js";
+import {
+  GrafiekType,
+  LeeftijdType,
+  MarginaleDrukResultaatType,
+  PeriodeType,
+  PersoonType,
+  WonenType,
+  WoningType,
+} from "../../../src/types";
 
-test('Marginale Druk Details ', () => {
-  const vis: GrafiekType = {jaar:2023, periode:PeriodeType.JAAR, svt: 'p', sv_p: 3};
-  const personen: PersoonType[] = [{leeftijd:LeeftijdType.V}];
-  const wonen: WonenType = {woning_type:WoningType.HUUR, huur:600};
+test("Marginale Druk Details ", () => {
+  const vis: GrafiekType = {
+    jaar: 2023,
+    periode: PeriodeType.JAAR,
+    svt: "p",
+    sv_p: 3,
+  };
+  const personen: PersoonType[] = [{ leeftijd: LeeftijdType.V }];
+  const wonen: WonenType = { woning_type: WoningType.HUUR, huur: 600 };
   const ai: number = 27800;
-  const md:MarginaleDruk = new MarginaleDruk(vis, personen, wonen, new BeschikbaarInkomen(vis, personen, wonen));
+  const md: MarginaleDruk = new MarginaleDruk(
+    vis,
+    personen,
+    wonen,
+    new BeschikbaarInkomen(vis, personen, wonen)
+  );
   let mdd: MarginaleDrukResultaatType = md.bereken(ai);
 
   let expected: MarginaleDrukResultaatType = {
@@ -42,7 +60,14 @@ test('Marginale Druk Details ', () => {
   };
 
   expect(mdd).toEqual(expected);
-  expect(mdd.nettoInkomensBelasting + mdd.algemeneHeffingsKorting + mdd.arbeidskorting + mdd.zorgtoeslag 
-    + mdd.wonen + mdd.kinderbijslag + mdd.kindgebondenBudget + mdd.inkomensafhankelijkeCombinatiekorting)
-    .toEqual(mdd.marginaleDruk);
-})
+  expect(
+    mdd.nettoInkomensBelasting +
+      mdd.algemeneHeffingsKorting +
+      mdd.arbeidskorting +
+      mdd.zorgtoeslag +
+      mdd.wonen +
+      mdd.kinderbijslag +
+      mdd.kindgebondenBudget +
+      mdd.inkomensafhankelijkeCombinatiekorting
+  ).toEqual(mdd.marginaleDruk);
+});

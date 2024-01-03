@@ -15,50 +15,65 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
-import { expect, test } from "vitest"
+import { expect, test } from "vitest";
 import { LeeftijdType, PersoonType } from "../../../src/types";
-import iack from "../../../src/js/belasting/inkomensafhankelijke_combinatiekorting"
+import iack from "../../../src/js/belasting/inkomensafhankelijke_combinatiekorting";
 
-const JAAR : number = 2023;
+const JAAR: number = 2023;
 
 // Bepaal Laagste Arbeidsinkomen Inkomen Anderen
 
-test('Laagste Arbeidsinkomen Inkomen, alleenstaande', () => {
-  let personen: PersoonType[] = [{leeftijd: LeeftijdType.V}];
+test("Laagste Arbeidsinkomen Inkomen, alleenstaande", () => {
+  let personen: PersoonType[] = [{ leeftijd: LeeftijdType.V }];
 
-  expect(iack.bepaalLaagsteArbeidsInkomenAnderen(personen)).toEqual(Number.MAX_VALUE)
-})
+  expect(iack.bepaalLaagsteArbeidsInkomenAnderen(personen)).toEqual(
+    Number.MAX_VALUE
+  );
+});
 
+test("Laagste Arbeidsinkomen Inkomen, inkomen 0", () => {
+  let personen: PersoonType[] = [
+    { leeftijd: LeeftijdType.V },
+    { leeftijd: LeeftijdType.V, bruto_inkomen: 0 },
+  ];
 
-test('Laagste Arbeidsinkomen Inkomen, inkomen 0', () => {
-  let personen: PersoonType[] = [{leeftijd:LeeftijdType.V}, {leeftijd:LeeftijdType.V, bruto_inkomen:0}];
+  expect(iack.bepaalLaagsteArbeidsInkomenAnderen(personen)).toEqual(0);
+});
 
-  expect(iack.bepaalLaagsteArbeidsInkomenAnderen(personen)).toEqual(0)
-})
+test("Laagste Arbeidsinkomen Inkomen, inkomen undefined", () => {
+  let personen: PersoonType[] = [
+    { leeftijd: LeeftijdType.V },
+    { leeftijd: LeeftijdType.V },
+  ];
 
-test('Laagste Arbeidsinkomen Inkomen, inkomen undefined', () => {
-  let personen: PersoonType[] = [{leeftijd:LeeftijdType.V}, {leeftijd:LeeftijdType.V}];
-  
-  expect(iack.bepaalLaagsteArbeidsInkomenAnderen(personen)).toEqual(0)
-})
+  expect(iack.bepaalLaagsteArbeidsInkomenAnderen(personen)).toEqual(0);
+});
 
-test('Laagste Arbeidsinkomen Inkomen, inkomen 1000', () => {
-  let personen: PersoonType[] = [{leeftijd:LeeftijdType.V}, {leeftijd:LeeftijdType.V, bruto_inkomen:1000}];
+test("Laagste Arbeidsinkomen Inkomen, inkomen 1000", () => {
+  let personen: PersoonType[] = [
+    { leeftijd: LeeftijdType.V },
+    { leeftijd: LeeftijdType.V, bruto_inkomen: 1000 },
+  ];
 
-  expect(iack.bepaalLaagsteArbeidsInkomenAnderen(personen)).toEqual(1000)
-})
-
+  expect(iack.bepaalLaagsteArbeidsInkomenAnderen(personen)).toEqual(1000);
+});
 
 // Test Inkomensafhankelijke Combinatiekorting
 
-test('Inkomensafhankelijke Combinatiekorting 5.000', () => {
-  expect(iack.inkomensafhankelijkeCombinatiekorting(JAAR, 5000, Number.MAX_VALUE)).toEqual(0)
-})
+test("Inkomensafhankelijke Combinatiekorting 5.000", () => {
+  expect(
+    iack.inkomensafhankelijkeCombinatiekorting(JAAR, 5000, Number.MAX_VALUE)
+  ).toEqual(0);
+});
 
-test('Inkomensafhankelijke Combinatiekorting 20.000', () => {
-  expect(iack.inkomensafhankelijkeCombinatiekorting(JAAR, 20000, Number.MAX_VALUE)).toEqual(1654)
-})
+test("Inkomensafhankelijke Combinatiekorting 20.000", () => {
+  expect(
+    iack.inkomensafhankelijkeCombinatiekorting(JAAR, 20000, Number.MAX_VALUE)
+  ).toEqual(1654);
+});
 
-test('Inkomensafhankelijke Combinatiekorting 50.000', () => {
-  expect(iack.inkomensafhankelijkeCombinatiekorting(JAAR, 50000, Number.MAX_VALUE)).toEqual(2694)
-})
+test("Inkomensafhankelijke Combinatiekorting 50.000", () => {
+  expect(
+    iack.inkomensafhankelijkeCombinatiekorting(JAAR, 50000, Number.MAX_VALUE)
+  ).toEqual(2694);
+});

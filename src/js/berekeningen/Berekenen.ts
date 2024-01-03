@@ -94,6 +94,7 @@ export class Berekenen {
       ),
       //nk: inkomen.nettoKortingenInkomens(personen),
       huren: huren,
+      eigenwoningforfait: huren ? 0 : hra.eigenwoningforfait(jaar, wonen.woz),
       hypotheekRenteAftrek: huren
         ? 0
         : hra.hypotheekRenteAftrek(jaar, wonen.rente, wonen.woz),

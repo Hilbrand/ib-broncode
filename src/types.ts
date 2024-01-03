@@ -59,6 +59,7 @@ export type BerekenInvoerType = {
   maxKindgebondenBudget: number;
   nk?: number;
   huren: boolean;
+  eigenwoningforfait: number;
   hypotheekRenteAftrek: number;
 };
 
