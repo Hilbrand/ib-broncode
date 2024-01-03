@@ -19,25 +19,11 @@ import { BeschikbaarInkomen } from "./BeschikbaarInkomen";
 import { MarginaleDruk } from "./MarginaleDruk";
 import { EffectieveBelasting } from "./EffectieveBelasting";
 import { BlueminkBeschikbaarInkomen } from "../../bluemink/BlueminkBeschikbaarInkomen";
-import {
-  GrafiekType,
-  LeeftijdType,
-  PeriodeType,
-  PersoonType,
-  TabType,
-  WonenType,
-  WoningType,
-} from "../../types";
+import { GrafiekType, LeeftijdType, PeriodeType, PersoonType, TabType, WonenType, WoningType } from "../../types";
 
 const stap: number = 100;
 
-function berekenGrafiekData(
-  path: string,
-  type: TabType,
-  vis: GrafiekType,
-  personen: PersoonType[],
-  wonen: WoningType
-) {
+function berekenGrafiekData(path: string, type: TabType, vis: GrafiekType, personen: PersoonType[], wonen: WoningType) {
   let berekenen: Berekenen = null;
   let bi =
     path == "/bluemink"

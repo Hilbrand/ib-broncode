@@ -14,23 +14,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-import {
-  LeeftijdType,
-  PeriodeType,
-  PersoonType,
-  WonenType,
-  WoningType,
-} from "../types";
+import { LeeftijdType, PeriodeType, PersoonType, WonenType, WoningType } from "../types";
 
 function telPersonen(personen: PersoonType[], controleLeeftijd: LeeftijdType) {
   return personen.filter((p) => p.leeftijd == controleLeeftijd).length;
 }
 
 function telVolwassenen(personen: PersoonType[]): number {
-  return (
-    telPersonen(personen, LeeftijdType.V) +
-    telPersonen(personen, LeeftijdType.AOW)
-  );
+  return telPersonen(personen, LeeftijdType.V) + telPersonen(personen, LeeftijdType.AOW);
 }
 
 function toeslagenPartner(personen: PersoonType[]): boolean {

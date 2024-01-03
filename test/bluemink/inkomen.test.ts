@@ -23,27 +23,19 @@ const JAAR = 2023;
 // test algemeneHeffingsKorting
 
 test("Algemene Heffings Korting 1.000", () => {
-  expect(inkomen.algemeneHeffingsKorting(JAAR, 1000, 10000, false)).toEqual(
-    2000
-  );
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 1000, 10000, false)).toEqual(2000);
 });
 
 test("Algemene Heffings Korting 10.000", () => {
-  expect(inkomen.algemeneHeffingsKorting(JAAR, 10000, 10000, false)).toEqual(
-    2000
-  );
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 10000, 10000, false)).toEqual(2000);
 });
 
 test("Algemene Heffings Korting 40.000", () => {
-  expect(inkomen.algemeneHeffingsKorting(JAAR, 40000, 10000, false)).toEqual(
-    2000
-  );
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 40000, 10000, false)).toEqual(2000);
 });
 
 test("Algemene Heffings Korting 100.000", () => {
-  expect(inkomen.algemeneHeffingsKorting(JAAR, 100000, 10000, false)).toEqual(
-    2000
-  );
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 100000, 10000, false)).toEqual(2000);
 });
 
 // test arbeidskorting

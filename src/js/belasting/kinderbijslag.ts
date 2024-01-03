@@ -30,9 +30,7 @@ function kinderbijslag(jaar: number, personen: PersoonType[]): number {
   let k1215 = functies.telPersonen(personen, LeeftijdType.K1215);
   let k1617 = functies.telPersonen(personen, LeeftijdType.K1617);
 
-  return Math.floor(
-    4 * (k05 * kbsj.K05 + k611 * kbsj.K611 + (k1215 + k1617) * kbsj.K1217)
-  );
+  return Math.floor(4 * (k05 * kbsj.K05 + k611 * kbsj.K611 + (k1215 + k1617) * kbsj.K1217));
 }
 
 export default {

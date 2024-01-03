@@ -28,21 +28,13 @@ function eigenwoningforfait(jaar: number, wozWaarde: number): number {
 
   for (let ewf of ewfj) {
     if (wozWaarde < ewf.woz.tm) {
-      return Math.floor(
-        ewf.minimum
-          ? ewf.minimum + ewf.factor * (wozWaarde - ewf.woz.van)
-          : ewf.factor * wozWaarde
-      );
+      return Math.floor(ewf.minimum ? ewf.minimum + ewf.factor * (wozWaarde - ewf.woz.van) : ewf.factor * wozWaarde);
     }
   }
 }
 
 // Rente moet worden opgesteld bij inkomen (aftrek geeft negative waarde)
-function hypotheekRenteAftrek(
-  jaar: number,
-  rente: number,
-  wozWaarde: number
-): number {
+function hypotheekRenteAftrek(jaar: number, rente: number, wozWaarde: number): number {
   const ksfj = data.EWF[jaar].kSchuldFactor;
   const ewf = eigenwoningforfait(jaar, wozWaarde);
   const ew = -rente + ewf;

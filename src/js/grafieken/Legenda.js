@@ -38,20 +38,15 @@ export class Legenda {
   }
 
   percentage(getal) {
-    return (
-      (getal > 0 ? (1 * getal).toFixed(2) : "-").padStart(5, "\u00A0") + " %"
-    );
+    return (getal > 0 ? (1 * getal).toFixed(2) : "-").padStart(5, "\u00A0") + " %";
   }
 
   geld(bedrag) {
-    return bedrag > 0
-      ? Legenda.EURO + " " + bedrag.toFixed().padStart(5, "\u00A0")
-      : "-";
+    return bedrag > 0 ? Legenda.EURO + " " + bedrag.toFixed().padStart(5, "\u00A0") : "-";
   }
 
   setLegendaVast(data, length, offset) {
-    this.berekenen.vis.arbeidsInkomen =
-      data[offset].id / this.berekenen.getFactor();
+    this.berekenen.vis.arbeidsInkomen = data[offset].id / this.berekenen.getFactor();
     this.setLegendaText(data, length, offset);
   }
 

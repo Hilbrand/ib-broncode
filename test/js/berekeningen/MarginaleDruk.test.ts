@@ -38,12 +38,7 @@ test("Marginale Druk Details ", () => {
   const personen: PersoonType[] = [{ leeftijd: LeeftijdType.V }];
   const wonen: WonenType = { woning_type: WoningType.HUUR, huur: 600 };
   const ai: number = 27800;
-  const md: MarginaleDruk = new MarginaleDruk(
-    vis,
-    personen,
-    wonen,
-    new BeschikbaarInkomen(vis, personen, wonen)
-  );
+  const md: MarginaleDruk = new MarginaleDruk(vis, personen, wonen, new BeschikbaarInkomen(vis, personen, wonen));
   let mdd: MarginaleDrukResultaatType = md.bereken(ai);
 
   let expected: MarginaleDrukResultaatType = {

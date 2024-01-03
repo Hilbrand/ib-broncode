@@ -26,18 +26,12 @@
 import { LeeftijdType, PersoonType } from "../../types";
 import data from "./belasting_data";
 
-function algemeneHeffingsKorting(
-  jaar: number,
-  toetsingsinkomen: number,
-  maxBelasting: number,
-  aow: boolean
-): number {
+function algemeneHeffingsKorting(jaar: number, toetsingsinkomen: number, maxBelasting: number, aow: boolean): number {
   const ahkt = aow ? data.AHK[jaar].AOW : data.AHK[jaar].V;
 
   for (let ahk of ahkt) {
     if (toetsingsinkomen < ahk.inkomen.tot) {
-      const algemeneHeffingsKorting =
-        ahk.minimum + (toetsingsinkomen - ahk.minus) * ahk.factor;
+      const algemeneHeffingsKorting = ahk.minimum + (toetsingsinkomen - ahk.minus) * ahk.factor;
 
       return Math.round(Math.min(maxBelasting, algemeneHeffingsKorting));
     }
@@ -45,12 +39,7 @@ function algemeneHeffingsKorting(
   return 0;
 }
 
-function arbeidskorting(
-  jaar: number,
-  arbeidsinkomen: number,
-  maxArbeidsinkomen: number,
-  aow: boolean
-): number {
+function arbeidskorting(jaar: number, arbeidsinkomen: number, maxArbeidsinkomen: number, aow: boolean): number {
   const akt = aow ? data.AK[jaar].AOW : data.AK[jaar].V;
 
   for (let ak of akt) {
@@ -63,36 +52,19 @@ function arbeidskorting(
   return 0;
 }
 
-function maxArbeidsKorting(
-  jaar: number,
-  toetsingsInkomen: number,
-  maxBelasting: number,
-  aow: boolean
-): number {
+function maxArbeidsKorting(jaar: number, toetsingsInkomen: number, maxBelasting: number, aow: boolean): number {
   return (
-    inkomstenBelasting(jaar, toetsingsInkomen, aow) -
-    algemeneHeffingsKorting(jaar, toetsingsInkomen, maxBelasting, aow)
+    inkomstenBelasting(jaar, toetsingsInkomen, aow) - algemeneHeffingsKorting(jaar, toetsingsInkomen, maxBelasting, aow)
   );
 }
 
-function toetsingsinkomen(
-  arbeidsinkomen: number,
-  hypotheekRenteAftrek: number
-): number {
+function toetsingsinkomen(arbeidsinkomen: number, hypotheekRenteAftrek: number): number {
   return Math.max(0, arbeidsinkomen + (hypotheekRenteAftrek || 0));
 }
 
-function toeslagenToetsInkomen(
-  arbeidsinkomen: number,
-  personen: PersoonType[]
-): number {
+function toeslagenToetsInkomen(arbeidsinkomen: number, personen: PersoonType[]): number {
   return (
-    arbeidsinkomen +
-    personen.reduce(
-      (subtotaal, a) =>
-        subtotaal + (isNaN(a.bruto_inkomen) ? 0 : a.bruto_inkomen),
-      0
-    )
+    arbeidsinkomen + personen.reduce((subtotaal, a) => subtotaal + (isNaN(a.bruto_inkomen) ? 0 : a.bruto_inkomen), 0)
   );
 }
 
@@ -103,16 +75,10 @@ function ibRange(toetsingsInkomen: number, p): number {
   return p.percentage * range;
 }
 
-function inkomstenBelasting(
-  jaar: number,
-  toetsingsInkomen: number,
-  aow: boolean
-): number {
+function inkomstenBelasting(jaar: number, toetsingsInkomen: number, aow: boolean): number {
   const ibTabel = aow ? data.IB[jaar].AOW : data.IB[jaar].V;
 
-  return Math.round(
-    ibTabel.reduce((ib, p) => ib + ibRange(toetsingsInkomen, p), 0)
-  );
+  return Math.round(ibTabel.reduce((ib, p) => ib + ibRange(toetsingsInkomen, p), 0));
 }
 
 function netto(jaar: number, bruto: number, aow: boolean = false): number {
@@ -138,12 +104,7 @@ function nettoKortingenInkomens(jaar: number, personen: PersoonType[]) {
         bruto: inkomen,
         netto: netto(jaar, inkomen, aow),
         arbeidskorting: 0, //arbeidskorting(jaar, inkomen, aow),
-        algemeneHeffingsKorting: algemeneHeffingsKorting(
-          jaar,
-          inkomen,
-          tib,
-          aow
-        ),
+        algemeneHeffingsKorting: algemeneHeffingsKorting(jaar, inkomen, tib, aow),
       });
     }
   });

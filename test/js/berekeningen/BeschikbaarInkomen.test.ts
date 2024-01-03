@@ -43,13 +43,8 @@ const koop: WonenType = {
 
 test("Bereken beschikbaar inkomen eenverdiener, 2 kinderen, huur", () => {
   const arbeidsinkomen: number = 46377;
-  const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(
-    vis,
-    personen,
-    huur
-  );
-  const berekening: BeschikbaarInkomenResultaatType =
-    berekenen.bereken(arbeidsinkomen);
+  const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(vis, personen, huur);
+  const berekening: BeschikbaarInkomenResultaatType = berekenen.bereken(arbeidsinkomen);
 
   let expected: BeschikbaarInkomenResultaatType = {
     algemeneHeffingsKorting: 1932,
@@ -70,13 +65,8 @@ test("Bereken beschikbaar inkomen eenverdiener, 2 kinderen, huur", () => {
 
 test("Bereken beschikbaar inkomen 10000 eenverdiener, 2 kinderen, koop", () => {
   const arbeidsinkomen: number = 10000;
-  const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(
-    vis,
-    personen,
-    koop
-  );
-  const berekening: BeschikbaarInkomenResultaatType =
-    berekenen.bereken(arbeidsinkomen);
+  const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(vis, personen, koop);
+  const berekening: BeschikbaarInkomenResultaatType = berekenen.bereken(arbeidsinkomen);
 
   let expected: BeschikbaarInkomenResultaatType = {
     algemeneHeffingsKorting: 3362,
@@ -98,13 +88,8 @@ test("Bereken beschikbaar inkomen 10000 eenverdiener, 2 kinderen, koop", () => {
 test("Bereken beschikbaar inkomen 30000 eenverdiener, koop", () => {
   const arbeidsinkomen: number = 30000;
   const eenverdiener: PersoonType[] = [{ leeftijd: LeeftijdType.V }];
-  const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(
-    vis,
-    eenverdiener,
-    koop
-  );
-  const berekening: BeschikbaarInkomenResultaatType =
-    berekenen.bereken(arbeidsinkomen);
+  const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(vis, eenverdiener, koop);
+  const berekening: BeschikbaarInkomenResultaatType = berekenen.bereken(arbeidsinkomen);
 
   let expected: BeschikbaarInkomenResultaatType = {
     algemeneHeffingsKorting: 3362,

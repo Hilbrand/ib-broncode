@@ -23,36 +23,22 @@ const JAAR: number = 2023;
 // test algemeneHeffingsKorting
 
 test("Algemene Heffings Korting 1.000", () => {
-  expect(inkomen.algemeneHeffingsKorting(JAAR, 1000, 10000, false)).toEqual(
-    3070
-  );
-  expect(inkomen.algemeneHeffingsKorting(JAAR, 1000, 10000, true)).toEqual(
-    1583
-  );
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 1000, 10000, false)).toEqual(3070);
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 1000, 10000, true)).toEqual(1583);
 });
 
 test("Algemene Heffings Korting 10.000", () => {
-  expect(inkomen.algemeneHeffingsKorting(JAAR, 10000, 10000, false)).toEqual(
-    3070
-  );
-  expect(inkomen.algemeneHeffingsKorting(JAAR, 10000, 10000, true)).toEqual(
-    1583
-  );
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 10000, 10000, false)).toEqual(3070);
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 10000, 10000, true)).toEqual(1583);
 });
 
 test("Algemene Heffings Korting 40.000", () => {
-  expect(inkomen.algemeneHeffingsKorting(JAAR, 40000, 10000, false)).toEqual(
-    2013
-  );
-  expect(inkomen.algemeneHeffingsKorting(JAAR, 40000, 10000, true)).toEqual(
-    1038
-  );
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 40000, 10000, false)).toEqual(2013);
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 40000, 10000, true)).toEqual(1038);
 });
 
 test("Algemene Heffings Korting 100.000", () => {
-  expect(inkomen.algemeneHeffingsKorting(JAAR, 100000, 10000, false)).toEqual(
-    0
-  );
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 100000, 10000, false)).toEqual(0);
   expect(inkomen.algemeneHeffingsKorting(JAAR, 100000, 10000, true)).toEqual(0);
 });
 
@@ -91,9 +77,7 @@ test("Belasting 100.000", () => {
 });
 
 test("Belasting 40.021", () => {
-  expect(inkomen.inkomstenBelasting(2024, 40021, true)).toEqual(
-    Math.round(7632.1837)
-  );
+  expect(inkomen.inkomstenBelasting(2024, 40021, true)).toEqual(Math.round(7632.1837));
 });
 
 // test netto
@@ -103,9 +87,7 @@ test("Netto 10.000", () => {
 });
 
 test("", () => {
-  expect(
-    inkomen.toeslagenToetsInkomen(100, [{ bruto_inkomen: 200 }, {}])
-  ).toEqual(300);
+  expect(inkomen.toeslagenToetsInkomen(100, [{ bruto_inkomen: 200 }, {}])).toEqual(300);
 });
 
 // test('Netto 25.000', () => {

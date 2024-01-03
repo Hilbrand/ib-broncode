@@ -3,11 +3,7 @@
     <n-space vertical>
       <n-space :wrap="false" justify="space-between">
         Stel aantal personen in:
-        <n-select
-          v-model:value="aantalPersonen"
-          :options="personOptions"
-          :consistent-menu-width="false"
-        />
+        <n-select v-model:value="aantalPersonen" :options="personOptions" :consistent-menu-width="false" />
       </n-space>
 
       <n-table :bordered="false" size="small" striped>
@@ -42,13 +38,7 @@
               </div>
             </td>
             <td>
-              <n-button
-                v-if="index != 0"
-                text
-                @click="verwijderPersoon(index)"
-                size="20"
-                class="deleteButton"
-              >
+              <n-button v-if="index != 0" text @click="verwijderPersoon(index)" size="20" class="deleteButton">
                 <n-icon size="20"
                   ><svg
                     xmlns="http://www.w3.org/2000/svg"

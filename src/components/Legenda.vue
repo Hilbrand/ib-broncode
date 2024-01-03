@@ -1,9 +1,6 @@
 <template>
   <n-card title="Legenda" size="small">
-    <n-space
-      vertical
-      v-if="!data.grafiek || Object.keys(data.grafiek).length == 0"
-    >
+    <n-space vertical v-if="!data.grafiek || Object.keys(data.grafiek).length == 0">
       Beweeg de muis over de grafiek om de legenda te tonen.
     </n-space>
     <n-space vertical v-else>

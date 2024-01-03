@@ -52,10 +52,7 @@ function inkomensafhankelijkeCombinatiekorting(
   aow: boolean = false
 ): number {
   const tabel = data.IACK[jaar];
-  const arbeidsinkomen =
-    laagstePartnerinkomen < 0
-      ? toetsinkomen
-      : Math.min(toetsinkomen, laagstePartnerinkomen);
+  const arbeidsinkomen = laagstePartnerinkomen < 0 ? toetsinkomen : Math.min(toetsinkomen, laagstePartnerinkomen);
   const t = aow ? tabel.HAOW : tabel.H;
 
   return arbeidsinkomen < t.MinAInk

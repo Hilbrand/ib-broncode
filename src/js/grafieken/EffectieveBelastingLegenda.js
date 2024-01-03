@@ -44,12 +44,8 @@ export class EffectieveBelastingLegenda extends Legenda {
     ld.totals = [
       {
         naam: "bruto",
-        percentage: this.percentage(
-          (100 * b.brutoInkomstenBelasting) / b.arbeidsInkomen
-        ),
-        bedrag: this.geld(
-          b.brutoInkomstenBelasting * this.berekenen.getFactor()
-        ),
+        percentage: this.percentage((100 * b.brutoInkomstenBelasting) / b.arbeidsInkomen),
+        bedrag: this.geld(b.brutoInkomstenBelasting * this.berekenen.getFactor()),
       },
     ];
     this.legendaFunction(ld);

@@ -32,17 +32,13 @@ function toJsonArray(q: any) {
 }
 
 function splitParam(queryParam: string | any): string {
-  let a: string[] | any = queryParam
-    ? queryParam.split(KEY_VALUE_SPLIT)
-    : queryParam;
+  let a: string[] | any = queryParam ? queryParam.split(KEY_VALUE_SPLIT) : queryParam;
 
   return a ? a.map(toJsonArray) : a;
 }
 
 function copyNavigatieToJson(from, to, functionNavToJson: (any) => any) {
-  Object.entries(functionNavToJson(splitParam(from))).forEach(
-    (a) => (to[a[0]] = toJsonArray(a[1]))
-  );
+  Object.entries(functionNavToJson(splitParam(from))).forEach((a) => (to[a[0]] = toJsonArray(a[1])));
 }
 
 // -------------------

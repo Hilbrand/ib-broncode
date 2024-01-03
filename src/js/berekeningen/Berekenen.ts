@@ -44,11 +44,7 @@ export class Berekenen {
     this.vis = vis;
     this.personen = personen;
     this.wonen = wonen;
-    this.algemeneGegevens = this.berekenAlgemeneGegevens(
-      vis.jaar,
-      personen,
-      wonen
-    );
+    this.algemeneGegevens = this.berekenAlgemeneGegevens(vis.jaar, personen, wonen);
     this.factor = functies.factorBerekening(vis.periode);
   }
 
@@ -73,11 +69,7 @@ export class Berekenen {
     return this.factor;
   }
 
-  berekenAlgemeneGegevens(
-    jaar: number,
-    personen: PersoonType[],
-    wonen: WonenType
-  ): BerekenInvoerType {
+  berekenAlgemeneGegevens(jaar: number, personen: PersoonType[], wonen: WonenType): BerekenInvoerType {
     let toeslagenpartner = functies.toeslagenPartner(personen);
     let aow = functies.aow(personen);
     let huren = functies.isHuur(wonen);
@@ -87,17 +79,11 @@ export class Berekenen {
       aow: aow,
       iacbInkomen: iack.bepaalLaagsteArbeidsInkomenAnderen(personen),
       kinderbijslag: kbs.kinderbijslag(jaar, personen),
-      maxKindgebondenBudget: kgb.maxKindgebondenBudget(
-        jaar,
-        personen,
-        toeslagenpartner
-      ),
+      maxKindgebondenBudget: kgb.maxKindgebondenBudget(jaar, personen, toeslagenpartner),
       //nk: inkomen.nettoKortingenInkomens(personen),
       huren: huren,
       eigenwoningforfait: huren ? 0 : hra.eigenwoningforfait(jaar, wonen.woz),
-      hypotheekRenteAftrek: huren
-        ? 0
-        : hra.hypotheekRenteAftrek(jaar, wonen.rente, wonen.woz),
+      hypotheekRenteAftrek: huren ? 0 : hra.hypotheekRenteAftrek(jaar, wonen.rente, wonen.woz),
     };
   }
 

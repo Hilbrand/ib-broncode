@@ -17,14 +17,7 @@
 
 import { expect, test } from "vitest";
 import gegevens from "../../../src/js/berekeningen/gegevens";
-import {
-  GrafiekType,
-  LeeftijdType,
-  PeriodeType,
-  PersoonType,
-  SalarisVerhogingType,
-  TabType,
-} from "../../../src/types";
+import { GrafiekType, LeeftijdType, PeriodeType, PersoonType, SalarisVerhogingType, TabType } from "../../../src/types";
 
 const personenQuery: string = "V;V,10000;K611";
 const personenJson: PersoonType[] = [

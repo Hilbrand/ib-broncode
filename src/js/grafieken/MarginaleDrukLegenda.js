@@ -29,8 +29,7 @@ export class MarginaleDrukLegenda extends Legenda {
     let b = this.berekenGetallen(data[offset]);
     let ld = {
       grafiek: [],
-      titel:
-        "Opbouw van de marginale druk met vermindering in toeslagen en kortingen",
+      titel: "Opbouw van de marginale druk met vermindering in toeslagen en kortingen",
       arbeidsInkomen: data[offset].id.toFixed(),
     };
     let factor = this.berekenen.getFactor();

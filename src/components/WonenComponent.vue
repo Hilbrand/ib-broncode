@@ -32,14 +32,7 @@
       <n-space vertical>
         <n-space :wrap="false">
           <div style="white-space: nowrap">WOZ waarde</div>
-          <n-input-number
-            placeholder="WOZ waarde"
-            id="huur"
-            min="0"
-            step="1"
-            size="small"
-            v-model:value="gegevens.woz"
-          >
+          <n-input-number placeholder="WOZ waarde" id="huur" min="0" step="1" size="small" v-model:value="gegevens.woz">
             <template #prefix>&euro;</template>
           </n-input-number>
         </n-space>
@@ -82,11 +75,7 @@ export default {
   computed: {
     renteaftrek() {
       if (this.gegevens.woning_type == "koop") {
-        return -hra.hypotheekRenteAftrek(
-          this.jaar,
-          this.gegevens.rente,
-          this.gegevens.woz
-        );
+        return -hra.hypotheekRenteAftrek(this.jaar, this.gegevens.rente, this.gegevens.woz);
       } else {
         return "";
       }

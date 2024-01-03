@@ -31,7 +31,5 @@ const A3K: PersoonType[] = [
 // Test Kinderbijslag
 
 test("test Kinderbijslag, 4 kinderen", () => {
-  expect(kbs.kinderbijslag(JAAR, A3K)).toEqual(
-    Math.floor(4 * (261.7 + 317.77 + 373.85 * 2))
-  );
+  expect(kbs.kinderbijslag(JAAR, A3K)).toEqual(Math.floor(4 * (261.7 + 317.77 + 373.85 * 2)));
 });

@@ -36,34 +36,26 @@ export class MarginaleDruk extends Berekenen {
 
   bereken(arbeidsInkomen) {
     const berekening1 = this.bi.bereken(arbeidsInkomen);
-    const berekening2 = this.bi.bereken(
-      arbeidsInkomen + this.salarisVerhoging(arbeidsInkomen)
-    );
+    const berekening2 = this.bi.bereken(arbeidsInkomen + this.salarisVerhoging(arbeidsInkomen));
 
     return this.marginaleDruk(berekening1, berekening2, arbeidsInkomen);
   }
 
   salarisVerhoging(arbeidsInkomen) {
-    return this.vis.svt == "a"
-      ? this.vis.sv_abs
-      : arbeidsInkomen * (this.vis.sv_p / 100);
+    return this.vis.svt == "a" ? this.vis.sv_abs : arbeidsInkomen * (this.vis.sv_p / 100);
   }
 
   mdPercentage(netto1, netto2, Δbudget, inverse) {
     const ΔNetto = netto2 - netto1;
     const percentage = Δbudget == 0 ? 0 : ΔNetto / Δbudget;
     const result = (percentage * 100).toFixed(2);
-    const relevantResult =
-      isNaN(result) || result == 0 ? 0 : inverse ? -result : 1 * result;
+    const relevantResult = isNaN(result) || result == 0 ? 0 : inverse ? -result : 1 * result;
 
     return relevantResult;
   }
 
   inkomstenBelastingAangepast(berekening) {
-    return (
-      berekening.brutoInkomstenBelasting -
-      (berekening.algemeneHeffingsKorting + berekening.arbeidskorting)
-    );
+    return berekening.brutoInkomstenBelasting - (berekening.algemeneHeffingsKorting + berekening.arbeidskorting);
   }
 
   nettoInkomensBelasting(
@@ -85,8 +77,7 @@ export class MarginaleDruk extends Berekenen {
   }
 
   marginaleDrukTotaal(alles, berekening1, berekening2, id) {
-    let ΔNetto =
-      berekening2.beschikbaarInkomen - berekening1.beschikbaarInkomen;
+    let ΔNetto = berekening2.beschikbaarInkomen - berekening1.beschikbaarInkomen;
     let ΔBruto = berekening2.arbeidsinkomen - berekening1.arbeidsinkomen;
     let md = ΔNetto > 0 ? (100 - (ΔNetto / ΔBruto) * 100).toFixed(2) : 0;
 
@@ -100,11 +91,7 @@ export class MarginaleDruk extends Berekenen {
   belastingdruk(alles, berekening1, id) {
     let belastingdruk =
       berekening1.arbeidsinkomen > 0
-        ? functies.negatiefIsNul(
-            100 -
-              (berekening1.beschikbaarInkomen / berekening1.arbeidsinkomen) *
-                100
-          )
+        ? functies.negatiefIsNul(100 - (berekening1.beschikbaarInkomen / berekening1.arbeidsinkomen) * 100)
         : 0;
     alles.push({
       id: id,
@@ -119,51 +106,19 @@ export class MarginaleDruk extends Berekenen {
 
   marginaleDruk(berekening1, berekening2) {
     let ΔBruto = berekening2.arbeidsinkomen - berekening1.arbeidsinkomen;
-    let md =
-      100 -
-      this.mdPercentage(
-        berekening1.beschikbaarInkomen,
-        berekening2.beschikbaarInkomen,
-        ΔBruto,
-        false
-      );
+    let md = 100 - this.mdPercentage(berekening1.beschikbaarInkomen, berekening2.beschikbaarInkomen, ΔBruto, false);
 
     let ΔalgemeneHeffingsKorting = functies.negatiefIsNul(
-      this.mdPercentage(
-        berekening1.algemeneHeffingsKorting,
-        berekening2.algemeneHeffingsKorting,
-        ΔBruto,
-        true
-      )
+      this.mdPercentage(berekening1.algemeneHeffingsKorting, berekening2.algemeneHeffingsKorting, ΔBruto, true)
     );
     let Δarbeidskorting = functies.negatiefIsNul(
-      this.mdPercentage(
-        berekening1.arbeidskorting,
-        berekening2.arbeidskorting,
-        ΔBruto,
-        true
-      )
+      this.mdPercentage(berekening1.arbeidskorting, berekening2.arbeidskorting, ΔBruto, true)
     );
 
     let Δtoeslagen = {
-      zorgtoeslag: this.mdPercentage(
-        berekening1.zorgtoeslag,
-        berekening2.zorgtoeslag,
-        ΔBruto,
-        true
-      ),
-      wonen: this.mdPercentage(
-        berekening1.wonen,
-        berekening2.wonen,
-        ΔBruto,
-        true
-      ),
-      kinderbijslag: this.mdPercentage(
-        berekening1.kinderbijslag,
-        berekening2.kinderbijslag,
-        ΔBruto,
-        true
-      ),
+      zorgtoeslag: this.mdPercentage(berekening1.zorgtoeslag, berekening2.zorgtoeslag, ΔBruto, true),
+      wonen: this.mdPercentage(berekening1.wonen, berekening2.wonen, ΔBruto, true),
+      kinderbijslag: this.mdPercentage(berekening1.kinderbijslag, berekening2.kinderbijslag, ΔBruto, true),
       kindgebondenBudget: this.mdPercentage(
         berekening1.kindgebondenBudget,
         berekening2.kindgebondenBudget,
@@ -194,9 +149,7 @@ export class MarginaleDruk extends Berekenen {
       Δarbeidskorting,
       negativeSumΔtoeslagen
     );
-    let nettoInkomensBelastingNul = functies.negatiefIsNul(
-      nib - negativeSumΔtoeslagen
-    );
+    let nettoInkomensBelastingNul = functies.negatiefIsNul(nib - negativeSumΔtoeslagen);
 
     return {
       arbeidsinkomen: berekening2.arbeidsinkomen - berekening1.arbeidsinkomen,
@@ -207,9 +160,7 @@ export class MarginaleDruk extends Berekenen {
       wonen: functies.negatiefIsNul(Δtoeslagen.wonen),
       kinderbijslag: functies.negatiefIsNul(Δtoeslagen.kinderbijslag),
       kindgebondenBudget: functies.negatiefIsNul(Δtoeslagen.kindgebondenBudget),
-      inkomensafhankelijkeCombinatiekorting: functies.negatiefIsNul(
-        Δtoeslagen.inkomensafhankelijkeCombinatiekorting
-      ),
+      inkomensafhankelijkeCombinatiekorting: functies.negatiefIsNul(Δtoeslagen.inkomensafhankelijkeCombinatiekorting),
       marginaleDruk: md,
     };
   }
@@ -218,10 +169,7 @@ export class MarginaleDruk extends Berekenen {
     alles.push({
       id: id,
       type: "netto belasting",
-      getal: this.afronden(
-        marginaleDruk.nettoInkomensBelasting,
-        this.bi.factor
-      ),
+      getal: this.afronden(marginaleDruk.nettoInkomensBelasting, this.bi.factor),
     });
     this.bi.verzamelGrafiekSeries(alles, marginaleDruk, id);
   }

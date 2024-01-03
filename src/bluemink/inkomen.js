@@ -68,13 +68,8 @@ function algemeneHeffingsKorting(jaar, toetsingsinkomen, maxBelasting, aow) {
 
 function arbeidskorting(jaar, arbeidsinkomen, maxArbeidsinkomen, aow) {
   for (let p of ARBEIDS_KORTING) {
-    if (
-      arbeidsinkomen < (p.tot || Number.POSITIVE_INFINITY) &&
-      arbeidsinkomen >= (p.vanaf || 0)
-    ) {
-      return typeof p.bedrag === "undefined"
-        ? p.offset + (arbeidsinkomen - p.vanaf) * p.percentage
-        : p.bedrag;
+    if (arbeidsinkomen < (p.tot || Number.POSITIVE_INFINITY) && arbeidsinkomen >= (p.vanaf || 0)) {
+      return typeof p.bedrag === "undefined" ? p.offset + (arbeidsinkomen - p.vanaf) * p.percentage : p.bedrag;
     }
   }
   return 0;
@@ -90,9 +85,7 @@ function ibRange(toetsingsInkomen, p) {
 function inkomstenBelasting(toetsingsInkomen, aow) {
   let ibTabel = IB;
 
-  return Math.round(
-    ibTabel.reduce((ib, p) => ib + ibRange(toetsingsInkomen, p), 0)
-  );
+  return Math.round(ibTabel.reduce((ib, p) => ib + ibRange(toetsingsInkomen, p), 0));
 }
 
 function toeslagenToetsInkomen(toetsingsInkomen, personen) {

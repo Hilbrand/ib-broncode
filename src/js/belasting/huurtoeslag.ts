@@ -37,31 +37,16 @@ function huurtoeslag(
     return 0;
   }
   const mph = aantalPersonen > 1;
-  const htbp = aow
-    ? mph
-      ? htbpj.MPHAOW
-      : htbpj.EPHAOW
-    : mph
-    ? htbpj.MPH
-    : htbpj.EPH;
+  const htbp = aow ? (mph ? htbpj.MPHAOW : htbpj.EPHAOW) : mph ? htbpj.MPH : htbpj.EPH;
   const basishuur =
     (rekeninkomen > htbp.MinInkGr
-      ? htbp["Factor a"] * rekeninkomen * rekeninkomen +
-        htbp["Factor b"] * rekeninkomen
+      ? htbp["Factor a"] * rekeninkomen * rekeninkomen + htbp["Factor b"] * rekeninkomen
       : htbp.MinNrmHr) + htbp.TaakStBedr;
   const a = Math.max(0, Math.min(htj.KwKrtGrns, rekenhuur) - basishuur);
   const aftopGrens = aantalPersonen > 2 ? htj.AftopB : htj.AftopA;
   const b =
-    rekenhuur > htj.KwKrtGrns
-      ? Math.max(
-          0,
-          Math.min(rekenhuur, aftopGrens) - Math.max(htj.KwKrtGrns, basishuur)
-        )
-      : 0;
-  const c =
-    !mph && rekenhuur > aftopGrens
-      ? Math.max(0, rekenhuur - Math.max(aftopGrens, basishuur))
-      : 0;
+    rekenhuur > htj.KwKrtGrns ? Math.max(0, Math.min(rekenhuur, aftopGrens) - Math.max(htj.KwKrtGrns, basishuur)) : 0;
+  const c = !mph && rekenhuur > aftopGrens ? Math.max(0, rekenhuur - Math.max(aftopGrens, basishuur)) : 0;
   return 12 * Math.floor(a + 0.65 * b + 0.4 * c);
 }
 

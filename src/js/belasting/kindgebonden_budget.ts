@@ -25,17 +25,11 @@ import { LeeftijdType, PersoonType } from "../../types";
 import data from "./belasting_data.js";
 import functies from "../functies";
 
-function rekenBasis(
-  jaar: number,
-  aantalKinderen: number,
-  toeslagenPartner: boolean
-): number {
+function rekenBasis(jaar: number, aantalKinderen: number, toeslagenPartner: boolean): number {
   const tabelj = data.TABEL[jaar];
   const maxkgbj = data.MAXKGB[jaar];
 
-  return aantalKinderen > 0
-    ? maxkgbj[aantalKinderen] + (toeslagenPartner ? 0 : tabelj.VHgeenTP)
-    : 0;
+  return aantalKinderen > 0 ? maxkgbj[aantalKinderen] + (toeslagenPartner ? 0 : tabelj.VHgeenTP) : 0;
 }
 
 /**
@@ -46,11 +40,7 @@ function rekenBasis(
  * @returns
  */
 
-function maxKindgebondenBudget(
-  jaar: number,
-  personen: PersoonType[],
-  toeslagenPartner: boolean
-): number {
+function maxKindgebondenBudget(jaar: number, personen: PersoonType[], toeslagenPartner: boolean): number {
   const tabelj = data.TABEL[jaar];
   const k05 = functies.telPersonen(personen, LeeftijdType.K05);
   const k611 = functies.telPersonen(personen, LeeftijdType.K611);
@@ -71,15 +61,9 @@ function kindgebondenBudget(
   const tabelj = data.TABEL[jaar];
 
   if (maxKindergebondenBudget > 0) {
-    const maxInk =
-      (toeslagenPartner ? tabelj.VerhoogdDrempelInkomen : 0) +
-      tabelj.DrempelinkomenKGB;
+    const maxInk = (toeslagenPartner ? tabelj.VerhoogdDrempelInkomen : 0) + tabelj.DrempelinkomenKGB;
     if (toetsinkomen > maxInk) {
-      return Math.max(
-        0,
-        maxKindergebondenBudget -
-          Math.floor((toetsinkomen - maxInk) * (tabelj.TslgTP / 100))
-      );
+      return Math.max(0, maxKindergebondenBudget - Math.floor((toetsinkomen - maxInk) * (tabelj.TslgTP / 100)));
     } else {
       return maxKindergebondenBudget;
     }

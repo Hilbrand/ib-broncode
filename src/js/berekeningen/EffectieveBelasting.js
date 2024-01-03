@@ -50,8 +50,7 @@ export class EffectieveBelasting extends BeschikbaarInkomen {
       arbeidsInkomen: arbeidsInkomen,
       brutoInkomstenBelasting: beschikbaarInkomen.brutoInkomstenBelasting,
       effectieveBelasting: effectieveBelasting,
-      effectieveBelastingPercentage:
-        100 * (effectieveBelasting / arbeidsInkomen),
+      effectieveBelastingPercentage: 100 * (effectieveBelasting / arbeidsInkomen),
     };
   }
 
@@ -59,10 +58,7 @@ export class EffectieveBelasting extends BeschikbaarInkomen {
     alles.push({
       id: id,
       type: "effectieve belasting",
-      getal: this.afronden(
-        beschikbaarInkomen.effectieveBelastingPercentage,
-        this.getFactor()
-      ),
+      getal: this.afronden(beschikbaarInkomen.effectieveBelastingPercentage, this.getFactor()),
     });
   }
 }

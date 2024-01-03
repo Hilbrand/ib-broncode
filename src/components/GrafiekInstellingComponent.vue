@@ -2,18 +2,8 @@
   <n-card title="Grafiek Instellingen" size="small">
     <n-space vertical>
       Gegevens Jaar:
-      <n-select
-        v-model:value="grafiek.jaar"
-        :options="jaren"
-        :consistent-menu-width="false"
-      />
-      <n-slider
-        v-model:value="grafiek.van_tot"
-        range
-        :step="100"
-        :min="0"
-        :max="200000"
-      />
+      <n-select v-model:value="grafiek.jaar" :options="jaren" :consistent-menu-width="false" />
+      <n-slider v-model:value="grafiek.van_tot" range :step="100" :min="0" :max="200000" />
       <n-input-group>
         <n-input-number
           placeholder="Bruto Ondergrens"
@@ -38,21 +28,14 @@
         </n-space>
       </n-radio-group>
       <br />
-      Vul jaar inkomen in of klik op de grafiek om een inkomensberekening te
-      doen:
+      Vul jaar inkomen in of klik op de grafiek om een inkomensberekening te doen:
       <n-slider
         v-model:value="grafiek.arbeidsInkomen"
         :step="100"
         :min="grafiek.van_tot[0]"
         :max="grafiek.van_tot[1]"
       />
-      <n-input-number
-        placeholder="Arbeidsinkomen"
-        min="0"
-        step="1"
-        size="small"
-        v-model:value="grafiek.arbeidsInkomen"
-      >
+      <n-input-number placeholder="Arbeidsinkomen" min="0" step="1" size="small" v-model:value="grafiek.arbeidsInkomen">
         <template #prefix>&euro;</template>
       </n-input-number>
     </n-space>

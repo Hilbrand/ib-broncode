@@ -137,17 +137,9 @@ function navigatieToJson(query: NavigatieType): InvoerGegevens {
     wonen: defaultWonen(),
     grafiek: defaultGrafiek(),
   };
-  navigatie.copyNavigatieToJson(
-    query?.p,
-    basis.personen,
-    personenNavigatieToJson
-  );
+  navigatie.copyNavigatieToJson(query?.p, basis.personen, personenNavigatieToJson);
   navigatie.copyNavigatieToJson(query?.w, basis.wonen, wonenNavigatieToJson);
-  navigatie.copyNavigatieToJson(
-    query?.grafiek,
-    basis.grafiek,
-    grafiekNavigatieToJson
-  );
+  navigatie.copyNavigatieToJson(query?.grafiek, basis.grafiek, grafiekNavigatieToJson);
   return basis;
 }
 
@@ -156,9 +148,7 @@ function navigatieToJson(query: NavigatieType): InvoerGegevens {
 // p=<leeftijd>;<leeftijd>,<bruto_inkomen>
 
 function personenJsonToNavigatie(personen: PersoonType[]): string[] {
-  return personen.map(
-    (p) => p.leeftijd + (p.bruto_inkomen ? "," + p.bruto_inkomen : "")
-  );
+  return personen.map((p) => p.leeftijd + (p.bruto_inkomen ? "," + p.bruto_inkomen : ""));
 }
 
 // w=huur;<huur>
@@ -176,16 +166,8 @@ function wonenJsonToNavigatie(wonen: WonenType): any[] {
 }
 
 function grafiekJsonToNavigatie(grafiek: GrafiekType): any[] {
-  let sv =
-    grafiek.svt == SalarisVerhogingType.A ? grafiek.sv_abs : grafiek.sv_p;
-  return [
-    grafiek.jaar,
-    grafiek.periode,
-    grafiek.van_tot,
-    grafiek.svt,
-    sv,
-    grafiek.arbeidsInkomen,
-  ];
+  let sv = grafiek.svt == SalarisVerhogingType.A ? grafiek.sv_abs : grafiek.sv_p;
+  return [grafiek.jaar, grafiek.periode, grafiek.van_tot, grafiek.svt, sv, grafiek.arbeidsInkomen];
 }
 
 function jsonToNavigatie(json: InvoerGegevens): NavigatieType {
@@ -193,9 +175,7 @@ function jsonToNavigatie(json: InvoerGegevens): NavigatieType {
     tab: json.tab,
     p: navigatie.jsonArrayToNavigatie(personenJsonToNavigatie(json.personen)),
     w: navigatie.jsonArrayToNavigatie(wonenJsonToNavigatie(json.wonen)),
-    grafiek: navigatie.jsonArrayToNavigatie(
-      grafiekJsonToNavigatie(json.grafiek)
-    ),
+    grafiek: navigatie.jsonArrayToNavigatie(grafiekJsonToNavigatie(json.grafiek)),
   };
 }
 

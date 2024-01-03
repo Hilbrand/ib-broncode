@@ -21,10 +21,7 @@ import kgb from "../../../src/js/belasting/kindgebonden_budget";
 
 // 2023 getallen
 const JAAR: number = 2023;
-const A1K: PersoonType[] = [
-  { leeftijd: LeeftijdType.V },
-  { leeftijd: LeeftijdType.K611 },
-];
+const A1K: PersoonType[] = [{ leeftijd: LeeftijdType.V }, { leeftijd: LeeftijdType.K611 }];
 const A1K_MAX: number = 3848 + 1653;
 const M1K: PersoonType[] = [
   { leeftijd: LeeftijdType.V },
@@ -57,80 +54,35 @@ test("test max Kindgebonden Budget alleenstaand, 1 kind 12-, 1 kind 12-15, 1 kin
 // Test Kindgebonden Budget
 
 test("test Kindgebonden Budget 10.000, alleenstaand, 1 kind 12-", () => {
-  expect(
-    kgb.kindgebondenBudget(
-      JAAR,
-      10000,
-      kgb.maxKindgebondenBudget(JAAR, A1K, false),
-      false
-    )
-  ).toEqual(A1K_MAX);
+  expect(kgb.kindgebondenBudget(JAAR, 10000, kgb.maxKindgebondenBudget(JAAR, A1K, false), false)).toEqual(A1K_MAX);
 });
 
 test("test Kindgebonden Budget 40.000, alleenstaand, 1 kind 12-", () => {
-  expect(
-    kgb.kindgebondenBudget(
-      JAAR,
-      40000,
-      kgb.maxKindgebondenBudget(JAAR, A1K, false),
-      false
-    )
-  ).toEqual(A1K_MAX - 1007);
+  expect(kgb.kindgebondenBudget(JAAR, 40000, kgb.maxKindgebondenBudget(JAAR, A1K, false), false)).toEqual(
+    A1K_MAX - 1007
+  );
 });
 
 test("test Kindgebonden Budget 10.000, 2 V, 1 kind 12-", () => {
-  expect(
-    kgb.kindgebondenBudget(
-      JAAR,
-      10000,
-      kgb.maxKindgebondenBudget(JAAR, M1K, true),
-      true
-    )
-  ).toEqual(M1K_MAX);
+  expect(kgb.kindgebondenBudget(JAAR, 10000, kgb.maxKindgebondenBudget(JAAR, M1K, true), true)).toEqual(M1K_MAX);
 });
 
 test("test Kindgebonden Budget 50.000, 2 V, 1 kind 12-", () => {
-  expect(
-    kgb.kindgebondenBudget(
-      JAAR,
-      50000,
-      kgb.maxKindgebondenBudget(JAAR, M1K, true),
-      true
-    )
-  ).toEqual(M1K_MAX - 445);
+  expect(kgb.kindgebondenBudget(JAAR, 50000, kgb.maxKindgebondenBudget(JAAR, M1K, true), true)).toEqual(M1K_MAX - 445);
 });
 
 test("test Kindgebonden Budget 50.000, 2 V, 1 kind 12-", () => {
-  expect(
-    kgb.kindgebondenBudget(
-      JAAR,
-      50000,
-      kgb.maxKindgebondenBudget(JAAR, M1K, true),
-      true
-    )
-  ).toEqual(M1K_MAX - 445);
+  expect(kgb.kindgebondenBudget(JAAR, 50000, kgb.maxKindgebondenBudget(JAAR, M1K, true), true)).toEqual(M1K_MAX - 445);
 });
 
 test("test Kindgebonden Budget 10.000, alleenstaand, 1 kind 12-, 1 kind 12-15, 1 kind 16-17", () => {
-  expect(
-    kgb.kindgebondenBudget(
-      JAAR,
-      10000,
-      kgb.maxKindgebondenBudget(JAAR, A3K, false),
-      false
-    )
-  ).toEqual(A3K_MAX);
+  expect(kgb.kindgebondenBudget(JAAR, 10000, kgb.maxKindgebondenBudget(JAAR, A3K, false), false)).toEqual(A3K_MAX);
 });
 
 test("test Kindgebonden Budget 40.000, alleenstaand, 1 kind 12-, 1 kind 12-15, 1 kind 16-17", () => {
-  expect(
-    kgb.kindgebondenBudget(
-      JAAR,
-      40000,
-      kgb.maxKindgebondenBudget(JAAR, A3K, false),
-      false
-    )
-  ).toEqual(A3K_MAX - 1007);
+  expect(kgb.kindgebondenBudget(JAAR, 40000, kgb.maxKindgebondenBudget(JAAR, A3K, false), false)).toEqual(
+    A3K_MAX - 1007
+  );
 });
 
 // const M2K = [{leeftijd: 'Volwassene'}, {leeftijd: 'Volwassene'}, {leeftijd: '12-'}, {leeftijd: '12-'}];
