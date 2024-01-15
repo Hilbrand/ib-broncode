@@ -90,7 +90,7 @@ export type MarginaleDrukResultaatType = {
 export enum TabType {
   BI = "bi",
   MD = "md",
-  EB = "eb",
+  BD = "bd",
 }
 
 export type PersoonNavigatieType = {

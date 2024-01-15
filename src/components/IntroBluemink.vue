@@ -21,10 +21,10 @@
         Als de marginale druk hoog is, dan zal minder werken bij een salarisverhoging niet direct tot veel minder
         inkomen zorgen.
       </dd>
-      <dt><b>Effectieve Belasting</b></dt>
+      <dt><b>Belastingdruk</b></dt>
       <dd>
         Dit geeft weer hoeveel procent belasting betaald moet worden na verrekening van kortingen. Het gaat om bruto
-        belasting waar kortingen vanaf zijn getrokken. Dit zijn arbeidskorting, algemene heffings korting,
+        belasting waar kortingen vanaf zijn getrokken. Dit zijn arbeidskorting, algemene heffingskorting,
         inkomensafhankelijke combinatie korting. In deze berekening zijn toeslagen niet meegenomen omdat een toeslag een
         bijdrage is van een andere uitgave. De effecten van een toelage hangen dus af van uitgaven waarvoor de toeslag
         wordt uitgekeerd. Dit is dus niet direct te koppelen aan de effectief te betalen belasting.

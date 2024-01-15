@@ -17,13 +17,24 @@
 import { Berekenen } from "./Berekenen";
 import { BeschikbaarInkomen } from "./BeschikbaarInkomen";
 import { MarginaleDruk } from "./MarginaleDruk";
-import { EffectieveBelasting } from "./EffectieveBelasting";
+import { Belastingdruk } from "./Belastingdruk";
 import { BlueminkBeschikbaarInkomen } from "../../bluemink/BlueminkBeschikbaarInkomen";
-import { GrafiekType, LeeftijdType, PeriodeType, PersoonType, TabType, WonenType, WoningType } from "../../types";
+import {
+  GrafiekType,
+  PersoonType,
+  TabType,
+  WonenType
+} from "../../types";
 
 const stap: number = 100;
 
-function berekenGrafiekData(path: string, type: TabType, vis: GrafiekType, personen: PersoonType[], wonen: WoningType) {
+function berekenGrafiekData(
+  path: string,
+  type: TabType,
+  vis: GrafiekType,
+  personen: PersoonType[],
+  wonen: WonenType
+) {
   let berekenen: Berekenen = null;
   let bi =
     path == "/bluemink"
@@ -37,8 +48,8 @@ function berekenGrafiekData(path: string, type: TabType, vis: GrafiekType, perso
     case TabType.MD:
       berekenen = new MarginaleDruk(vis, personen, wonen, bi);
       break;
-    case TabType.EB:
-      berekenen = new EffectieveBelasting(vis, personen, wonen, bi);
+    case TabType.BD:
+      berekenen = new Belastingdruk(vis, personen, wonen, bi);
       break;
   }
   let series = [];

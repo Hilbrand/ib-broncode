@@ -49,13 +49,11 @@
           <div id="md"></div>
         </n-space>
       </n-tab-pane>
-      <!--
-      <n-tab-pane name="eb" tab="Effectieve Belasting" key="eb">
+      <n-tab-pane name="bd" tab="Belastingdruk" key="bd">
         <n-space vertical>
-          <div id="eb"></div>
+          <div id="bd"></div>
         </n-space>
       </n-tab-pane>
--->
     </n-tabs>
     <n-scrollbar id="legenda" v-if="gegevens.tab != 'intro'">
       <Legenda :data="legendaData" />

@@ -15,18 +15,18 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 import { BeschikbaarInkomen } from "@/js/berekeningen/BeschikbaarInkomen";
-import { EffectieveBelastingLegenda } from "@/js/grafieken/EffectieveBelastingLegenda";
+import { BelastingdrukLegenda } from "@/js/grafieken/BelastingdrukLegenda";
 
 /**
  * Berekend het belastingbedrag na verrekening van alle kortingen en toeslagen.
  */
-export class EffectieveBelasting extends BeschikbaarInkomen {
+export class Belastingdruk extends BeschikbaarInkomen {
   constructor(vis, personen, wonen) {
     super(vis, personen, wonen);
   }
 
   createLegenda() {
-    return new EffectieveBelastingLegenda(this);
+    return new BelastingdrukLegenda(this);
   }
 
   getYDomain() {
@@ -44,21 +44,21 @@ export class EffectieveBelasting extends BeschikbaarInkomen {
       beschikbaarInkomen.algemeneHeffingsKorting +
       beschikbaarInkomen.arbeidskorting +
       beschikbaarInkomen.inkomensafhankelijkeCombinatiekorting;
-    const effectieveBelasting = Math.max(0, arbeidsInkomen - totaal);
+    const belastingdruk = Math.max(0, arbeidsInkomen - totaal);
 
     return {
       arbeidsInkomen: arbeidsInkomen,
       brutoInkomstenBelasting: beschikbaarInkomen.brutoInkomstenBelasting,
-      effectieveBelasting: effectieveBelasting,
-      effectieveBelastingPercentage: 100 * (effectieveBelasting / arbeidsInkomen),
+      belastingdruk: belastingdruk,
+      belastingdrukPercentage: 100 * (belastingdruk / arbeidsInkomen),
     };
   }
 
   verzamelGrafiekSeries(alles, beschikbaarInkomen, id) {
     alles.push({
       id: id,
-      type: "effectieve belasting",
-      getal: this.afronden(beschikbaarInkomen.effectieveBelastingPercentage, this.getFactor()),
+      type: "Belastingdruk",
+      getal: this.afronden(beschikbaarInkomen.belastingdrukPercentage, this.getFactor()),
     });
   }
 }

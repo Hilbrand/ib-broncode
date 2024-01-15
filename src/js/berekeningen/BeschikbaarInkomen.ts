@@ -28,7 +28,6 @@ import {
   LeeftijdType,
   PersoonType,
   WonenType,
-  WoningType,
 } from "../../types";
 import { Legenda } from "../grafieken/Legenda";
 

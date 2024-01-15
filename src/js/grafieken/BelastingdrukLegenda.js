@@ -18,9 +18,9 @@
 import { Legenda } from "@/js/grafieken/Legenda";
 
 /**
- * Legenda voor tonen effectieve belasting.
+ * Legenda voor tonen Belastingdruk.
  */
-export class EffectieveBelastingLegenda extends Legenda {
+export class BelastingdrukLegenda extends Legenda {
   constructor(berekenen) {
     super(berekenen);
   }
@@ -30,7 +30,7 @@ export class EffectieveBelastingLegenda extends Legenda {
     let b = this.berekenGetallen(data[offset]);
     let ld = {
       grafiek: [],
-      titel: "Effectieve belasting",
+      titel: "Belastingdruk",
       arbeidsInkomen: data[offset].id.toFixed(),
     };
 
@@ -52,6 +52,6 @@ export class EffectieveBelastingLegenda extends Legenda {
   }
 
   getLabelYAs() {
-    return "Effectieve belasting";
+    return "Belastingdruk";
   }
 }

@@ -132,7 +132,8 @@ function grafiekNavigatieToJson(p: any): GrafiekType {
 
 function navigatieToJson(query: NavigatieType): InvoerGegevens {
   let basis: InvoerGegevens = {
-    tab: query.tab || "intro",
+    // Als oude code "eb" gebruikt is, vervang door nieuwe "bd".
+    tab: (query?.tab == "eb" ? "bd" : query?.tab) || "intro",
     personen: [defaultPersoon()],
     wonen: defaultWonen(),
     grafiek: defaultGrafiek(),
