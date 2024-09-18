@@ -18,7 +18,7 @@
 import { expect, test } from "vitest";
 import inkomen from "../../../src/js/belasting/inkomen";
 
-const JAAR: number = 2023;
+const JAAR: string = "2023";
 
 // test algemeneHeffingsKorting
 
@@ -77,7 +77,7 @@ test("Belasting 100.000", () => {
 });
 
 test("Belasting 40.021", () => {
-  expect(inkomen.inkomstenBelasting(2024, 40021, true)).toEqual(Math.round(7632.1837));
+  expect(inkomen.inkomstenBelasting("2024", 40021, true)).toEqual(Math.round(7632.1837));
 });
 
 // test netto

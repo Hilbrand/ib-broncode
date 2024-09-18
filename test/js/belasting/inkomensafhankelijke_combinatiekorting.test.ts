@@ -19,7 +19,7 @@ import { expect, test } from "vitest";
 import { LeeftijdType, PersoonType } from "../../../src/types";
 import iack from "../../../src/js/belasting/inkomensafhankelijke_combinatiekorting";
 
-const JAAR: number = 2023;
+const JAAR: string = "2023";
 
 // Bepaal Laagste Arbeidsinkomen Inkomen Anderen
 

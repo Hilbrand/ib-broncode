@@ -18,7 +18,7 @@
 import { assert, expect, test } from "vitest";
 import ht from "../../../src/js/belasting/huurtoeslag";
 
-const JAAR = 2023;
+const JAAR: string = "2023";
 
 test("Huurtoeslag alleen 14.500, rekenhuur 355", () => {
   expect(ht.huurtoeslag(JAAR, 14500, 355, 1, false)).toEqual(12 * 129);
@@ -30,6 +30,10 @@ test("Huurtoeslag alleen 27038, rekenhuur 639", () => {
 
 test("Huurtoeslag alleen 14.500, rekenhuur 355", () => {
   expect(ht.huurtoeslag(JAAR, 14500, 355, 1, true)).toEqual(12 * 131);
+});
+
+test("Huurtoeslag samen PD2025 36667 + 18333, rekenhuur 710", () => {
+  expect(ht.huurtoeslag("PD2025", 36667 + 18333, 710, 4, false)).toEqual(0);
 });
 
 test("Huurtoeslag alleen 27038, rekenhuur 639", () => {

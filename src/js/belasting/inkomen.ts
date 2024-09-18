@@ -18,6 +18,9 @@
 /**
  * Berekening van inkomen, arbeidskorting en algemeneheffingskorting
  *
+ * Inkomsten belasting
+ * https://wetten.overheid.nl/BWBR0011353/2024-04-30/0
+ *
  * https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_tarieven/heffingskortingen/algemene_heffingskorting/tabel-algemene-heffingskorting-2023
  * https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_tarieven/heffingskortingen/arbeidskorting/tabel-arbeidskorting-2023
  * IB AOW: https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_tarieven/boxen_en_tarieven/overzicht_tarieven_en_schijven/u-hebt-voor-2023-aow-leeftijd
@@ -26,12 +29,12 @@
 import { LeeftijdType, PersoonType } from "../../types";
 import data from "./belasting_data";
 
-function algemeneHeffingsKorting(jaar: number, toetsingsinkomen: number, maxBelasting: number, aow: boolean): number {
+function algemeneHeffingsKorting(jaar: string, toetsingsinkomen: number, maxBelasting: number, aow: boolean): number {
   const ahkt = aow ? data.AHK[jaar].AOW : data.AHK[jaar].V;
 
   for (let ahk of ahkt) {
     if (toetsingsinkomen < ahk.inkomen.tot) {
-      const algemeneHeffingsKorting = ahk.minimum + (toetsingsinkomen - ahk.minus) * ahk.factor;
+      const algemeneHeffingsKorting = ahk.maximaal - (toetsingsinkomen - ahk.afbouwpunt) * ahk.afbouwfactor;
 
       return Math.round(Math.min(maxBelasting, algemeneHeffingsKorting));
     }
@@ -39,12 +42,12 @@ function algemeneHeffingsKorting(jaar: number, toetsingsinkomen: number, maxBela
   return 0;
 }
 
-function arbeidskorting(jaar: number, arbeidsinkomen: number, maxArbeidsinkomen: number, aow: boolean): number {
+function arbeidskorting(jaar: string, arbeidsinkomen: number, maxArbeidsinkomen: number, aow: boolean): number {
   const akt = aow ? data.AK[jaar].AOW : data.AK[jaar].V;
 
   for (let ak of akt) {
     if (arbeidsinkomen < ak.inkomen.tot) {
-      let arbeidskorting = ak.minimum + (arbeidsinkomen - ak.minus) * ak.factor;
+      let arbeidskorting = ak.grens + (arbeidsinkomen - ak.afbouwpunt) * ak.afbouwfactor;
 
       return Math.round(Math.min(maxArbeidsinkomen, arbeidskorting));
     }
@@ -52,7 +55,7 @@ function arbeidskorting(jaar: number, arbeidsinkomen: number, maxArbeidsinkomen:
   return 0;
 }
 
-function maxArbeidsKorting(jaar: number, toetsingsInkomen: number, maxBelasting: number, aow: boolean): number {
+function maxArbeidsKorting(jaar: string, toetsingsInkomen: number, maxBelasting: number, aow: boolean): number {
   return (
     inkomstenBelasting(jaar, toetsingsInkomen, aow) - algemeneHeffingsKorting(jaar, toetsingsInkomen, maxBelasting, aow)
   );
@@ -75,17 +78,17 @@ function ibRange(toetsingsInkomen: number, p): number {
   return p.percentage * range;
 }
 
-function inkomstenBelasting(jaar: number, toetsingsInkomen: number, aow: boolean): number {
+function inkomstenBelasting(jaar: string, toetsingsInkomen: number, aow: boolean): number {
   const ibTabel = aow ? data.IB[jaar].AOW : data.IB[jaar].V;
 
   return Math.round(ibTabel.reduce((ib, p) => ib + ibRange(toetsingsInkomen, p), 0));
 }
 
-function netto(jaar: number, bruto: number, aow: boolean = false): number {
+function netto(jaar: string, bruto: number, aow: boolean = false): number {
   return Math.min(bruto, bruto - inkomstenBelasting(jaar, bruto, aow));
 }
 
-function nettoKortingenInkomens(jaar: number, personen: PersoonType[]) {
+function nettoKortingenInkomens(jaar: string, personen: PersoonType[]) {
   let nk = [];
   personen.forEach((p, idx) => {
     if (idx == 0) {

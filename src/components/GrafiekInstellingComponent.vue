@@ -46,8 +46,8 @@
 import gegevens from "@/js/berekeningen/gegevens";
 
 const jaren = [];
-for (const jaar of gegevens.JAREN) {
-  jaren.push({ label: jaar, value: jaar });
+for (const jaar of gegevens.JAREN.reverse()) {
+  jaren.push({ label: jaar.label, value: jaar.jaar });
 }
 
 export default {

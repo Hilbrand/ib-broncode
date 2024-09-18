@@ -25,7 +25,7 @@ import { LeeftijdType, PersoonType } from "../../types";
 import data from "./belasting_data.js";
 import functies from "../functies";
 
-function rekenBasis(jaar: number, aantalKinderen: number, toeslagenPartner: boolean): number {
+function rekenBasis(jaar: string, aantalKinderen: number, toeslagenPartner: boolean): number {
   const tabelj = data.TABEL[jaar];
   const maxkgbj = data.MAXKGB[jaar];
 
@@ -33,14 +33,14 @@ function rekenBasis(jaar: number, aantalKinderen: number, toeslagenPartner: bool
 }
 
 /**
- * Bereken maximaal kindergebonden budget.
+ * Bereken maximaal kindgebonden budget.
  *
  * @param personen
  * @param toeslagenPartner
  * @returns
  */
 
-function maxKindgebondenBudget(jaar: number, personen: PersoonType[], toeslagenPartner: boolean): number {
+function maxKindgebondenBudget(jaar: string, personen: PersoonType[], toeslagenPartner: boolean): number {
   const tabelj = data.TABEL[jaar];
   const k05 = functies.telPersonen(personen, LeeftijdType.K05);
   const k611 = functies.telPersonen(personen, LeeftijdType.K611);
@@ -53,7 +53,7 @@ function maxKindgebondenBudget(jaar: number, personen: PersoonType[], toeslagenP
 }
 
 function kindgebondenBudget(
-  jaar: number,
+  jaar: string,
   toetsinkomen: number,
   maxKindergebondenBudget: number,
   toeslagenPartner: boolean

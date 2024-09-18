@@ -20,7 +20,7 @@ import { LeeftijdType, PersoonType } from "../../../src/types";
 import kgb from "../../../src/js/belasting/kindgebonden_budget";
 
 // 2023 getallen
-const JAAR: number = 2023;
+const JAAR: string = "2023";
 const A1K: PersoonType[] = [{ leeftijd: LeeftijdType.V }, { leeftijd: LeeftijdType.K611 }];
 const A1K_MAX: number = 3848 + 1653;
 const M1K: PersoonType[] = [

@@ -23,7 +23,7 @@
 import data from "./belasting_data";
 
 //  Eigenwoning forfait
-function eigenwoningforfait(jaar: number, wozWaarde: number): number {
+function eigenwoningforfait(jaar: string, wozWaarde: number): number {
   const ewfj = data.EWF[jaar].ewf;
 
   for (let ewf of ewfj) {
@@ -34,7 +34,7 @@ function eigenwoningforfait(jaar: number, wozWaarde: number): number {
 }
 
 // Rente moet worden opgesteld bij inkomen (aftrek geeft negative waarde)
-function hypotheekRenteAftrek(jaar: number, rente: number, wozWaarde: number): number {
+function hypotheekRenteAftrek(jaar: string, rente: number, wozWaarde: number): number {
   const ksfj = data.EWF[jaar].kSchuldFactor;
   const ewf = eigenwoningforfait(jaar, wozWaarde);
   const ew = -rente + ewf;

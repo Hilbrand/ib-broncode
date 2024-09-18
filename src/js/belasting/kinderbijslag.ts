@@ -23,7 +23,7 @@ import { LeeftijdType, PersoonType } from "../../types";
 import data from "./belasting_data";
 import functies from "../functies";
 
-function kinderbijslag(jaar: number, personen: PersoonType[]): number {
+function kinderbijslag(jaar: string, personen: PersoonType[]): number {
   const kbsj = data.KBS[jaar];
   let k05 = functies.telPersonen(personen, LeeftijdType.K05);
   let k611 = functies.telPersonen(personen, LeeftijdType.K611);

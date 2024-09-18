@@ -19,13 +19,7 @@ import hra from "../belasting/hypotheekrente_aftrek.js";
 import iack from "../belasting/inkomensafhankelijke_combinatiekorting";
 import kbs from "../belasting/kinderbijslag";
 import kgb from "../belasting/kindgebonden_budget";
-import {
-  BerekenInvoerType,
-  BerekenResultaatType,
-  GrafiekType,
-  PersoonType,
-  WonenType,
-} from "../../types";
+import { BerekenInvoerType, BerekenResultaatType, GrafiekType, PersoonType, WonenType } from "../../types";
 import { Legenda } from "../grafieken/Legenda";
 
 export class Berekenen {
@@ -65,7 +59,7 @@ export class Berekenen {
     return this.factor;
   }
 
-  berekenAlgemeneGegevens(jaar: number, personen: PersoonType[], wonen: WonenType): BerekenInvoerType {
+  berekenAlgemeneGegevens(jaar: string, personen: PersoonType[], wonen: WonenType): BerekenInvoerType {
     let toeslagenpartner = functies.toeslagenPartner(personen);
     let aow = functies.aow(personen);
     let huren = functies.isHuur(wonen);

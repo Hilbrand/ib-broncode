@@ -18,28 +18,13 @@ import { Berekenen } from "./Berekenen";
 import { BeschikbaarInkomen } from "./BeschikbaarInkomen";
 import { MarginaleDruk } from "./MarginaleDruk";
 import { Belastingdruk } from "./Belastingdruk";
-import { BlueminkBeschikbaarInkomen } from "../../bluemink/BlueminkBeschikbaarInkomen";
-import {
-  GrafiekType,
-  PersoonType,
-  TabType,
-  WonenType
-} from "../../types";
+import { GrafiekType, PersoonType, TabType, WonenType } from "../../types";
 
 const stap: number = 100;
 
-function berekenGrafiekData(
-  path: string,
-  type: TabType,
-  vis: GrafiekType,
-  personen: PersoonType[],
-  wonen: WonenType
-) {
+function berekenGrafiekData(path: string, type: TabType, vis: GrafiekType, personen: PersoonType[], wonen: WonenType) {
   let berekenen: Berekenen = null;
-  let bi =
-    path == "/bluemink"
-      ? new BlueminkBeschikbaarInkomen(vis, personen, wonen)
-      : new BeschikbaarInkomen(vis, personen, wonen);
+  let bi = new BeschikbaarInkomen(vis, personen, wonen);
 
   switch (type) {
     case TabType.BI:

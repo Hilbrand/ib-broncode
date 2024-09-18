@@ -24,7 +24,7 @@
 import data from "./belasting_data.js";
 
 function huurtoeslag(
-  jaar: number,
+  jaar: string,
   rekeninkomen: number,
   rekenhuur: number,
   aantalPersonen: number,
@@ -50,7 +50,7 @@ function huurtoeslag(
   return 12 * Math.floor(a + 0.65 * b + 0.4 * c);
 }
 
-function huurtoeslagMax(jaar: number, rekeninkomen: number): number {
+function huurtoeslagMax(jaar: string, rekeninkomen: number): number {
   const maxhuur = data.HT[jaar].MaxHuur;
 
   return huurtoeslag(jaar, rekeninkomen, maxhuur, 1, false);

@@ -22,13 +22,7 @@ import kgb from "../belasting/kindgebonden_budget";
 import zt from "../belasting/zorgtoeslag";
 import { Berekenen } from "../berekeningen/Berekenen";
 import { BeschikbaarInkomenLegenda } from "../grafieken/BeschikbaarInkomenLegenda";
-import {
-  BeschikbaarInkomenResultaatType,
-  GrafiekType,
-  LeeftijdType,
-  PersoonType,
-  WonenType,
-} from "../../types";
+import { BeschikbaarInkomenResultaatType, GrafiekType, LeeftijdType, PersoonType, WonenType } from "../../types";
 import { Legenda } from "../grafieken/Legenda";
 
 export class BeschikbaarInkomen extends Berekenen {
@@ -68,7 +62,7 @@ export class BeschikbaarInkomen extends Berekenen {
       toetsingsinkomenBelasting,
       aow
     );
-    // Maximum belasting na aftrek van algemene heffings korting.
+    // Maximum belasting na aftrek van algemene heffingskorting.
     let maxBelastingNaAHK = functies.negatiefIsNul(arbeidsinkomenBelasting - algemeneHeffingsKorting);
     // Arbeidskorting gaat over alleen arbeidsinkomen
     // Maar kan niet hoger zijn dan maximum te betalen belasting.
@@ -79,7 +73,7 @@ export class BeschikbaarInkomen extends Berekenen {
     // Dit is maximum te betalen belasting.
     let hypotheekInkomenBelasting = inkomen.inkomstenBelasting(this.vis.jaar, hypotheekInkomen, aow);
     // Potentieel aftrekbare hypotheekrente is verschil tussen arbeidsinkomen belasting
-    // en belasting van inkomen met hypotheekrente verekend in het inkomen.
+    // en belasting van inkomen met hypotheekrente verrekend in het inkomen.
     let hypotheekRenteAftrek = arbeidsinkomenBelasting - hypotheekInkomenBelasting;
     // Maximum te betalen belasting is arbeidsinkomen belasting minus AHK en AK.
     let maxBelasting = maxBelastingNaAHK - arbeidskorting;
@@ -88,7 +82,7 @@ export class BeschikbaarInkomen extends Berekenen {
     // Netto inkomen is arbeidsinkomen minus arbeidsinkomenbelasting.
     let nettoArbeidsinkomen = arbeidsinkomen - arbeidsinkomenBelasting;
 
-    // Inkomen berekening inclusief fiscale partnes.
+    // Inkomen berekening inclusief fiscale partners.
     let toeslagenToetsInkomen = inkomen.toeslagenToetsInkomen(arbeidsinkomen, this.personen);
     let kindgebondenBudget = kgb.kindgebondenBudget(
       this.vis.jaar,
@@ -101,6 +95,7 @@ export class BeschikbaarInkomen extends Berekenen {
       arbeidsinkomen: arbeidsinkomen,
       brutoInkomstenBelasting: toetsingsinkomenBelasting,
       netto: nettoArbeidsinkomen,
+      ibBox1: hypotheekInkomenBelasting,
       algemeneHeffingsKorting: algemeneHeffingsKorting,
       arbeidskorting: arbeidskorting,
       zorgtoeslag: zt.zorgtoeslag(this.vis.jaar, toeslagenToetsInkomen, this.algemeneGegevens.toeslagenpartner),

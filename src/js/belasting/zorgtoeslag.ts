@@ -23,19 +23,14 @@
 
 import data from "./belasting_data";
 
-function zorgtoeslag(jaar: number, inkomen: number, toeslagpartner: boolean): number {
+function zorgtoeslag(jaar: string, inkomen: number, toeslagpartner: boolean): number {
   const tabel = data.TABEL[jaar];
   const drempel = tabel.Drempel;
 
-  if ((toeslagpartner && inkomen > tabel.MxInk2) || (!toeslagpartner && inkomen > tabel.MxInk1)) {
-    return 0;
-  }
   if (toeslagpartner) {
-    return Math.floor(
-      tabel.SP * 2 - ((tabel.TDMT / 100) * drempel + (tabel.BDMT / 100) * Math.max(0, inkomen - drempel))
-    );
+    return Math.max(0, Math.floor(tabel.MaxPartner - tabel.BDMT * Math.max(0, inkomen - drempel)));
   } else {
-    return Math.floor(tabel.SP - ((tabel.TDA / 100) * drempel + (tabel.BDA / 100) * Math.max(0, inkomen - drempel)));
+    return Math.max(0, Math.floor(tabel.MaxAlleen - tabel.BDA * Math.max(0, inkomen - drempel)));
   }
 }
 

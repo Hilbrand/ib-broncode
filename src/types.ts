@@ -1,3 +1,8 @@
+export type JaarType = {
+  jaar: string;
+  label: string;
+};
+
 export enum LeeftijdType {
   K05 = "K05", // "Kind 0 t/m 5 Jaar",
   K611 = "K611", // "Kind 6 t/m 11 Jaar",
@@ -35,7 +40,7 @@ export enum SalarisVerhogingType {
 }
 
 export type GrafiekType = {
-  jaar?: number;
+  jaar?: string;
   periode?: PeriodeType;
   van_tot?: number[];
   arbeidsInkomen?: number;
@@ -78,6 +83,7 @@ export type BerekenResultaatType = {
 export type BeschikbaarInkomenResultaatType = {
   brutoInkomstenBelasting: number;
   netto: number;
+  ibBox1: number;
 } & BerekenResultaatType;
 
 export type MarginaleDrukResultaatType = {

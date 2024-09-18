@@ -18,7 +18,7 @@
 import { expect, test } from "vitest";
 import zt from "../../../src/js/belasting/zorgtoeslag";
 
-const JAAR: number = 2023;
+const JAAR: string = "2023";
 
 // Zorgtoeslag alleenstaande
 
@@ -37,7 +37,7 @@ test("Zorgtoeslag samen 50.000", () => {
 });
 
 test("Zorgtoeslag samen 40.000", () => {
-  expect(zt.zorgtoeslag(JAAR, 40000, true)).toEqual(1145);
+  expect(zt.zorgtoeslag(JAAR, 40000, true)).toEqual(1144);
 });
 
 test("Zorgtoeslag samen 20.000", () => {

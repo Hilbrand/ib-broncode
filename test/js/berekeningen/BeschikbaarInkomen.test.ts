@@ -27,7 +27,7 @@ import {
   WoningType,
 } from "../../../src/types";
 
-const vis: GrafiekType = { jaar: 2024, periode: PeriodeType.JAAR };
+const vis: GrafiekType = { jaar: "2024", periode: PeriodeType.JAAR };
 const personen: PersoonType[] = [
   { leeftijd: LeeftijdType.V },
   { leeftijd: LeeftijdType.V },
@@ -50,6 +50,7 @@ test("Bereken beschikbaar inkomen eenverdiener, 2 kinderen, huur", () => {
     algemeneHeffingsKorting: 1932,
     arbeidsinkomen: arbeidsinkomen,
     arbeidskorting: 5114,
+    ibBox1: 17146,
     beschikbaarInkomen: 43334,
     brutoInkomstenBelasting: 17146,
     inkomensafhankelijkeCombinatiekorting: 0,
@@ -72,14 +73,15 @@ test("Bereken beschikbaar inkomen 10000 eenverdiener, 2 kinderen, koop", () => {
     algemeneHeffingsKorting: 3362,
     arbeidsinkomen: arbeidsinkomen,
     arbeidskorting: 335,
-    beschikbaarInkomen: 20440,
+    ibBox1: 0,
+    beschikbaarInkomen: 20441,
     brutoInkomstenBelasting: 3697,
     inkomensafhankelijkeCombinatiekorting: 0,
     kinderbijslag: 2736,
     kindgebondenBudget: 4872,
     netto: 6303,
     wonen: 0,
-    zorgtoeslag: 2832,
+    zorgtoeslag: 2833,
   };
 
   expect(berekening).toEqual(expected);
@@ -95,6 +97,7 @@ test("Bereken beschikbaar inkomen 30000 eenverdiener, koop", () => {
     algemeneHeffingsKorting: 3362,
     arbeidsinkomen: arbeidsinkomen,
     arbeidskorting: 5286,
+    ibBox1: 6514,
     beschikbaarInkomen: 31048,
     brutoInkomstenBelasting: 11091,
     inkomensafhankelijkeCombinatiekorting: 0,

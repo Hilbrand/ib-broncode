@@ -7,8 +7,7 @@
     </div>
     <n-tabs ref="tabsRef" type="line" style="padding: 0 10px" @update:value="tabUpdated" v-model:value="gegevens.tab">
       <n-tab-pane name="intro" tab="Introductie">
-        <IntroBluemink v-if="$route.path == '/bluemink'" />
-        <IntroPagina v-else />
+        <IntroPagina />
       </n-tab-pane>
       <n-tab-pane name="bi" tab="Beschikbaar Inkomen" key="bi">
         <n-space> Deze grafiek toont het beschikbare inkomen uitgesplitst naar kortingen en toeslagen. </n-space>
@@ -85,7 +84,6 @@
 <script>
 import { ref, nextTick } from "vue";
 import IntroPagina from "./IntroPagina.vue";
-import IntroBluemink from "./IntroBluemink.vue";
 import HuishoudenComponent from "./HuishoudenComponent.vue";
 import WonenComponent from "./WonenComponent.vue";
 import GrafiekInstellingComponent from "./GrafiekInstellingComponent.vue";
@@ -101,7 +99,6 @@ export default {
     GrafiekInstellingComponent,
     IntroPagina,
     Legenda,
-    IntroBluemink,
   },
   data() {
     return {
@@ -125,6 +122,7 @@ export default {
         },
       },
       legendaData: { grafiek: {}, netto: {}, bruto: {} },
+      timer: null,
     };
   },
   mounted() {
@@ -152,9 +150,10 @@ export default {
     gegevens: {
       deep: true,
       handler() {
-        this.$router.replace({
-          query: gegevens.jsonToNavigatie(this.gegevens),
-        });
+        if (this.timer != null) {
+          clearTimeout(this.timer);
+        }
+        this.timer = setTimeout(() => this.replace(), 1000);
       },
     },
   },
@@ -164,6 +163,11 @@ export default {
         document.getElementById("infoBar").style.maxHeight = document.documentElement.clientHeight + "px";
       }
       this.chart();
+    },
+    replace() {
+      this.$router.replace({
+        query: gegevens.jsonToNavigatie(this.gegevens),
+      });
     },
     tabUpdated(value) {
       this.tabRef = ref(value);

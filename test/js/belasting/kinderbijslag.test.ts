@@ -19,7 +19,7 @@ import { expect, test } from "vitest";
 import { LeeftijdType, PersoonType } from "../../../src/types";
 import kbs from "../../../src/js/belasting/kinderbijslag";
 
-const JAAR: number = 2023;
+const JAAR: string = "2023";
 const A3K: PersoonType[] = [
   { leeftijd: LeeftijdType.V },
   { leeftijd: LeeftijdType.K05 },

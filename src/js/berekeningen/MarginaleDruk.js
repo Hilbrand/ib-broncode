@@ -62,7 +62,7 @@ export class MarginaleDruk extends Berekenen {
     berekening1,
     berekening2,
     ΔBruto,
-    ΔalgemeneHeffingsKortin,
+    ΔalgemeneHeffingsKorting,
     Δarbeidskorting,
     negativeSumΔtoeslagen
   ) {
@@ -73,7 +73,7 @@ export class MarginaleDruk extends Berekenen {
       false
     );
 
-    return nettoInkomensBelasting - (ΔalgemeneHeffingsKortin + Δarbeidskorting);
+    return nettoInkomensBelasting - (ΔalgemeneHeffingsKorting + Δarbeidskorting);
   }
 
   marginaleDrukTotaal(alles, berekening1, berekening2, id) {

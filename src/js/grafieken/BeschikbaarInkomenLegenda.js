@@ -50,6 +50,7 @@ export class BeschikbaarInkomenLegenda extends Legenda {
         naam: "arbeidsinkomen",
         bedrag: this.geld(b.arbeidsinkomen * this.berekenen.getFactor()),
       },
+      { naam: "inkomstenbelasting box 1", bedrag: this.geld(b.ibBox1) },
     ];
     this.legendaFunction(ld);
   }

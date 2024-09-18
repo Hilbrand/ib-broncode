@@ -17,7 +17,7 @@
 import { expect, test } from "vitest";
 import ha from "../../../src/js/belasting/hypotheekrente_aftrek";
 
-const JAAR: number = 2023;
+const JAAR: string = "2023";
 
 // (400 - 1050) * 83.33
 test("Hypotheek kleine schuld is optelling", () => {

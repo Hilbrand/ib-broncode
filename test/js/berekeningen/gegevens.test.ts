@@ -28,7 +28,7 @@ const personenJson: PersoonType[] = [
 
 const grafiekQuery: string = "2000;jaar;1,2;p;4;12345";
 const grafiekJson: GrafiekType = {
-  jaar: 2000,
+  jaar: "2000",
   periode: PeriodeType.JAAR,
   van_tot: [1, 2],
   svt: SalarisVerhogingType.P,
@@ -91,7 +91,7 @@ test("half lege navigatie", () => {
       periode: "jaar",
       van_tot: [10000, 100000],
       arbeidsInkomen: 0,
-      jaar: 2024,
+      jaar: "PD2025",
       svt: "p",
       sv_p: 3,
       sv_abs: 1000,
@@ -113,7 +113,7 @@ test("lege navigatie naar json", () => {
       periode: "jaar",
       van_tot: [10000, 100000],
       arbeidsInkomen: 0,
-      jaar: 2024,
+      jaar: "PD2025",
       svt: "p",
       sv_p: 3,
       sv_abs: 1000,

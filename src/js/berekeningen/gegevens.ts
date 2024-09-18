@@ -18,6 +18,7 @@
 import {
   GrafiekType,
   InvoerGegevens,
+  JaarType,
   LeeftijdType,
   NavigatieType,
   PeriodeType,
@@ -32,8 +33,12 @@ const DEFAULT_WOON_TYPE: WoningType = WoningType.HUUR;
 const AVG_HUUR: number = 600;
 const AVG_WOZ: number = 315000;
 const AVG_RENTE: number = AVG_WOZ * 0.0428;
-const JAAR: number = 2024;
-const JAREN: number[] = [2023, 2024];
+const JAAR: string = "PD2025";
+const JAREN: JaarType[] = [
+  { jaar: "2023", label: "2023" },
+  { jaar: "2024", label: "2024" },
+  { jaar: "PD2025", label: "2025 Prinsjesdag" },
+];
 
 function lengte(a: any): number {
   return (a && a.length) || 0;

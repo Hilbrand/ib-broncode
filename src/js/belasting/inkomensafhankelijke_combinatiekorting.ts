@@ -46,7 +46,7 @@ function bepaalLaagsteArbeidsInkomenAnderen(personen: PersoonType[]): number {
 }
 
 function inkomensafhankelijkeCombinatiekorting(
-  jaar: number,
+  jaar: string,
   toetsinkomen: number,
   laagstePartnerinkomen: number,
   aow: boolean = false
@@ -57,9 +57,7 @@ function inkomensafhankelijkeCombinatiekorting(
 
   return arbeidsinkomen < t.MinAInk
     ? 0
-    : arbeidsinkomen < t.MaxAInk
-    ? Math.floor((arbeidsinkomen - (t.MinAInk - 1)) * t.InkKorting)
-    : t.MaxInkAfKrt;
+    : Math.min(t.MaxInkAfKrt, Math.floor((arbeidsinkomen - (t.MinAInk - 1)) * t.InkKorting));
 }
 
 export default {
