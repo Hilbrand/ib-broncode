@@ -42,10 +42,10 @@ export class MarginaleDrukLegenda extends Legenda {
         color: this.colorFunction(j),
         naam: entry.type,
         percentage: this.percentage(getal),
-        bedrag: this.geld(b.arbeidsinkomen * factor * (getal / 100)),
+        bedrag: this.geld(b.extraLoon * factor * (getal / 100)),
       });
     }
-    let md = b.arbeidsinkomen * factor * 0.01 * totaal;
+    let md = b.extraLoon * factor * 0.01 * totaal;
     ld.totals = [
       {
         naam: "marginale druk",
@@ -53,14 +53,14 @@ export class MarginaleDrukLegenda extends Legenda {
         bedrag: this.geld(md),
       },
       {
-        naam: "netto salarisverhoging",
+        naam: "netto extra loon",
         percentage: this.percentage(100 - totaal),
-        bedrag: this.geld((b.arbeidsinkomen * factor).toFixed() - md),
+        bedrag: this.geld((b.extraLoon * factor).toFixed() - md),
       },
       {
-        naam: "bruto salarisverhoging",
+        naam: "bruto extra loon",
         percentage: this.percentage(100),
-        bedrag: this.geld(b.arbeidsinkomen * factor),
+        bedrag: this.geld(b.extraLoon * factor),
       },
     ];
     this.legendaFunction(ld);

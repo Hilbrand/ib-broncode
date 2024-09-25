@@ -11,12 +11,10 @@
       <dd>Dit geeft de verdeling van toeslagen en kortingen weer per arbeidsinkomen (salaris).</dd>
       <dt><b>Marginale Druk</b></dt>
       <dd>
-        Dit geeft weer hoeveel procent van de salarisverhoging
+        Dit geeft weer hoeveel procent van het extra loon
         <q>verdwijnt</q> door belasting, verlies van kortingen en toeslagen. De grafiek geeft weer waar de marginale
         druk door wordt veroorzaakt. Zonder kortingen en toeslagen is de marginale druk gelijk aan het inkomensbelasting
         tarief. De marginale druk is relevant voor de keuze voor het aantal uren of dagen per week dat gewerkt wordt.
-        Als de marginale druk hoog is, dan zal minder werken bij een salarisverhoging niet direct tot veel minder
-        inkomen zorgen.
       </dd>
       <dt><b>Belastingdruk</b></dt>
       <dd>

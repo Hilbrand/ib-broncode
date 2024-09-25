@@ -14,32 +14,39 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
+
 import { Berekenen } from "./Berekenen";
 import { BeschikbaarInkomen } from "./BeschikbaarInkomen";
 import { MarginaleDruk } from "./MarginaleDruk";
 import { Belastingdruk } from "./Belastingdruk";
-import { GrafiekType, PersoonType, TabType, WonenType } from "../../types";
+import { InvoerGegevensType, TabType } from "../../ts/types";
 
-const stap: number = 100;
+const GRAFIEK_STAP: number = 100;
 
-function berekenGrafiekData(path: string, type: TabType, vis: GrafiekType, personen: PersoonType[], wonen: WonenType) {
+function berekenenMethode(gegevens: InvoerGegevensType): Berekenen {
   let berekenen: Berekenen = null;
-  let bi = new BeschikbaarInkomen(vis, personen, wonen);
+  let bi = new BeschikbaarInkomen(gegevens);
 
-  switch (type) {
+  switch (gegevens.tab) {
     case TabType.BI:
       berekenen = bi;
       break;
     case TabType.MD:
-      berekenen = new MarginaleDruk(vis, personen, wonen, bi);
+      berekenen = new MarginaleDruk(gegevens, bi);
       break;
     case TabType.BD:
-      berekenen = new Belastingdruk(vis, personen, wonen, bi);
+      berekenen = new Belastingdruk(gegevens, bi);
       break;
   }
+  return berekenen;
+}
+
+function berekenGrafiekData(gegevens: InvoerGegevensType) {
+  let berekenen = berekenenMethode(gegevens);
+  let vis = gegevens.visualisatie;
   let series = [];
 
-  for (let i = vis.van_tot[0]; i <= vis.van_tot[1]; i += stap) {
+  for (let i = vis.van_tot[0]; i <= vis.van_tot[1]; i += GRAFIEK_STAP) {
     let id = Math.round(i * berekenen.factor);
 
     berekenen.verzamelGrafiekSeries(series, berekenen.bereken(i), id);
@@ -47,6 +54,21 @@ function berekenGrafiekData(path: string, type: TabType, vis: GrafiekType, perso
   return { berekenen: berekenen, series: series };
 }
 
+function berekenTabelData(gegevens: InvoerGegevensType) {
+  let berekenen = berekenenMethode(gegevens);
+  let vis = gegevens.visualisatie;
+  let series = [];
+
+  for (let i = vis.van_tot[0]; i <= vis.van_tot[1]; i += vis.stap) {
+    let id = Math.round(i * berekenen.factor);
+    let idx = (i - vis.van_tot[0]) / vis.stap;
+
+    series[idx] = berekenen.bereken(i);
+  }
+  return { berekenen: berekenen, series: series };
+}
+
 export default {
   berekenGrafiekData,
+  berekenTabelData,
 };

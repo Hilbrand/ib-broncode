@@ -15,18 +15,26 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
-import functies from "@/js/functies";
-import { MarginaleDrukLegenda } from "@/js/grafieken/MarginaleDrukLegenda";
-import { Berekenen } from "@/js/berekeningen/Berekenen";
+import functies from "../../ts/functies";
+import { MarginaleDrukLegenda } from "../grafieken/MarginaleDrukLegenda";
+import { Berekenen } from "./Berekenen";
+import { BeschikbaarInkomen } from "./BeschikbaarInkomen";
+import { BeschikbaarInkomenResultaatType, InvoerGegevensType, MarginaleDrukResultaatType, VisualisatieTypeType } from "../../ts/types";
 
 export class MarginaleDruk extends Berekenen {
-  constructor(vis, personen, wonen, bi) {
-    super(vis, personen, wonen);
+  bi: BeschikbaarInkomen;
+  getalFunctie: (a:number, b:number, c:number, i:boolean) => number;
+
+  // percentage of absolute getallen instellen.
+  //
+  constructor(gegevens: InvoerGegevensType, bi: BeschikbaarInkomen) {
+    super(gegevens);
     this.bi = bi;
     this.bi.factor = 1; // Maak berekeningen altijd op jaarbasis. Visualisatie berekening per maand of jaar.
+    this.getalFunctie = gegevens.visualisatie.type === VisualisatieTypeType.T ? this.mdAbsolute : this.mdPercentage;
   }
 
-  createLegenda() {
+  createLegenda(): MarginaleDrukLegenda {
     return new MarginaleDrukLegenda(this);
   }
 
@@ -34,39 +42,43 @@ export class MarginaleDruk extends Berekenen {
     return [0, 100];
   }
 
-  bereken(arbeidsInkomen) {
+  bereken(arbeidsInkomen: number): MarginaleDrukResultaatType {
     const berekening1 = this.bi.bereken(arbeidsInkomen);
     const berekening2 = this.bi.bereken(arbeidsInkomen + this.salarisVerhoging(arbeidsInkomen));
 
-    return this.marginaleDruk(berekening1, berekening2, arbeidsInkomen);
+    return this.marginaleDruk(berekening1, berekening2);
   }
 
-  salarisVerhoging(arbeidsInkomen) {
+  salarisVerhoging(arbeidsInkomen: number): number {
     return this.vis.svt == "a" ? this.vis.sv_abs : arbeidsInkomen * (this.vis.sv_p / 100);
   }
 
-  mdPercentage(netto1, netto2, Δbudget, inverse) {
-    const ΔNetto = netto2 - netto1;
-    const percentage = Δbudget == 0 ? 0 : ΔNetto / Δbudget;
-    const result = (percentage * 100).toFixed(2);
-    const relevantResult = isNaN(result) || result == 0 ? 0 : inverse ? -result : 1 * result;
+  mdAbsolute(netto1: number, netto2: number, Δtotaal: number, inverse: boolean): number {
+    const Δnetto = netto2 - netto1;
 
-    return relevantResult;
+    return isNaN(Δnetto) || Δnetto == 0 ? 0 : inverse ? -Δnetto : 1 * Δnetto;
   }
 
-  inkomstenBelastingAangepast(berekening) {
+  mdPercentage(netto1: number, netto2: number, Δtotaal: number, inverse: boolean): number {
+    const Δnetto = netto2 - netto1;
+    const percentage = Δtotaal == 0 ? 0 : Δnetto / Δtotaal;
+    const result: number = +(percentage * 100).toFixed(2);
+    return isNaN(result) || result == 0 ? 0 : inverse ? -result : 1 * result;
+  }
+
+  inkomstenBelastingAangepast(berekening: BeschikbaarInkomenResultaatType): number {
     return berekening.brutoInkomstenBelasting - (berekening.algemeneHeffingsKorting + berekening.arbeidskorting);
   }
 
   nettoInkomensBelasting(
-    berekening1,
-    berekening2,
-    ΔBruto,
-    ΔalgemeneHeffingsKorting,
-    Δarbeidskorting,
-    negativeSumΔtoeslagen
-  ) {
-    let nettoInkomensBelasting = this.mdPercentage(
+    berekening1: BeschikbaarInkomenResultaatType,
+    berekening2: BeschikbaarInkomenResultaatType,
+    ΔBruto: number,
+    ΔalgemeneHeffingsKorting: number,
+    Δarbeidskorting: number,
+    negativeSumΔtoeslagen: number
+  ): number {
+    let nettoInkomensBelasting = this.getalFunctie(
       this.inkomstenBelastingAangepast(berekening1),
       this.inkomstenBelastingAangepast(berekening2),
       ΔBruto,
@@ -79,7 +91,7 @@ export class MarginaleDruk extends Berekenen {
   marginaleDrukTotaal(alles, berekening1, berekening2, id) {
     let ΔNetto = berekening2.beschikbaarInkomen - berekening1.beschikbaarInkomen;
     let ΔBruto = berekening2.arbeidsinkomen - berekening1.arbeidsinkomen;
-    let md = ΔNetto > 0 ? (100 - (ΔNetto / ΔBruto) * 100).toFixed(2) : 0;
+    let md = ΔNetto > 0 ? +(100 - (ΔNetto / ΔBruto) * 100).toFixed(2) : 0;
 
     alles.push({
       id: id,
@@ -88,7 +100,7 @@ export class MarginaleDruk extends Berekenen {
     });
   }
 
-  belastingdruk(alles, berekening1, id) {
+  belastingdruk(alles, berekening1: BeschikbaarInkomenResultaatType, id: number) {
     let belastingdruk =
       berekening1.arbeidsinkomen > 0
         ? functies.negatiefIsNul(100 - (berekening1.beschikbaarInkomen / berekening1.arbeidsinkomen) * 100)
@@ -100,36 +112,35 @@ export class MarginaleDruk extends Berekenen {
     });
   }
 
-  sumNegative(values) {
+  sumNegative(values: number[]): number {
     return values.filter((v) => v < 0).reduce((a, b) => a + -b, 0);
   }
 
-  marginaleDruk(berekening1, berekening2) {
+  marginaleDruk(berekening1: BeschikbaarInkomenResultaatType, berekening2: BeschikbaarInkomenResultaatType): MarginaleDrukResultaatType {
     let ΔBruto = berekening2.arbeidsinkomen - berekening1.arbeidsinkomen;
     let md = 100 - this.mdPercentage(berekening1.beschikbaarInkomen, berekening2.beschikbaarInkomen, ΔBruto, false);
 
     let ΔalgemeneHeffingsKorting = functies.negatiefIsNul(
-      this.mdPercentage(berekening1.algemeneHeffingsKorting, berekening2.algemeneHeffingsKorting, ΔBruto, true)
+      this.getalFunctie(berekening1.algemeneHeffingsKorting, berekening2.algemeneHeffingsKorting, ΔBruto, true)
     );
     let Δarbeidskorting = functies.negatiefIsNul(
-      this.mdPercentage(berekening1.arbeidskorting, berekening2.arbeidskorting, ΔBruto, true)
+      this.getalFunctie(berekening1.arbeidskorting, berekening2.arbeidskorting, ΔBruto, true)
     );
 
     let Δtoeslagen = {
-      zorgtoeslag: this.mdPercentage(berekening1.zorgtoeslag, berekening2.zorgtoeslag, ΔBruto, true),
-      wonen: this.mdPercentage(berekening1.wonen, berekening2.wonen, ΔBruto, true),
-      kinderbijslag: this.mdPercentage(berekening1.kinderbijslag, berekening2.kinderbijslag, ΔBruto, true),
-      kindgebondenBudget: this.mdPercentage(
+      zorgtoeslag: this.getalFunctie(berekening1.zorgtoeslag, berekening2.zorgtoeslag, ΔBruto, true),
+      wonen: this.getalFunctie(berekening1.wonen, berekening2.wonen, ΔBruto, true),
+      kinderbijslag: this.getalFunctie(berekening1.kinderbijslag, berekening2.kinderbijslag, ΔBruto, true),
+      kindgebondenBudget: this.getalFunctie(
         berekening1.kindgebondenBudget,
         berekening2.kindgebondenBudget,
         ΔBruto,
         true
       ),
-      inkomensafhankelijkeCombinatiekorting: this.mdPercentage(
+      inkomensafhankelijkeCombinatiekorting: this.getalFunctie(
         berekening1.inkomensafhankelijkeCombinatiekorting,
         berekening2.inkomensafhankelijkeCombinatiekorting,
         ΔBruto,
-        true,
         true
       ),
     };
@@ -140,7 +151,6 @@ export class MarginaleDruk extends Berekenen {
       Δtoeslagen.kindgebondenBudget,
       Δtoeslagen.inkomensafhankelijkeCombinatiekorting,
     ]);
-
     let nib = this.nettoInkomensBelasting(
       berekening1,
       berekening2,
@@ -152,8 +162,10 @@ export class MarginaleDruk extends Berekenen {
     let nettoInkomensBelastingNul = functies.negatiefIsNul(nib - negativeSumΔtoeslagen);
 
     return {
-      arbeidsinkomen: berekening2.arbeidsinkomen - berekening1.arbeidsinkomen,
+      arbeidsinkomen: berekening1.arbeidsinkomen,
       nettoInkomensBelasting: nettoInkomensBelastingNul,
+      nettoLoon: berekening2.arbeidsinkomen - berekening1.arbeidsinkomen + ΔalgemeneHeffingsKorting + Δarbeidskorting,
+      extraLoon: berekening2.arbeidsinkomen - berekening1.arbeidsinkomen,
       algemeneHeffingsKorting: ΔalgemeneHeffingsKorting,
       arbeidskorting: Δarbeidskorting,
       zorgtoeslag: functies.negatiefIsNul(Δtoeslagen.zorgtoeslag),

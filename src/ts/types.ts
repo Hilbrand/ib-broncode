@@ -1,5 +1,22 @@
+/*
+ * Copyright Hilbrand Bouwkamp
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see http://www.gnu.org/licenses/.
+ */
+
 export type JaarType = {
-  jaar: string;
+  value: string;
   label: string;
 };
 
@@ -10,6 +27,15 @@ export enum LeeftijdType {
   K1617 = "K1617", // "16 of 17 jaar",
   V = "V", // "Volwassene",
   AOW = "AOW", // "AOW Leeftijd",
+}
+
+export enum LeeftijdTekstType {
+  K05 = "0 en 5 jaar", // "Kind 0 t/m 5 Jaar",
+  K611 = "6 en 11 jaar", // "Kind 6 t/m 11 Jaar",
+  K1215 = "12 en 15 jaar", // "Kind 12 t/m 15 jaar",
+  K1617 = "16 en 17 jaar", // "16 of 17 jaar",
+  V = "Volwassene", // "Volwassene",
+  AOW = "AOW-er", // "AOW Leeftijd",
 }
 
 export type PersoonType = {
@@ -39,21 +65,28 @@ export enum SalarisVerhogingType {
   A = "a", // Absoluut
 }
 
-export type GrafiekType = {
+export enum VisualisatieTypeType {
+  G = 'g', // grafiek
+  T = 't', // Tabel
+}
+
+export type VisualisatieType = {
+  type?: VisualisatieTypeType;
   jaar?: string;
   periode?: PeriodeType;
   van_tot?: number[];
+  stap?: number;
   arbeidsInkomen?: number;
   svt?: SalarisVerhogingType;
   sv_p?: number;
   sv_abs?: number;
 };
 
-export type InvoerGegevens = {
+export type InvoerGegevensType = {
   tab: string;
   personen: PersoonType[];
   wonen: WonenType;
-  grafiek: GrafiekType;
+  visualisatie: VisualisatieType;
 };
 
 export type BerekenInvoerType = {
@@ -69,8 +102,10 @@ export type BerekenInvoerType = {
 };
 
 export type BerekenResultaatType = {
-  arbeidsinkomen: number;
-  beschikbaarInkomen?: number;
+  arbeidsinkomen: number; // bruto loon
+  ibBox1: number;
+  nettoLoon: number; // bruto inkomen - ibBox1 + AHK + AK
+  beschikbaarInkomen?: number; // netto inkomen
   algemeneHeffingsKorting: number;
   arbeidskorting: number;
   inkomensafhankelijkeCombinatiekorting: number;
@@ -82,12 +117,12 @@ export type BerekenResultaatType = {
 
 export type BeschikbaarInkomenResultaatType = {
   brutoInkomstenBelasting: number;
-  netto: number;
-  ibBox1: number;
+  netto: number; // netto inkomen
 } & BerekenResultaatType;
 
 export type MarginaleDrukResultaatType = {
-  nettoInkomensBelasting?: number;
+  nettoInkomensBelasting?: number; // ibBox1
+  extraLoon: number;
   marginaleDruk: number;
 } & BerekenResultaatType;
 
@@ -108,5 +143,6 @@ export type NavigatieType = {
   tab?: string;
   p?: string;
   w?: string;
-  grafiek?: string;
+  grafiek?: string; // vervangen door visualisatie
+  v?: string;
 };

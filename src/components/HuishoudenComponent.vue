@@ -9,7 +9,7 @@
       <n-table :bordered="false" size="small" striped>
         <thead>
           <tr>
-            <th>#</th>
+            <th>&nbsp;</th>
             <th>Leeftijd</th>
             <th></th>
           </tr>

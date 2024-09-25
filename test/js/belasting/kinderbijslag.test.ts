@@ -16,7 +16,7 @@
  */
 
 import { expect, test } from "vitest";
-import { LeeftijdType, PersoonType } from "../../../src/types";
+import { LeeftijdType, PersoonType } from "../../../src/ts/types";
 import kbs from "../../../src/js/belasting/kinderbijslag";
 
 const JAAR: string = "2023";

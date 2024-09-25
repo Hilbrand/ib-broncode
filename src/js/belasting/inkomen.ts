@@ -16,7 +16,7 @@
  */
 
 /**
- * Berekening van inkomen, arbeidskorting en algemeneheffingskorting
+ * Berekening van inkomen, arbeidskorting en algemene heffingskorting
  *
  * Inkomsten belasting
  * https://wetten.overheid.nl/BWBR0011353/2024-04-30/0
@@ -26,7 +26,7 @@
  * IB AOW: https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_tarieven/boxen_en_tarieven/overzicht_tarieven_en_schijven/u-hebt-voor-2023-aow-leeftijd
  */
 
-import { LeeftijdType, PersoonType } from "../../types";
+import { LeeftijdType, PersoonType } from "../../ts/types";
 import data from "./belasting_data";
 
 function algemeneHeffingsKorting(jaar: string, toetsingsinkomen: number, maxBelasting: number, aow: boolean): number {

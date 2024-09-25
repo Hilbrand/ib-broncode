@@ -14,28 +14,29 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-import functies from "../functies.js";
+
+import functies from "../../ts/functies.js";
 import hra from "../belasting/hypotheekrente_aftrek.js";
 import iack from "../belasting/inkomensafhankelijke_combinatiekorting";
 import kbs from "../belasting/kinderbijslag";
 import kgb from "../belasting/kindgebonden_budget";
-import { BerekenInvoerType, BerekenResultaatType, GrafiekType, PersoonType, WonenType } from "../../types";
+import { BerekenInvoerType, BerekenResultaatType, InvoerGegevensType, PersoonType, VisualisatieType, WonenType } from "../../ts/types.js";
 import { Legenda } from "../grafieken/Legenda";
 
 export class Berekenen {
-  vis: GrafiekType;
+  vis: VisualisatieType;
   personen: PersoonType[];
   wonen: WonenType;
   algemeneGegevens: BerekenInvoerType;
   factor: number;
   legenda: any;
 
-  constructor(vis: GrafiekType, personen: PersoonType[], wonen: WonenType) {
-    this.vis = vis;
-    this.personen = personen;
-    this.wonen = wonen;
-    this.algemeneGegevens = this.berekenAlgemeneGegevens(vis.jaar, personen, wonen);
-    this.factor = functies.factorBerekening(vis.periode);
+  constructor(gegevens: InvoerGegevensType) {
+    this.vis = gegevens.visualisatie;
+    this.personen = gegevens.personen;
+    this.wonen = gegevens.wonen;
+    this.algemeneGegevens = this.berekenAlgemeneGegevens(gegevens);
+    this.factor = functies.factorBerekening(this.vis.periode);
   }
 
   getLegenda(): Legenda {
@@ -59,7 +60,10 @@ export class Berekenen {
     return this.factor;
   }
 
-  berekenAlgemeneGegevens(jaar: string, personen: PersoonType[], wonen: WonenType): BerekenInvoerType {
+  berekenAlgemeneGegevens(gegevens: InvoerGegevensType): BerekenInvoerType {
+    let jaar = gegevens.visualisatie.jaar;
+    let personen = gegevens.personen;
+    let wonen = gegevens.wonen;
     let toeslagenpartner = functies.toeslagenPartner(personen);
     let aow = functies.aow(personen);
     let huren = functies.isHuur(wonen);

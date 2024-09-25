@@ -22,7 +22,7 @@
  */
 
 import data from "./belasting_data";
-import { LeeftijdType, PersoonType } from "../../types";
+import { LeeftijdType, PersoonType } from "../../ts/types";
 
 /**
  * Bepaalt laagste inkomen van alle personen, behalve de eerste.

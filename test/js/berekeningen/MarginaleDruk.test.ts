@@ -19,18 +19,19 @@ import { expect, test } from "vitest";
 import { BeschikbaarInkomen } from "../../../src/js/berekeningen/BeschikbaarInkomen.js";
 import { MarginaleDruk } from "../../../src/js/berekeningen/MarginaleDruk.js";
 import {
-  GrafiekType,
+  InvoerGegevensType,
   LeeftijdType,
   MarginaleDrukResultaatType,
   PeriodeType,
   PersoonType,
   SalarisVerhogingType,
+  VisualisatieType,
   WonenType,
   WoningType,
-} from "../../../src/types";
+} from "../../../src/ts/types.js";
 
 test("Marginale Druk Details ", () => {
-  const vis: GrafiekType = {
+  const vis: VisualisatieType = {
     jaar: "2023",
     periode: PeriodeType.JAAR,
     svt: SalarisVerhogingType.P,
@@ -39,12 +40,19 @@ test("Marginale Druk Details ", () => {
   const personen: PersoonType[] = [{ leeftijd: LeeftijdType.V }];
   const wonen: WonenType = { woning_type: WoningType.HUUR, huur: 600 };
   const ai: number = 27800;
-  const md: MarginaleDruk = new MarginaleDruk(vis, personen, wonen, new BeschikbaarInkomen(vis, personen, wonen));
+  const gegevens: InvoerGegevensType = {
+    tab: "bi",
+    personen: personen,
+    wonen: wonen,
+    visualisatie: vis,
+  };
+  const md: MarginaleDruk = new MarginaleDruk(gegevens, new BeschikbaarInkomen(gegevens));
   let mdd: MarginaleDrukResultaatType = md.bereken(ai);
 
   let expected: MarginaleDrukResultaatType = {
-    arbeidsinkomen: ai * 0.03,
+    arbeidsinkomen: ai, //* 0.03,
     nettoInkomensBelasting: 33.81,
+    extraLoon: ai * 0.03,
     algemeneHeffingsKorting: 6.12,
     arbeidskorting: 0,
     zorgtoeslag: 13.67,
@@ -69,7 +77,7 @@ test("Marginale Druk Details ", () => {
 });
 
 test("Marginale Druk Details PD2025", () => {
-  const vis: GrafiekType = {
+  const vis: VisualisatieType = {
     jaar: "PD2025",
     periode: PeriodeType.JAAR,
     svt: SalarisVerhogingType.A,
@@ -83,11 +91,19 @@ test("Marginale Druk Details PD2025", () => {
   ];
   const wonen: WonenType = { woning_type: WoningType.HUUR, huur: 710 };
   const ai: number = 36667;
-  const md: MarginaleDruk = new MarginaleDruk(vis, personen, wonen, new BeschikbaarInkomen(vis, personen, wonen));
+  const gegevens: InvoerGegevensType = {
+    tab: "md",
+    personen: personen,
+    wonen: wonen,
+    visualisatie: vis,
+  };
+
+  const md: MarginaleDruk = new MarginaleDruk(gegevens, new BeschikbaarInkomen(gegevens));
   let mdd: MarginaleDrukResultaatType = md.bereken(ai);
 
   let expected: MarginaleDrukResultaatType = {
-    arbeidsinkomen: 1000,
+    arbeidsinkomen: ai,
+    extraLoon: 1000,
     nettoInkomensBelasting: 33.5,
     algemeneHeffingsKorting: 6.3,
     arbeidskorting: 0,

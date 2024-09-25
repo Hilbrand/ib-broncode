@@ -22,8 +22,8 @@
  */
 
 import data from "./belasting_data";
-import { LeeftijdType, PersoonType } from "../../types";
-import functies from "../functies";
+import { LeeftijdType, PersoonType } from "../../ts/types";
+import functies from "../../ts/functies";
 
 function kinderopvangToeslag(jaar: string, toestingsInkomen: number, personen: PersoonType[]): number {
   const kqttj = data.KOTT[jaar];

@@ -19,15 +19,16 @@ import { expect, test } from "vitest";
 import { BeschikbaarInkomen } from "../../../src/js/berekeningen/BeschikbaarInkomen";
 import {
   BeschikbaarInkomenResultaatType,
-  GrafiekType,
+  InvoerGegevensType,
+  VisualisatieType,
   LeeftijdType,
   PeriodeType,
   PersoonType,
   WonenType,
   WoningType,
-} from "../../../src/types";
+} from "../../../src/ts/types";
 
-const vis: GrafiekType = { jaar: "2024", periode: PeriodeType.JAAR };
+const vis: VisualisatieType = { jaar: "2024", periode: PeriodeType.JAAR };
 const personen: PersoonType[] = [
   { leeftijd: LeeftijdType.V },
   { leeftijd: LeeftijdType.V },
@@ -43,7 +44,13 @@ const koop: WonenType = {
 
 test("Bereken beschikbaar inkomen eenverdiener, 2 kinderen, huur", () => {
   const arbeidsinkomen: number = 46377;
-  const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(vis, personen, huur);
+  const gegevens: InvoerGegevensType = {
+    tab: "bi",
+    personen: personen,
+    wonen: huur,
+    visualisatie: vis,
+  };
+  const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(gegevens);
   const berekening: BeschikbaarInkomenResultaatType = berekenen.bereken(arbeidsinkomen);
 
   let expected: BeschikbaarInkomenResultaatType = {
@@ -66,7 +73,13 @@ test("Bereken beschikbaar inkomen eenverdiener, 2 kinderen, huur", () => {
 
 test("Bereken beschikbaar inkomen 10000 eenverdiener, 2 kinderen, koop", () => {
   const arbeidsinkomen: number = 10000;
-  const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(vis, personen, koop);
+  const gegevens: InvoerGegevensType = {
+    tab: "bi",
+    personen: personen,
+    wonen: koop,
+    visualisatie: vis,
+  };
+  const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(gegevens);
   const berekening: BeschikbaarInkomenResultaatType = berekenen.bereken(arbeidsinkomen);
 
   let expected: BeschikbaarInkomenResultaatType = {
@@ -90,7 +103,13 @@ test("Bereken beschikbaar inkomen 10000 eenverdiener, 2 kinderen, koop", () => {
 test("Bereken beschikbaar inkomen 30000 eenverdiener, koop", () => {
   const arbeidsinkomen: number = 30000;
   const eenverdiener: PersoonType[] = [{ leeftijd: LeeftijdType.V }];
-  const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(vis, eenverdiener, koop);
+  const gegevens: InvoerGegevensType = {
+    tab: "bi",
+    personen: eenverdiener,
+    wonen: koop,
+    visualisatie: vis,
+  };
+  const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(gegevens);
   const berekening: BeschikbaarInkomenResultaatType = berekenen.bereken(arbeidsinkomen);
 
   let expected: BeschikbaarInkomenResultaatType = {

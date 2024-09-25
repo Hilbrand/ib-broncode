@@ -12,9 +12,11 @@ De broncode is beschikbaar onder de AGPL3.0 licentie.
 
 # Kengetallen
 
+Overzicht van de kengetallen die gebuikt zijn.
+
 ## Inkomsten belasting
 
-Categorieen van en tot, met per groep een percentage.
+Categorieën van en tot, met per groep een percentage.
 Wet Inkomstenbelasting 2001
 https://wetten.overheid.nl/BWBR0011353/2024-04-30/0
 
@@ -51,6 +53,7 @@ https://wetten.overheid.nl/BWBR0008659/2024-01-01
 
 ## Zorgtoeslag
 
+https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/themaoverstijgend/brochures_en_publicaties/informatieblad-zorgtoeslag-2023
 
 # Sotfware Ontwikkelomgeving
 

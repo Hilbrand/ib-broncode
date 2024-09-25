@@ -14,7 +14,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-import functies from "../functies";
+
+import functies from "../../ts/functies";
 import inkomen from "../belasting/inkomen";
 import ht from "../belasting//huurtoeslag";
 import iack from "../belasting/inkomensafhankelijke_combinatiekorting";
@@ -22,14 +23,14 @@ import kgb from "../belasting/kindgebonden_budget";
 import zt from "../belasting/zorgtoeslag";
 import { Berekenen } from "../berekeningen/Berekenen";
 import { BeschikbaarInkomenLegenda } from "../grafieken/BeschikbaarInkomenLegenda";
-import { BeschikbaarInkomenResultaatType, GrafiekType, LeeftijdType, PersoonType, WonenType } from "../../types";
+import { BeschikbaarInkomenResultaatType, InvoerGegevensType, LeeftijdType } from "../../ts/types";
 import { Legenda } from "../grafieken/Legenda";
 
 export class BeschikbaarInkomen extends Berekenen {
   beschikbaarInkomen: number;
 
-  constructor(vis: GrafiekType, personen: PersoonType[], wonen: WonenType) {
-    super(vis, personen, wonen);
+  constructor(gegevens: InvoerGegevensType) {
+    super(gegevens);
   }
 
   createLegenda(): Legenda {
@@ -94,6 +95,7 @@ export class BeschikbaarInkomen extends Berekenen {
     let beschikbaarInkomen: BeschikbaarInkomenResultaatType = {
       arbeidsinkomen: arbeidsinkomen,
       brutoInkomstenBelasting: toetsingsinkomenBelasting,
+      nettoLoon: nettoArbeidsinkomen + algemeneHeffingsKorting + arbeidskorting,
       netto: nettoArbeidsinkomen,
       ibBox1: hypotheekInkomenBelasting,
       algemeneHeffingsKorting: algemeneHeffingsKorting,
@@ -127,7 +129,7 @@ export class BeschikbaarInkomen extends Berekenen {
       beschikbaarInkomen.arbeidskorting +
       beschikbaarInkomen.zorgtoeslag +
       beschikbaarInkomen.wonen +
-      beschikbaarInkomen.kinderbijslag +
+      // beschikbaarInkomen.kinderbijslag +
       beschikbaarInkomen.kindgebondenBudget +
       beschikbaarInkomen.inkomensafhankelijkeCombinatiekorting;
     return beschikbaarInkomen;

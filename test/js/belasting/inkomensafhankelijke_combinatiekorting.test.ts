@@ -16,7 +16,7 @@
  */
 
 import { expect, test } from "vitest";
-import { LeeftijdType, PersoonType } from "../../../src/types";
+import { LeeftijdType, PersoonType } from "../../../src/ts/types";
 import iack from "../../../src/js/belasting/inkomensafhankelijke_combinatiekorting";
 
 const JAAR: string = "2023";

@@ -16,7 +16,7 @@
  */
 
 import { expect, test } from "vitest";
-import { LeeftijdType, PersoonType } from "../../../src/types";
+import { LeeftijdType, PersoonType } from "../../../src/ts/types";
 import kgb from "../../../src/js/belasting/kindgebonden_budget";
 
 // 2023 getallen
@@ -85,8 +85,19 @@ test("test Kindgebonden Budget 40.000, alleenstaand, 1 kind 12-, 1 kind 12-15, 1
   );
 });
 
-// const M2K = [{leeftijd: 'Volwassene'}, {leeftijd: 'Volwassene'}, {leeftijd: '12-'}, {leeftijd: '12-'}];
-
-// test('test Kindgebonden Budget 46377, 2 V, 1 kind 12-', () => {
-//   expect(kgb.kindgebondenBudget(46377, kgb.maxKindgebondenBudget(M2K, true), true)).toEqual(M1K_MAX - 445)
-//})
+const M2K = [
+  { leeftijd: LeeftijdType.V },
+  { leeftijd: LeeftijdType.V, bruto_inkomen: 18333 },
+  { leeftijd: LeeftijdType.K611 },
+  { leeftijd: LeeftijdType.K611 },
+];
+const jaar = "2024";
+test("test Kindgebonden Budget 46377, 2 V, 1 kind 12-", () => {
+  //  expect(kgb.kindgebondenBudget(jaar, 37667 + 18333, kgb.maxKindgebondenBudget(jaar, M2K, true), true)).toEqual(Math.floor(12 * 298.4))
+});
+// 36400: 3600 - 3540 = 60
+// 38400: 3540 - 3468 = 72
+// 3600 - 3540 - 3468 ==> 12 verschil, is afronding.
+test("test Kindgebonden Budget 36400, 2 V, 1 kind 12-", () => {
+  // expect(kgb.kindgebondenBudget(jaar, 36400 + 18333, kgb.maxKindgebondenBudget(jaar, M2K, true), true)).toEqual(Math.floor(12 * 298.4))
+});
