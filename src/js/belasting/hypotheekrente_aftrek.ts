@@ -33,16 +33,16 @@ function eigenwoningforfait(jaar: string, wozWaarde: number): number {
   }
 }
 
-// Rente moet worden opgesteld bij inkomen (aftrek geeft negative waarde)
+// De aftrek is meestal gelijk aan het verschil tussen het eigenwoningforfait en de aftrekbare kosten zoals de rente
 function hypotheekRenteAftrek(jaar: string, rente: number, wozWaarde: number): number {
   const ksfj = data.EWF[jaar].kSchuldFactor;
   const ewf = eigenwoningforfait(jaar, wozWaarde);
-  const ew = -rente + ewf;
+  const ew = ewf - rente;
 
   // Als uw eigenwoningforfait hoger is dan uw hypotheekrenteaftrek.
   // Dan telt uw eigenwoningforfait maar voor een klein deel mee.
   // Vanwege de zogenoemde ‘Wet Hillen’
-  return Math.floor(ew > 0 ? ew * ksfj : ew);
+  return -Math.floor(ew > 0 ? ew * ksfj : ew);
 }
 
 export default {

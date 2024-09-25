@@ -18,96 +18,165 @@
 import { expect, test } from "vitest";
 import { BeschikbaarInkomen } from "../../../src/js/berekeningen/BeschikbaarInkomen.js";
 import { MarginaleDruk } from "../../../src/js/berekeningen/MarginaleDruk.js";
+import { InvoerGegevensType, MarginaleDrukResultaatType, VisualisatieTypeType } from "../../../src/ts/types.js";
 import {
-  GrafiekType,
-  LeeftijdType,
-  MarginaleDrukResultaatType,
-  PeriodeType,
-  PersoonType,
-  SalarisVerhogingType,
-  WonenType,
-  WoningType,
-} from "../../../src/types";
+  alleenstaande2KinderenHuur,
+  alleenstaandeKoop,
+  eenverdiener2KinderenHuur,
+  eenverdiener2kinderenKoop,
+} from "./invoer";
 
-test("Marginale Druk Details ", () => {
-  const vis: GrafiekType = {
-    jaar: "2023",
-    periode: PeriodeType.JAAR,
-    svt: SalarisVerhogingType.P,
-    sv_p: 3,
+function bereken(
+  arbeidsinkomen: number,
+  gegevens: InvoerGegevensType,
+  extraLoon: number,
+  type: VisualisatieTypeType
+): MarginaleDrukResultaatType {
+  gegevens.visualisatie.sv_abs = extraLoon;
+  const berekenen: MarginaleDruk = new MarginaleDruk(gegevens, new BeschikbaarInkomen(gegevens));
+
+  return berekenen.bereken(arbeidsinkomen, type);
+}
+
+test("Bereken 2024 marginale druk alleenstaande 27500, 2 kinderen, huur 674", () => {
+  const arbeidsinkomen: number = 29206; /* Brutoloon: 30.000*/
+  const berekening = bereken(arbeidsinkomen, alleenstaande2KinderenHuur("bi"), 939, VisualisatieTypeType.T);
+  const expected: MarginaleDrukResultaatType = {
+    ahk: 126,
+    ahkMax: -63,
+    ak: 24,
+    akMax: 24,
+    arbeidsinkomen: 29206,
+    extraLoon: 939,
+    hraMax: 0,
+    iack: 107,
+    iackMax: 107,
+    ibBox1: -348,
+    kb: 0,
+    kgb: -63,
+    marginaleDruk: 49.2,
+    nettoArbeidsinkomen: 477,
+    nettoInkomen: 477,
+    nettoLoon: 848,
+    nettoLoonBelasting: 91,
+    nvzk: -189,
+    wonen: -180,
+    zt: -128,
   };
-  const personen: PersoonType[] = [{ leeftijd: LeeftijdType.V }];
-  const wonen: WonenType = { woning_type: WoningType.HUUR, huur: 600 };
-  const ai: number = 27800;
-  const md: MarginaleDruk = new MarginaleDruk(vis, personen, wonen, new BeschikbaarInkomen(vis, personen, wonen));
-  let mdd: MarginaleDrukResultaatType = md.bereken(ai);
-
-  let expected: MarginaleDrukResultaatType = {
-    arbeidsinkomen: ai * 0.03,
-    nettoInkomensBelasting: 33.81,
-    algemeneHeffingsKorting: 6.12,
-    arbeidskorting: 0,
-    zorgtoeslag: 13.67,
-    wonen: 31.65,
-    kinderbijslag: 0,
-    kindgebondenBudget: 0,
-    inkomensafhankelijkeCombinatiekorting: 0,
-    marginaleDruk: 85.25,
-  };
-
-  expect(mdd).toEqual(expected);
-  expect(
-    mdd.nettoInkomensBelasting +
-      mdd.algemeneHeffingsKorting +
-      mdd.arbeidskorting +
-      mdd.zorgtoeslag +
-      mdd.wonen +
-      mdd.kinderbijslag +
-      mdd.kindgebondenBudget +
-      mdd.inkomensafhankelijkeCombinatiekorting
-  ).toEqual(mdd.marginaleDruk);
+  expect(berekening).toEqual(expected);
 });
 
-test("Marginale Druk Details PD2025", () => {
-  const vis: GrafiekType = {
-    jaar: "PD2025",
-    periode: PeriodeType.JAAR,
-    svt: SalarisVerhogingType.A,
-    sv_abs: 1000,
+test("Bereken 2024 beschikbaar inkomen eenverdiener 47500, 2 kinderen, huur 674", () => {
+  const arbeidsinkomen: number = 45633; // Brutoloon: 47500
+  const berekening = bereken(arbeidsinkomen, eenverdiener2KinderenHuur("bi"), 939, VisualisatieTypeType.T);
+  const expected: MarginaleDrukResultaatType = {
+    ahk: -63,
+    ahkMax: -63,
+    ak: -61,
+    akMax: -61,
+    arbeidsinkomen: 45633,
+    extraLoon: 939,
+    hraMax: 0,
+    iack: 0,
+    iackMax: 0,
+    ibBox1: -347,
+    kb: 0,
+    kgb: -63,
+    marginaleDruk: 89.78,
+    nettoArbeidsinkomen: 96,
+    nettoInkomen: 96,
+    nettoLoon: 468,
+    nettoLoonBelasting: 471,
+    nvzk: 0,
+    wonen: -180,
+    zt: -129,
   };
-  const personen: PersoonType[] = [
-    { leeftijd: LeeftijdType.V },
-    { leeftijd: LeeftijdType.V, bruto_inkomen: 18333 },
-    { leeftijd: LeeftijdType.K611 },
-    { leeftijd: LeeftijdType.K611 },
-  ];
-  const wonen: WonenType = { woning_type: WoningType.HUUR, huur: 710 };
-  const ai: number = 36667;
-  const md: MarginaleDruk = new MarginaleDruk(vis, personen, wonen, new BeschikbaarInkomen(vis, personen, wonen));
-  let mdd: MarginaleDrukResultaatType = md.bereken(ai);
+  expect(berekening).toEqual(expected);
+});
 
-  let expected: MarginaleDrukResultaatType = {
-    arbeidsinkomen: 1000,
-    nettoInkomensBelasting: 33.5,
-    algemeneHeffingsKorting: 6.3,
-    arbeidskorting: 0,
-    zorgtoeslag: 0,
+test("Bereken 2024 beschikbaar inkomen meestverdiener 45000, 2 kinderen, huur 674", () => {
+  const arbeidsinkomen: number = 43313; // Brutoloon: 45000
+  const gegevens = eenverdiener2KinderenHuur("bi");
+  gegevens.personen[1].bruto_inkomen = 21969;
+
+  const berekening = bereken(arbeidsinkomen, gegevens, 939, VisualisatieTypeType.T);
+  const expected: MarginaleDrukResultaatType = {
+    ahk: -62,
+    ahkMax: -62,
+    ak: -62,
+    akMax: -62,
+    arbeidsinkomen: 43313,
+    extraLoon: 939,
+    hraMax: 0,
+    iack: 0,
+    iackMax: 0,
+    ibBox1: -347,
+    kb: 0,
+    kgb: -64,
+    marginaleDruk: 56.98,
+    nettoArbeidsinkomen: 404,
+    nettoInkomen: 404,
+    nettoLoon: 468,
+    nettoLoonBelasting: 471,
+    nvzk: 0,
     wonen: 0,
-    kinderbijslag: 0,
-    kindgebondenBudget: 7.1,
-    inkomensafhankelijkeCombinatiekorting: 0,
-    marginaleDruk: 46.9,
+    zt: 0,
   };
+  expect(berekening).toEqual(expected);
+});
 
-  expect(mdd).toEqual(expected);
-  expect(
-    mdd.nettoInkomensBelasting +
-      mdd.algemeneHeffingsKorting +
-      mdd.arbeidskorting +
-      mdd.zorgtoeslag +
-      mdd.wonen +
-      mdd.kinderbijslag +
-      mdd.kindgebondenBudget +
-      mdd.inkomensafhankelijkeCombinatiekorting
-  ).toEqual(mdd.marginaleDruk);
+test("Bereken 2024 beschikbaar inkomen 47500 eenverdiener, 2 kinderen, koop", () => {
+  const arbeidsinkomen: number = 45633; // Brutoloon: 47500
+  const berekening = bereken(arbeidsinkomen, eenverdiener2kinderenKoop("bi"), 939, VisualisatieTypeType.T);
+  const expected: MarginaleDrukResultaatType = {
+    ahk: -62,
+    ahkMax: -62,
+    ak: -61,
+    akMax: -61,
+    arbeidsinkomen: 45633,
+    extraLoon: 939,
+    hraMax: 0,
+    iack: 0,
+    iackMax: 0,
+    ibBox1: -347,
+    kb: 0,
+    kgb: -63,
+    marginaleDruk: 70.5,
+    nettoArbeidsinkomen: 277,
+    nettoInkomen: 277,
+    nettoLoon: 469,
+    nettoLoonBelasting: 470,
+    nvzk: 0,
+    wonen: 0,
+    zt: -129,
+  };
+  expect(berekening).toEqual(expected);
+});
+
+test("Bereken 2024 beschikbaar inkomen 80000 alleenstaande, koop", () => {
+  const arbeidsinkomen: number = 80000;
+  const berekening = bereken(arbeidsinkomen, alleenstaandeKoop("bi"), 939, VisualisatieTypeType.T);
+  const expected: MarginaleDrukResultaatType = {
+    ahk: -62,
+    ahkMax: -62,
+    ak: -61,
+    akMax: -61,
+    arbeidsinkomen: 80000,
+    extraLoon: 939,
+    hraMax: 118,
+    iack: 0,
+    iackMax: 0,
+    ibBox1: -465,
+    kb: 0,
+    kgb: 0,
+    marginaleDruk: 37.49,
+    nettoArbeidsinkomen: 587,
+    nettoInkomen: 587,
+    nettoLoon: 469,
+    nettoLoonBelasting: 470,
+    nvzk: 0,
+    wonen: 118,
+    zt: 0,
+  };
+  expect(berekening).toEqual(expected);
 });

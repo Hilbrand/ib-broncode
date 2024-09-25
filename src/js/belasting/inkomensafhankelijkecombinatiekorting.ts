@@ -22,7 +22,7 @@
  */
 
 import data from "./belasting_data";
-import { LeeftijdType, PersoonType } from "../../types";
+import { LeeftijdType, PersoonType } from "../../ts/types";
 
 /**
  * Bepaalt laagste inkomen van alle personen, behalve de eerste.
@@ -57,7 +57,7 @@ function inkomensafhankelijkeCombinatiekorting(
 
   return arbeidsinkomen < t.MinAInk
     ? 0
-    : Math.min(t.MaxInkAfKrt, Math.floor((arbeidsinkomen - (t.MinAInk - 1)) * t.InkKorting));
+    : Math.min(t.MaxInkAfKrt, Math.round((arbeidsinkomen - (t.MinAInk - 1)) * t.InkKorting));
 }
 
 export default {

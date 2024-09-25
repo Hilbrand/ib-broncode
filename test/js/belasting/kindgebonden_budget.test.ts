@@ -16,7 +16,7 @@
  */
 
 import { expect, test } from "vitest";
-import { LeeftijdType, PersoonType } from "../../../src/types";
+import { LeeftijdType, PersoonType } from "../../../src/ts/types";
 import kgb from "../../../src/js/belasting/kindgebonden_budget";
 
 // 2023 getallen
@@ -84,9 +84,3 @@ test("test Kindgebonden Budget 40.000, alleenstaand, 1 kind 12-, 1 kind 12-15, 1
     A3K_MAX - 1007
   );
 });
-
-// const M2K = [{leeftijd: 'Volwassene'}, {leeftijd: 'Volwassene'}, {leeftijd: '12-'}, {leeftijd: '12-'}];
-
-// test('test Kindgebonden Budget 46377, 2 V, 1 kind 12-', () => {
-//   expect(kgb.kindgebondenBudget(46377, kgb.maxKindgebondenBudget(M2K, true), true)).toEqual(M1K_MAX - 445)
-//})

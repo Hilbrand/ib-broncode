@@ -10,11 +10,13 @@ De broncode is beschikbaar onder de AGPL3.0 licentie.
 [![Bouw broncode](https://github.com/Hilbrand/ib-broncode/actions/workflows/deploy.yml/badge.svg)](https://github.com/Hilbrand/ib-broncode/actions/workflows/deploy.yml)
 [![Uitrol naar GitHub pages](https://github.com/Hilbrand/ib/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/Hilbrand/ib/actions/workflows/pages/pages-build-deployment)
 
-# Kengetallen
+# Belasting gegevens
+
+Overzicht van de verschillende belastingen die zijn gebruikt in de berekeningen.
 
 ## Inkomsten belasting
 
-Categorieen van en tot, met per groep een percentage.
+Categorieën van en tot, met per groep een percentage.
 Wet Inkomstenbelasting 2001
 https://wetten.overheid.nl/BWBR0011353/2024-04-30/0
 
@@ -51,6 +53,7 @@ https://wetten.overheid.nl/BWBR0008659/2024-01-01
 
 ## Zorgtoeslag
 
+https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/themaoverstijgend/brochures_en_publicaties/informatieblad-zorgtoeslag-2023
 
 # Sotfware Ontwikkelomgeving
 

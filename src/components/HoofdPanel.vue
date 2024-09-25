@@ -2,29 +2,36 @@
   <div class="grid">
     <div id="infoBar">
       <HuishoudenComponent :personen="gegevens.personen" />
-      <WonenComponent :jaar="gegevens.grafiek.jaar" :wonen="gegevens.wonen" />
-      <GrafiekInstellingComponent :grafiekInstellingen="gegevens.grafiek" />
+      <WonenComponent :jaar="gegevens.visualisatie.jaar" :wonen="gegevens.wonen" />
+      <VisualisatieInstellingComponent :instellingen="gegevens.visualisatie" />
     </div>
     <n-tabs ref="tabsRef" type="line" style="padding: 0 10px" @update:value="tabUpdated" v-model:value="gegevens.tab">
       <n-tab-pane name="intro" tab="Introductie">
         <IntroPagina />
       </n-tab-pane>
       <n-tab-pane name="bi" tab="Beschikbaar Inkomen" key="bi">
-        <n-space> Deze grafiek toont het beschikbare inkomen uitgesplitst naar kortingen en toeslagen. </n-space>
-        <div id="bi"></div>
+        <n-h4 v-html="samenvattingTekst"></n-h4>
+        <n-divider />
+        <TabelComponent v-if="gegevens.tab == 'bi' && gegevens.visualisatie.type == 't'" :gegevens="gegevens" />
+        <div v-else>
+          <n-space> Deze grafiek toont het beschikbare inkomen uitgesplitst naar kortingen en toeslagen. </n-space>
+          <div id="bi"></div>
+        </div>
       </n-tab-pane>
       <n-tab-pane name="md" tab="Marginale Druk" key="md">
+        <n-h4 v-html="samenvattingTekst"></n-h4>
+        <n-divider />
         <n-space vertical>
           <n-space :wrap="false"
-            >Deze grafiek toont de marginale druk bij een salarisverhoging van
-            <n-radio-group v-model:value="gegevens.grafiek.svt">
+            >Deze grafiek toont de marginale druk bij extra loon van
+            <n-radio-group v-model:value="gegevens.visualisatie.svt">
               <n-radio label="%" key="p" value="p" size="small" />
               <n-radio label="€" key="a" value="a" size="small" />
             </n-radio-group>
             <n-input-group>
               <n-input-number
-                v-if="gegevens.grafiek.svt == 'p'"
-                v-model:value="gegevens.grafiek.sv_p"
+                v-if="gegevens.visualisatie.svt == 'p'"
+                v-model:value="gegevens.visualisatie.sv_p"
                 min="0"
                 max="100"
                 step="1"
@@ -34,8 +41,8 @@
                 <template #suffix>%</template></n-input-number
               >
               <n-input-number
-                v-if="gegevens.grafiek.svt == 'a'"
-                v-model:value="gegevens.grafiek.sv_abs"
+                v-if="gegevens.visualisatie.svt == 'a'"
+                v-model:value="gegevens.visualisatie.sv_abs"
                 min="0"
                 step="1"
                 size="tiny"
@@ -45,16 +52,20 @@
               >
             </n-input-group>
           </n-space>
-          <div id="md"></div>
+          <TabelComponent v-if="gegevens.tab == 'md' && gegevens.visualisatie.type == 't'" :gegevens="gegevens" />
+          <div v-else id="md"></div>
         </n-space>
       </n-tab-pane>
       <n-tab-pane name="bd" tab="Belastingdruk" key="bd">
-        <n-space vertical>
+        <n-h4 v-html="samenvattingTekst"></n-h4>
+        <n-divider />
+        <TabelComponent v-if="gegevens.tab == 'bd' && gegevens.visualisatie.type == 't'" :gegevens="gegevens" />
+        <n-space v-else vertical>
           <div id="bd"></div>
         </n-space>
       </n-tab-pane>
     </n-tabs>
-    <n-scrollbar id="legenda" v-if="gegevens.tab != 'intro'">
+    <n-scrollbar id="legenda" v-if="gegevens.tab != 'intro' && gegevens.visualisatie.type == 'g'">
       <Legenda :data="legendaData" />
     </n-scrollbar>
   </div>
@@ -86,24 +97,32 @@ import { ref, nextTick } from "vue";
 import IntroPagina from "./IntroPagina.vue";
 import HuishoudenComponent from "./HuishoudenComponent.vue";
 import WonenComponent from "./WonenComponent.vue";
-import GrafiekInstellingComponent from "./GrafiekInstellingComponent.vue";
+import VisualisatieInstellingComponent from "./VisualisatieInstellingComponent.vue";
+import TabelComponent from "./TabelComponent.vue";
 import Legenda from "./Legenda.vue";
-import gegevens from "@/js/berekeningen/gegevens";
+import { JAAR, jsonToNavigatie, navigatieToJson } from "@/ts/navigatie";
 import algemeen from "@/js/berekeningen/algemeen";
 import stacked_chart from "@/js/grafieken/stacked_chart";
+import { maakSamenvatting } from "@/ts/samenvatting";
 
 export default {
   components: {
     HuishoudenComponent,
     WonenComponent,
-    GrafiekInstellingComponent,
+    VisualisatieInstellingComponent,
     IntroPagina,
+    TabelComponent,
     Legenda,
+  },
+  setup() {
+    timer: null;
+    tabsRef: ref(null);
+    tabRef: ref("intro");
+    tabel: ref(null);
+    samenvattingTekst: ref("");
   },
   data() {
     return {
-      tabsRef: ref(null),
-      tabRef: ref("intro"),
       gegevens: {
         tab: "intro",
         // Personen
@@ -111,10 +130,12 @@ export default {
         // Wonen
         wonen: {},
         // Visualisatie
-        grafiek: {
-          jaar: gegevens.JAAR,
+        visualisatie: {
+          type: "g",
+          jaar: JAAR,
           periode: null,
           van_tot: [],
+          stap: 100,
           arbeidsInkomen: 0,
           svt: "p",
           sv_abs: 1000,
@@ -122,11 +143,10 @@ export default {
         },
       },
       legendaData: { grafiek: {}, netto: {}, bruto: {} },
-      timer: null,
     };
   },
   mounted() {
-    this.gegevens = gegevens.navigatieToJson(this.$route.query);
+    this.gegevens = navigatieToJson(this.$route.query);
     this.resize();
     window.addEventListener("resize", this.resize);
   },
@@ -137,7 +157,7 @@ export default {
     this.$watch(
       () => this.$route.query,
       (toQuery, previousQuery) => {
-        let queryGegevens = gegevens.navigatieToJson(toQuery);
+        let queryGegevens = navigatieToJson(toQuery);
 
         if (queryGegevens.tab != "intro") {
           this.gegevens = queryGegevens;
@@ -166,7 +186,7 @@ export default {
     },
     replace() {
       this.$router.replace({
-        query: gegevens.jsonToNavigatie(this.gegevens),
+        query: jsonToNavigatie(this.gegevens),
       });
     },
     tabUpdated(value) {
@@ -174,20 +194,18 @@ export default {
       this.gegevens.tab = value;
     },
     async chart() {
-      if (this.gegevens.tab == "intro") {
+      if (this.gegevens.tab === "intro") {
+        return;
+      }
+      this.samenvattingTekst = maakSamenvatting(this.gegevens);
+      if (this.gegevens.visualisatie.type === "t") {
         return;
       }
       await nextTick();
 
       stacked_chart.makeChart(
         "#" + this.gegevens.tab,
-        algemeen.berekenGrafiekData(
-          this.$route.path,
-          this.gegevens.tab,
-          this.gegevens.grafiek,
-          this.gegevens.personen,
-          this.gegevens.wonen
-        ),
+        algemeen.berekenGrafiekData(this.gegevens),
         document.getElementById(this.gegevens.tab).offsetWidth,
         (d) => (this.legendaData = d)
       );

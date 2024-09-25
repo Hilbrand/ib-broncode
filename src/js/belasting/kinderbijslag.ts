@@ -19,9 +19,9 @@
  * Berekening van kinderbijslag.
  *
  */
-import { LeeftijdType, PersoonType } from "../../types";
+import { LeeftijdType, PersoonType } from "../../ts/types";
 import data from "./belasting_data";
-import functies from "../functies";
+import functies from "../../ts/functies";
 
 function kinderbijslag(jaar: string, personen: PersoonType[]): number {
   const kbsj = data.KBS[jaar];

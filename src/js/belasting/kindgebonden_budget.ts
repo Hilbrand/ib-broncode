@@ -21,9 +21,9 @@
  * https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/themaoverstijgend/brochures_en_publicaties/informatieblad-kindgebonden-budget-2023
  */
 
-import { LeeftijdType, PersoonType } from "../../types";
+import { LeeftijdType, PersoonType } from "../../ts/types";
 import data from "./belasting_data.js";
-import functies from "../functies";
+import functies from "../../ts/functies";
 
 function rekenBasis(jaar: string, aantalKinderen: number, toeslagenPartner: boolean): number {
   const tabelj = data.TABEL[jaar];

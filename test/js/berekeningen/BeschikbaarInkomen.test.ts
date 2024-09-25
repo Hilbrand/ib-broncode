@@ -17,95 +17,125 @@
 
 import { expect, test } from "vitest";
 import { BeschikbaarInkomen } from "../../../src/js/berekeningen/BeschikbaarInkomen";
+import { BeschikbaarInkomenResultaatType, InvoerGegevensType, VisualisatieTypeType } from "../../../src/ts/types";
 import {
-  BeschikbaarInkomenResultaatType,
-  GrafiekType,
-  LeeftijdType,
-  PeriodeType,
-  PersoonType,
-  WonenType,
-  WoningType,
-} from "../../../src/types";
+  alleenstaande2KinderenHuur,
+  alleenstaandeKoop,
+  eenverdiener2KinderenHuur,
+  eenverdiener2kinderenKoop,
+} from "./invoer";
 
-const vis: GrafiekType = { jaar: "2024", periode: PeriodeType.JAAR };
-const personen: PersoonType[] = [
-  { leeftijd: LeeftijdType.V },
-  { leeftijd: LeeftijdType.V },
-  { leeftijd: LeeftijdType.K611 },
-  { leeftijd: LeeftijdType.K611 },
-];
-const huur: WonenType = { woning_type: WoningType.HUUR, huur: 1100 };
-const koop: WonenType = {
-  woning_type: WoningType.KOOP,
-  rente: 13482,
-  woz: 315000,
-};
+function bereken(
+  arbeidsinkomen: number,
+  gegevens: InvoerGegevensType,
+  type: VisualisatieTypeType
+): BeschikbaarInkomenResultaatType {
+  const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(gegevens);
 
-test("Bereken beschikbaar inkomen eenverdiener, 2 kinderen, huur", () => {
-  const arbeidsinkomen: number = 46377;
-  const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(vis, personen, huur);
-  const berekening: BeschikbaarInkomenResultaatType = berekenen.bereken(arbeidsinkomen);
+  return berekenen.bereken(arbeidsinkomen, type);
+}
 
-  let expected: BeschikbaarInkomenResultaatType = {
-    algemeneHeffingsKorting: 1932,
+test("Bereken 2024 beschikbaar inkomen alleenstaande 27500, 2 kinderen, huur 674", () => {
+  const arbeidsinkomen: number = 26860; /* Brutoloon: 27500*/
+  const berekening = bereken(arbeidsinkomen, alleenstaande2KinderenHuur("bi"), VisualisatieTypeType.T);
+  const expected: BeschikbaarInkomenResultaatType = {
+    ahk: 2342,
+    ahkMax: 3226,
+    ak: 5208,
+    akMax: 5208,
     arbeidsinkomen: arbeidsinkomen,
-    arbeidskorting: 5114,
-    ibBox1: 17146,
-    beschikbaarInkomen: 43334,
-    brutoInkomstenBelasting: 17146,
-    inkomensafhankelijkeCombinatiekorting: 0,
-    kinderbijslag: 2736,
-    kindgebondenBudget: 4162,
-    netto: 29231,
-    wonen: 0,
-    zorgtoeslag: 159,
+    hraMax: 0,
+    iack: 2380,
+    iackMax: 2380,
+    ibBox1: 9930,
+    kb: 2736,
+    kgb: 8350,
+    nettoArbeidsinkomen: 16930,
+    nettoInkomen: 41583,
+    nettoLoon: 26860,
+    nettoLoonBelasting: 0,
+    nvzk: 884,
+    wonen: 4896,
+    zt: 1477,
+  };
+  expect(berekening).toEqual(expected);
+});
+
+test("Bereken 2024 beschikbaar inkomen eenverdiener 47500, 2 kinderen, huur 674", () => {
+  const arbeidsinkomen: number = 45633; // Brutoloon: 47500
+  const berekening = bereken(arbeidsinkomen, eenverdiener2KinderenHuur("bi"), VisualisatieTypeType.T);
+  const expected: BeschikbaarInkomenResultaatType = {
+    ahk: 1982,
+    ahkMax: 1982,
+    ak: 5162,
+    akMax: 5162,
+    arbeidsinkomen: arbeidsinkomen,
+    hraMax: 0,
+    iack: 0,
+    iackMax: 0,
+    ibBox1: 16871,
+    kb: 2736,
+    kgb: 4212,
+    nettoArbeidsinkomen: 28762,
+    nettoInkomen: 41315,
+    nettoLoon: 35906,
+    nettoLoonBelasting: 9727,
+    nvzk: 0,
+    wonen: 936,
+    zt: 261,
+  };
+  expect(berekening).toEqual(expected);
+});
+
+test("Bereken 2024 beschikbaar inkomen 47500 eenverdiener, 2 kinderen, koop", () => {
+  const arbeidsinkomen: number = 45633; // Brutoloon: 47500
+  const berekening = bereken(arbeidsinkomen, eenverdiener2kinderenKoop("bi"), VisualisatieTypeType.T);
+  const expected: BeschikbaarInkomenResultaatType = {
+    ahk: 2802,
+    ahkMax: 2802,
+    ak: 5162,
+    akMax: 5162,
+    arbeidsinkomen: arbeidsinkomen,
+    hraMax: 4577,
+    iack: 0,
+    iackMax: 0,
+    ibBox1: 16871,
+    kb: 2736,
+    kgb: 4212,
+    nettoArbeidsinkomen: 28762,
+    nettoInkomen: 50353,
+    nettoLoon: 41303,
+    nettoLoonBelasting: 4330,
+    nvzk: 0,
+    wonen: 4577,
+    zt: 261,
   };
 
   expect(berekening).toEqual(expected);
 });
 
-test("Bereken beschikbaar inkomen 10000 eenverdiener, 2 kinderen, koop", () => {
-  const arbeidsinkomen: number = 10000;
-  const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(vis, personen, koop);
-  const berekening: BeschikbaarInkomenResultaatType = berekenen.bereken(arbeidsinkomen);
-
-  let expected: BeschikbaarInkomenResultaatType = {
-    algemeneHeffingsKorting: 3362,
+test("Bereken 2024 beschikbaar inkomen 80000 alleenstaande, koop", () => {
+  const arbeidsinkomen: number = 80000;
+  const berekening = bereken(arbeidsinkomen, alleenstaandeKoop("bi"), VisualisatieTypeType.T);
+  const expected: BeschikbaarInkomenResultaatType = {
+    ahk: 524,
+    ahkMax: 524,
+    ak: 2925,
+    akMax: 2925,
     arbeidsinkomen: arbeidsinkomen,
-    arbeidskorting: 335,
-    ibBox1: 0,
-    beschikbaarInkomen: 20441,
-    brutoInkomstenBelasting: 3697,
-    inkomensafhankelijkeCombinatiekorting: 0,
-    kinderbijslag: 2736,
-    kindgebondenBudget: 4872,
-    netto: 6303,
-    wonen: 0,
-    zorgtoeslag: 2833,
-  };
-
-  expect(berekening).toEqual(expected);
-});
-
-test("Bereken beschikbaar inkomen 30000 eenverdiener, koop", () => {
-  const arbeidsinkomen: number = 30000;
-  const eenverdiener: PersoonType[] = [{ leeftijd: LeeftijdType.V }];
-  const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(vis, eenverdiener, koop);
-  const berekening: BeschikbaarInkomenResultaatType = berekenen.bereken(arbeidsinkomen);
-
-  let expected: BeschikbaarInkomenResultaatType = {
-    algemeneHeffingsKorting: 3362,
-    arbeidsinkomen: arbeidsinkomen,
-    arbeidskorting: 5286,
-    ibBox1: 6514,
-    beschikbaarInkomen: 31048,
-    brutoInkomstenBelasting: 11091,
-    inkomensafhankelijkeCombinatiekorting: 0,
-    kinderbijslag: 0,
-    kindgebondenBudget: 0,
-    netto: 18909,
-    wonen: 2443,
-    zorgtoeslag: 1048,
+    hraMax: 5139,
+    iack: 0,
+    iackMax: 0,
+    ibBox1: 30138,
+    kb: 0,
+    kgb: 0,
+    nettoArbeidsinkomen: 49862,
+    nettoInkomen: 63589,
+    nettoLoon: 58450,
+    nettoLoonBelasting: 21550,
+    nvzk: 0,
+    wonen: 5139,
+    zt: 0,
   };
 
   expect(berekening).toEqual(expected);

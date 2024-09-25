@@ -14,15 +14,17 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-import { BeschikbaarInkomen } from "@/js/berekeningen/BeschikbaarInkomen";
-import { BelastingdrukLegenda } from "@/js/grafieken/BelastingdrukLegenda";
+
+import { BeschikbaarInkomen } from "./BeschikbaarInkomen";
+import { BelastingdrukLegenda } from "../grafieken/BelastingdrukLegenda";
+import { BelastingDrukResultaatType, InvoerGegevensType, VisualisatieTypeType } from "../../ts/types";
 
 /**
  * Berekend het belastingbedrag na verrekening van alle kortingen en toeslagen.
  */
 export class Belastingdruk extends BeschikbaarInkomen {
-  constructor(vis, personen, wonen) {
-    super(vis, personen, wonen);
+  constructor(gegevens: InvoerGegevensType) {
+    super(gegevens);
   }
 
   createLegenda() {
@@ -37,20 +39,13 @@ export class Belastingdruk extends BeschikbaarInkomen {
     return 1;
   }
 
-  bereken(arbeidsInkomen) {
-    const beschikbaarInkomen = this.berekenBeschikbaarInkomen(arbeidsInkomen);
-    const totaal =
-      beschikbaarInkomen.netto +
-      beschikbaarInkomen.algemeneHeffingsKorting +
-      beschikbaarInkomen.arbeidskorting +
-      beschikbaarInkomen.inkomensafhankelijkeCombinatiekorting;
-    const belastingdruk = Math.max(0, arbeidsInkomen - totaal);
+  bereken(arbeidsInkomen, visualisatie: VisualisatieTypeType): BelastingDrukResultaatType {
+    const beschikbaarInkomen = this.berekenBeschikbaarInkomen(arbeidsInkomen, visualisatie);
 
     return {
-      arbeidsInkomen: arbeidsInkomen,
-      brutoInkomstenBelasting: beschikbaarInkomen.brutoInkomstenBelasting,
-      belastingdruk: belastingdruk,
-      belastingdrukPercentage: 100 * (belastingdruk / arbeidsInkomen),
+      arbeidsinkomen: arbeidsInkomen,
+      ibBox1: beschikbaarInkomen.ibBox1,
+      belastingdrukPercentage: 100 * (beschikbaarInkomen.nettoLoonBelasting / arbeidsInkomen),
     };
   }
 

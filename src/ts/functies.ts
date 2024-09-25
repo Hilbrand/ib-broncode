@@ -14,7 +14,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-import { LeeftijdType, PeriodeType, PersoonType, WonenType, WoningType } from "../types";
+
+import { LeeftijdType, PeriodeType, PersoonType, WonenType, WoningType } from "./types";
+
+function telKinderen(personen: PersoonType[]): number {
+  return personen.length - telVolwassenen(personen);
+}
 
 function telPersonen(personen: PersoonType[], controleLeeftijd: LeeftijdType) {
   return personen.filter((p) => p.leeftijd == controleLeeftijd).length;
@@ -26,6 +31,10 @@ function telVolwassenen(personen: PersoonType[]): number {
 
 function toeslagenPartner(personen: PersoonType[]): boolean {
   return telVolwassenen(personen) > 1;
+}
+
+function eenVerdiener(personen: PersoonType[]): boolean {
+  return personen.filter((p) => p.bruto_inkomen > 0).length == 0;
 }
 
 function aow(personen: PersoonType[]): boolean {
@@ -45,6 +54,8 @@ function factorBerekening(periode: PeriodeType): number {
 }
 
 export default {
+  telKinderen,
+  eenVerdiener,
   telPersonen,
   telVolwassenen,
   toeslagenPartner,

@@ -15,6 +15,8 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
+import { VisualisatieTypeType } from "@/ts/types.ts";
+
 /**
  * Basis class voor legenda in grafiek.
  */
@@ -42,7 +44,9 @@ export class Legenda {
   }
 
   geld(bedrag) {
-    return bedrag > 0 || bedrag < 0 ? Legenda.EURO + " " + bedrag.toFixed().padStart(5, "\u00A0") : "-";
+    return bedrag > 0 || bedrag < 0
+      ? Legenda.EURO + " " + (+bedrag.toFixed())?.toLocaleString().padStart(5, "\u00A0")
+      : "-";
   }
 
   setLegendaVast(data, length, offset) {
@@ -55,17 +59,17 @@ export class Legenda {
   setGetal() {
     let ab = this.berekenen.vis.arbeidsInkomen;
     if (ab > 0) {
-      let b = this.berekenen.bereken(ab);
+      let b = this.berekenen.bereken(ab, VisualisatieTypeType.G);
       let id = ab * this.berekenen.getFactor();
       var data = [];
-      this.berekenen.verzamelGrafiekSeries(data, b, id);
+      this.berekenen.verzamelGrafiekSeries(data, b, id, false);
       this.setLegendaText(data, data.length, 0);
       this.updateFunction(id);
     }
   }
 
   berekenGetallen(entry) {
-    return this.berekenen.bereken(entry.id / this.berekenen.getFactor());
+    return this.berekenen.bereken(entry.id / this.berekenen.getFactor(), VisualisatieTypeType.T);
   }
   getLabelYAs() {
     return "";

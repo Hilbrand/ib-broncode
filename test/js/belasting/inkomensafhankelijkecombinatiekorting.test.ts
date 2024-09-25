@@ -16,8 +16,8 @@
  */
 
 import { expect, test } from "vitest";
-import { LeeftijdType, PersoonType } from "../../../src/types";
-import iack from "../../../src/js/belasting/inkomensafhankelijke_combinatiekorting";
+import { LeeftijdType, PersoonType } from "../../../src/ts/types";
+import iack from "../../../src/js/belasting/inkomensafhankelijkecombinatiekorting";
 
 const JAAR: string = "2023";
 
@@ -54,7 +54,7 @@ test("Inkomensafhankelijke Combinatiekorting 5.000", () => {
 });
 
 test("Inkomensafhankelijke Combinatiekorting 20.000", () => {
-  expect(iack.inkomensafhankelijkeCombinatiekorting(JAAR, 20000, Number.MAX_VALUE)).toEqual(1654);
+  expect(iack.inkomensafhankelijkeCombinatiekorting(JAAR, 20000, Number.MAX_VALUE)).toEqual(1655);
 });
 
 test("Inkomensafhankelijke Combinatiekorting 50.000", () => {

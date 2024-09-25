@@ -17,51 +17,52 @@
 
 import { expect, test } from "vitest";
 import inkomen from "../../../src/js/belasting/inkomen";
+import { LeeftijdType } from "../../../src/ts/types";
 
 const JAAR: string = "2023";
 
 // test algemeneHeffingsKorting
 
 test("Algemene Heffings Korting 1.000", () => {
-  expect(inkomen.algemeneHeffingsKorting(JAAR, 1000, 10000, false)).toEqual(3070);
-  expect(inkomen.algemeneHeffingsKorting(JAAR, 1000, 10000, true)).toEqual(1583);
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 1000, false)).toEqual(3070);
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 1000, true)).toEqual(1583);
 });
 
 test("Algemene Heffings Korting 10.000", () => {
-  expect(inkomen.algemeneHeffingsKorting(JAAR, 10000, 10000, false)).toEqual(3070);
-  expect(inkomen.algemeneHeffingsKorting(JAAR, 10000, 10000, true)).toEqual(1583);
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 10000, false)).toEqual(3070);
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 10000, true)).toEqual(1583);
 });
 
 test("Algemene Heffings Korting 40.000", () => {
-  expect(inkomen.algemeneHeffingsKorting(JAAR, 40000, 10000, false)).toEqual(2013);
-  expect(inkomen.algemeneHeffingsKorting(JAAR, 40000, 10000, true)).toEqual(1038);
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 40000, false)).toEqual(2013);
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 40000, true)).toEqual(1038);
 });
 
 test("Algemene Heffings Korting 100.000", () => {
-  expect(inkomen.algemeneHeffingsKorting(JAAR, 100000, 10000, false)).toEqual(0);
-  expect(inkomen.algemeneHeffingsKorting(JAAR, 100000, 10000, true)).toEqual(0);
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 100000, false)).toEqual(0);
+  expect(inkomen.algemeneHeffingsKorting(JAAR, 100000, true)).toEqual(0);
 });
 
 // test arbeidskorting
 
 test("Arbeidskorting 1.000", () => {
-  expect(inkomen.arbeidskorting(JAAR, 1000, 10000, false)).toEqual(82);
-  expect(inkomen.arbeidskorting(JAAR, 1000, 10000, true)).toEqual(42);
+  expect(inkomen.arbeidskorting(JAAR, 1000, false)).toEqual(82);
+  expect(inkomen.arbeidskorting(JAAR, 1000, true)).toEqual(42);
 });
 
 test("Arbeidskorting 15.000", () => {
-  expect(inkomen.arbeidskorting(JAAR, 15000, 10000, false)).toEqual(2156);
-  expect(inkomen.arbeidskorting(JAAR, 15000, 10000, true)).toEqual(1115);
+  expect(inkomen.arbeidskorting(JAAR, 15000, false)).toEqual(2156);
+  expect(inkomen.arbeidskorting(JAAR, 15000, true)).toEqual(1115);
 });
 
 test("Arbeidskorting 30.000", () => {
-  expect(inkomen.arbeidskorting(JAAR, 30000, 10000, false)).toEqual(4815);
-  expect(inkomen.arbeidskorting(JAAR, 30000, 10000, true)).toEqual(2482);
+  expect(inkomen.arbeidskorting(JAAR, 30000, false)).toEqual(4815);
+  expect(inkomen.arbeidskorting(JAAR, 30000, true)).toEqual(2482);
 });
 
 test("Arbeidskorting 60.000", () => {
-  expect(inkomen.arbeidskorting(JAAR, 60000, 10000, false)).toEqual(3600);
-  expect(inkomen.arbeidskorting(JAAR, 60000, 10000, true)).toEqual(1855);
+  expect(inkomen.arbeidskorting(JAAR, 60000, false)).toEqual(3600);
+  expect(inkomen.arbeidskorting(JAAR, 60000, true)).toEqual(1855);
 });
 
 // test inkomstenBelasting
@@ -87,7 +88,9 @@ test("Netto 10.000", () => {
 });
 
 test("", () => {
-  expect(inkomen.toeslagenToetsInkomen(100, [{ bruto_inkomen: 200 }, {}])).toEqual(300);
+  expect(
+    inkomen.toeslagenToetsInkomen(100, [{ bruto_inkomen: 200, leeftijd: LeeftijdType.V }, { leeftijd: LeeftijdType.V }])
+  ).toEqual(300);
 });
 
 // test('Netto 25.000', () => {

@@ -26,7 +26,6 @@ export class BeschikbaarInkomenLegenda extends Legenda {
   }
 
   setLegendaText(data, length, offset) {
-    let totaal = 0;
     let b = this.berekenGetallen(data[offset]);
     let ld = {
       grafiek: [],
@@ -36,8 +35,6 @@ export class BeschikbaarInkomenLegenda extends Legenda {
 
     for (let j = 0; j < length; j++) {
       let entry = data[offset + j];
-      let getal = entry.getal;
-      totaal += getal;
       ld.grafiek.unshift({
         color: this.colorFunction(j),
         naam: entry.type,
@@ -45,12 +42,12 @@ export class BeschikbaarInkomenLegenda extends Legenda {
       });
     }
     ld.totals = [
-      { naam: "beschikbaar inkomen", bedrag: this.geld(totaal) },
+      { naam: "beschikbaar inkomen", bedrag: this.geld(b.nettoInkomen * this.berekenen.getFactor()) },
       {
         naam: "arbeidsinkomen",
         bedrag: this.geld(b.arbeidsinkomen * this.berekenen.getFactor()),
       },
-      { naam: "inkomstenbelasting box 1", bedrag: this.geld(b.ibBox1) },
+      { naam: "inkomstenbelasting box 1", bedrag: this.geld(b.ibBox1 * this.berekenen.getFactor()) },
     ];
     this.legendaFunction(ld);
   }
