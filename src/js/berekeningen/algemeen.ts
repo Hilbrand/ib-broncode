@@ -19,9 +19,7 @@ import { Berekenen } from "./Berekenen";
 import { BeschikbaarInkomen } from "./BeschikbaarInkomen";
 import { MarginaleDruk } from "./MarginaleDruk";
 import { Belastingdruk } from "./Belastingdruk";
-import { InvoerGegevensType, TabType } from "../../ts/types";
-
-const GRAFIEK_STAP: number = 100;
+import { InvoerGegevensType, TabType, VisualisatieTypeType } from "../../ts/types";
 
 function berekenenMethode(gegevens: InvoerGegevensType): Berekenen {
   let berekenen: Berekenen = null;
@@ -45,11 +43,13 @@ function berekenGrafiekData(gegevens: InvoerGegevensType) {
   let berekenen = berekenenMethode(gegevens);
   let vis = gegevens.visualisatie;
   let series = [];
+  // grafiek stappen: range: < 2000 = 1, < 20.000 = 10, < 200.000 = 100 per stap
+  let stap = Math.max(10, Math.pow(10, Math.ceil(Math.abs(Math.log10(Math.max(1, (vis.van_tot[1] - vis.van_tot[0])) / 20) - 2))));
 
-  for (let i = vis.van_tot[0]; i <= vis.van_tot[1]; i += GRAFIEK_STAP) {
+  for (let i = vis.van_tot[0]; i <= vis.van_tot[1]; i += stap) {
     let id = Math.round(i * berekenen.factor);
 
-    berekenen.verzamelGrafiekSeries(series, berekenen.bereken(i), id);
+    berekenen.verzamelGrafiekSeries(series, berekenen.bereken(i, VisualisatieTypeType.G), id, true);
   }
   return { berekenen: berekenen, series: series };
 }
@@ -63,7 +63,7 @@ function berekenTabelData(gegevens: InvoerGegevensType) {
     let id = Math.round(i * berekenen.factor);
     let idx = (i - vis.van_tot[0]) / vis.stap;
 
-    series[idx] = berekenen.bereken(i);
+    series[idx] = berekenen.bereken(i, VisualisatieTypeType.T);
   }
   return { berekenen: berekenen, series: series };
 }

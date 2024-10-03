@@ -15,6 +15,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
+import { VisualisatieTypeType } from "@/ts/types.ts";
 import { BeschikbaarInkomen } from "@/js/berekeningen/BeschikbaarInkomen";
 import { BelastingdrukLegenda } from "@/js/grafieken/BelastingdrukLegenda";
 
@@ -38,20 +39,20 @@ export class Belastingdruk extends BeschikbaarInkomen {
     return 1;
   }
 
-  bereken(arbeidsInkomen) {
+  bereken(arbeidsInkomen, visualisatie) {
     const beschikbaarInkomen = this.berekenBeschikbaarInkomen(arbeidsInkomen);
     const totaal =
-      beschikbaarInkomen.netto +
-      beschikbaarInkomen.algemeneHeffingsKorting +
-      beschikbaarInkomen.arbeidskorting +
-      beschikbaarInkomen.inkomensafhankelijkeCombinatiekorting;
+      beschikbaarInkomen.nettoLoon +
+      beschikbaarInkomen.ahk +
+      beschikbaarInkomen.ak +
+      beschikbaarInkomen.iack;
     const belastingdruk = Math.max(0, arbeidsInkomen - totaal);
 
     return {
       arbeidsInkomen: arbeidsInkomen,
-      brutoInkomstenBelasting: beschikbaarInkomen.brutoInkomstenBelasting,
-      belastingdruk: belastingdruk,
-      belastingdrukPercentage: 100 * (belastingdruk / arbeidsInkomen),
+      ibBox1: beschikbaarInkomen.ibBox1,
+      belastingdruk: beschikbaarInkomen.nettoLoonBelasting,
+      belastingdrukPercentage: 100 * (beschikbaarInkomen.nettoLoonBelasting / arbeidsInkomen),
     };
   }
 

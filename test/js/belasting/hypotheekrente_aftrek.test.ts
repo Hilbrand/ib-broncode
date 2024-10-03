@@ -21,15 +21,15 @@ const JAAR: string = "2023";
 
 // (400 - 1050) * 83.33
 test("Hypotheek kleine schuld is optelling", () => {
-  expect(ha.hypotheekRenteAftrek(JAAR, 400, 300000)).toEqual(541);
+  expect(ha.hypotheekRenteAftrek(JAAR, 400, 300000)).toEqual(-541);
 });
 
 // 4000 - 1050 = 2950
 test("Hypotheek schuld", () => {
-  expect(ha.hypotheekRenteAftrek(JAAR, 4000, 300000)).toEqual(-2950);
+  expect(ha.hypotheekRenteAftrek(JAAR, 4000, 300000)).toEqual(2950);
 });
 
 // 50.000 - (4200 + (3.000.000 - 1.200.000) * 2.35%)
 test("Hypotheek schuld duur huis", () => {
-  expect(ha.hypotheekRenteAftrek(JAAR, 50000, 3000000)).toEqual(-3500);
+  expect(ha.hypotheekRenteAftrek(JAAR, 50000, 3000000)).toEqual(3500);
 });

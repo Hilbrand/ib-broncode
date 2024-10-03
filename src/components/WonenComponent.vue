@@ -75,7 +75,7 @@ export default {
   computed: {
     renteaftrek() {
       if (this.gegevens.woning_type == "koop") {
-        return -hra.hypotheekRenteAftrek(this.jaar, this.gegevens.rente, this.gegevens.woz);
+        return hra.hypotheekRenteAftrek(this.jaar, this.gegevens.rente, this.gegevens.woz);
       } else {
         return "";
       }

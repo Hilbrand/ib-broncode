@@ -26,6 +26,7 @@ import {
   PersoonType,
   WonenType,
   WoningType,
+  VisualisatieTypeType,
 } from "../../../src/ts/types";
 
 const vis: VisualisatieType = { jaar: "2024", periode: PeriodeType.JAAR };
@@ -51,21 +52,24 @@ test("Bereken beschikbaar inkomen eenverdiener, 2 kinderen, huur", () => {
     visualisatie: vis,
   };
   const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(gegevens);
-  const berekening: BeschikbaarInkomenResultaatType = berekenen.bereken(arbeidsinkomen);
+  const berekening: BeschikbaarInkomenResultaatType = berekenen.bereken(arbeidsinkomen, VisualisatieTypeType.T);
 
   let expected: BeschikbaarInkomenResultaatType = {
-    algemeneHeffingsKorting: 1932,
+    ahk: 1932,
+    ahkMax: 1932,
+    ak: 5114,
     arbeidsinkomen: arbeidsinkomen,
-    arbeidskorting: 5114,
+    iack: 0,
     ibBox1: 17146,
-    beschikbaarInkomen: 43334,
-    brutoInkomstenBelasting: 17146,
-    inkomensafhankelijkeCombinatiekorting: 0,
-    kinderbijslag: 2736,
-    kindgebondenBudget: 4162,
-    netto: 29231,
+    nettoArbeidsinkomen: 29231,
+    nettoInkomen: 43334,
+    nettoLoon: 36277,
+    nettoLoonBelasting: 10100,
+    nvzk: 0,
+    kb: 2736,
+    kgb: 4162,
     wonen: 0,
-    zorgtoeslag: 159,
+    zt: 159,
   };
 
   expect(berekening).toEqual(expected);
@@ -80,21 +84,24 @@ test("Bereken beschikbaar inkomen 10000 eenverdiener, 2 kinderen, koop", () => {
     visualisatie: vis,
   };
   const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(gegevens);
-  const berekening: BeschikbaarInkomenResultaatType = berekenen.bereken(arbeidsinkomen);
+  const berekening: BeschikbaarInkomenResultaatType = berekenen.bereken(arbeidsinkomen, VisualisatieTypeType.T);
 
   let expected: BeschikbaarInkomenResultaatType = {
-    algemeneHeffingsKorting: 3362,
+    ahk: 2872,
+    ahkMax: 3362,
+    ak: 825,
     arbeidsinkomen: arbeidsinkomen,
-    arbeidskorting: 335,
     ibBox1: 0,
-    beschikbaarInkomen: 20441,
-    brutoInkomstenBelasting: 3697,
-    inkomensafhankelijkeCombinatiekorting: 0,
-    kinderbijslag: 2736,
-    kindgebondenBudget: 4872,
-    netto: 6303,
+    kb: 2736,
+    kgb: 4872,
+    nettoArbeidsinkomen: 6303,
+    nettoInkomen: 20441,
+    nettoLoon: 10000,
+    nettoLoonBelasting: 0,
+    iack: 0,
+    nvzk: 490,
     wonen: 0,
-    zorgtoeslag: 2833,
+    zt: 2833,
   };
 
   expect(berekening).toEqual(expected);
@@ -110,21 +117,24 @@ test("Bereken beschikbaar inkomen 30000 eenverdiener, koop", () => {
     visualisatie: vis,
   };
   const berekenen: BeschikbaarInkomen = new BeschikbaarInkomen(gegevens);
-  const berekening: BeschikbaarInkomenResultaatType = berekenen.bereken(arbeidsinkomen);
+  const berekening: BeschikbaarInkomenResultaatType = berekenen.bereken(arbeidsinkomen, VisualisatieTypeType.T);
 
   let expected: BeschikbaarInkomenResultaatType = {
-    algemeneHeffingsKorting: 3362,
+    ahk: 3362,
+    ahkMax: 3362,
+    ak: 5286,
     arbeidsinkomen: arbeidsinkomen,
-    arbeidskorting: 5286,
     ibBox1: 6514,
-    beschikbaarInkomen: 31048,
-    brutoInkomstenBelasting: 11091,
-    inkomensafhankelijkeCombinatiekorting: 0,
-    kinderbijslag: 0,
-    kindgebondenBudget: 0,
-    netto: 18909,
+    kb: 0,
+    kgb: 0,
+    nettoArbeidsinkomen: 18909,
+    nettoInkomen: 31048,
+    nettoLoon: 30000,
+    nettoLoonBelasting: 0,
+    iack: 0,
+    nvzk: 0,
     wonen: 2443,
-    zorgtoeslag: 1048,
+    zt: 1048,
   };
 
   expect(berekening).toEqual(expected);

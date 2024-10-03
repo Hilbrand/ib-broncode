@@ -44,8 +44,8 @@ export class BelastingdrukLegenda extends Legenda {
     ld.totals = [
       {
         naam: "bruto belasting",
-        percentage: this.percentage((100 * b.brutoInkomstenBelasting) / b.arbeidsInkomen),
-        bedrag: this.geld(b.brutoInkomstenBelasting * this.berekenen.getFactor()),
+        percentage: this.percentage((100 * b.ibBox1) / b.arbeidsInkomen),
+        bedrag: this.geld(b.ibBox1 * this.berekenen.getFactor()),
       },
     ];
     this.legendaFunction(ld);

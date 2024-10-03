@@ -22,83 +22,77 @@ const AI_KOLOM: TableBaseColumn = {
   title: "Brutoinkomen",
   key: "arbeidsinkomen",
   align: 'right',
-  width: 100
 };
 
 const BOX1_KOLOM: TableBaseColumn = {
   title: "IB Box 1",
   key: "ibBox1",
   align: 'right',
-  width: 80,
 };
 const EL_KOLOM: TableBaseColumn = {
   title: "Extra loon",
   key: "extraLoon",
   align: 'right',
-  width: 80,
 };
 
 const NL_KOLOM: TableBaseColumn = {
   title: "Nettoloon",
   key: "nettoLoon",
   align: 'right',
-  width: 80,
 }
 
 const NI_KOLOM: TableBaseColumn = {
   title: "Netto inkomen",
-  key: "beschikbaarInkomen",
+  key: "nettoInkomen",
   align: 'right',
-  width: 80,
 }
 
 const AHK_KOLOM: TableBaseColumn = {
   title: "AHK",
-  key: "algemeneHeffingsKorting",
+  key: "ahkMax",
   align: 'right',
-  width: 60,
 };
 
 const AK_KOLOM: TableBaseColumn = {
   title: "AK",
-  key: "arbeidskorting",
+  key: "ak",
   align: 'right',
-  width: 60,
+};
+
+const NVZK_KOLOM: TableBaseColumn = {
+  title: "NVZK",
+  key: "nvzk",
+  align: 'right',
 };
 
 const IACK_KOLOM: TableBaseColumn = {
   title: "IACK",
-  key: "inkomensafhankelijkeCombinatiekorting",
+  key: "iack",
   align: 'right',
-  width: 60,
 };
 
 const ZT_KOLOM: TableBaseColumn = {
   title: "ZT",
-  key: "zorgtoeslag",
+  key: "zt",
   align: 'right',
-  width: 60,
 };
 
 const KGB_KOLOM: TableBaseColumn = {
   title: "KGB",
-  key: "kindgebondenBudget",
+  key: "kgb",
   align: 'right',
-  width: 60,
 };
 
 const HT_KOLOM: TableBaseColumn = {
   title: "HT",
   key: "wonen",
   align: 'right',
-  width: 60,
 };
 
 const MD_KOLOM: TableBaseColumn = {
   title: "Marginale Druk",
   key: "marginaleDruk",
   align: 'right',
-  width: 105,
   render: (_, index) => _.marginaleDruk.toFixed(0) + ' %'
 };
 
@@ -108,27 +102,14 @@ const BI_HUUR_KOLOMMEN: DataTableColumns<BeschikbaarInkomenResultaatType> = [
   AHK_KOLOM,
   AK_KOLOM,
   IACK_KOLOM,
+  NVZK_KOLOM,
   NL_KOLOM,
   ZT_KOLOM,
   KGB_KOLOM,
   HT_KOLOM,
   NI_KOLOM,
 ];
-//Brutoloon 
-// Belastbaar loon IB Box 1 
-//AHK
-// AK
-// IACK
-// NVZK
-// Nettoloon
-// ZT
-// KGB
-// HT
-// KOT
-// KOKO
-// Netto inkomen
-// Marginale druk
-// Gemiddelde druk
+
 const MD_HUUR_KOLOMMEN: DataTableColumns<MarginaleDrukResultaatType> = [
   AI_KOLOM,
   EL_KOLOM,
@@ -136,10 +117,12 @@ const MD_HUUR_KOLOMMEN: DataTableColumns<MarginaleDrukResultaatType> = [
   AHK_KOLOM,
   AK_KOLOM,
   IACK_KOLOM,
+  NVZK_KOLOM,
   NL_KOLOM,
   ZT_KOLOM,
   KGB_KOLOM,
   HT_KOLOM,
+  NI_KOLOM,
   MD_KOLOM
 ];
 
@@ -150,6 +133,8 @@ export function biHuurKolommen() : DataTableColumns<BeschikbaarInkomenResultaatT
 export function mdHuurKolommen() : DataTableColumns<MarginaleDrukResultaatType> {
   return MD_HUUR_KOLOMMEN;
 }
+// TODO koop -> misschien org ibBox1 en dan hypotheek als delta die van ibBox1 wordt afgehaald.
+//              misschien iets met Niet verzilverbaar hypotheek aftrek.
 
 export default {
   biHuurKolommen,

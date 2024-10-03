@@ -104,27 +104,32 @@ export type BerekenInvoerType = {
 export type BerekenResultaatType = {
   arbeidsinkomen: number; // bruto loon
   ibBox1: number;
-  nettoLoon: number; // bruto inkomen - ibBox1 + AHK + AK
-  beschikbaarInkomen?: number; // netto inkomen
-  algemeneHeffingsKorting: number;
-  arbeidskorting: number;
-  inkomensafhankelijkeCombinatiekorting: number;
-  kindgebondenBudget: number;
-  kinderbijslag: number;
+  nettoLoon: number; // bruto inkomen - ibBox1 + AHK + AK + HT
+  nettoInkomen: number; // netto inkomen
+  nettoArbeidsinkomen: number;
+  nettoLoonBelasting: number;
+  ahk: number;
+  ahkMax: number,
+  ak: number;
+  iack: number;
+  nvzk: number; // niet-verzilverde heffingskortingen
+  kb: number;
+  kgb: number;
   wonen: number;
-  zorgtoeslag: number;
+  zt: number;
 };
 
 export type BeschikbaarInkomenResultaatType = {
-  brutoInkomstenBelasting: number;
-  netto: number; // netto inkomen
 } & BerekenResultaatType;
 
 export type MarginaleDrukResultaatType = {
-  nettoInkomensBelasting?: number; // ibBox1
   extraLoon: number;
   marginaleDruk: number;
 } & BerekenResultaatType;
+
+export interface DeltaFunction {
+  delta: (a: number, b: number, c: number, inverse: boolean) => number;
+};
 
 // Navigatie typen
 

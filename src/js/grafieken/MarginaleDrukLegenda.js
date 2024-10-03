@@ -35,27 +35,26 @@ export class MarginaleDrukLegenda extends Legenda {
     let factor = this.berekenen.getFactor();
 
     for (let j = 0; j < length; j++) {
-      let entry = data[offset + j];
-      let getal = entry.getal;
+      const entry = data[offset + j];
+      const getal = entry.getal;
       totaal += getal;
       ld.grafiek.unshift({
         color: this.colorFunction(j),
         naam: entry.type,
         percentage: this.percentage(getal),
-        bedrag: this.geld(b.extraLoon * factor * (getal / 100)),
+        bedrag: this.geld(b.extraLoon * factor * (-getal / 100)),
       });
     }
-    let md = b.extraLoon * factor * 0.01 * totaal;
     ld.totals = [
       {
         naam: "marginale druk",
-        percentage: this.percentage(totaal),
-        bedrag: this.geld(md),
+        percentage: this.percentage(b.marginaleDruk),
+        bedrag: this.geld(b.marginaleDruk * factor * b.extraLoon * 0.01),
       },
       {
         naam: "netto extra loon",
-        percentage: this.percentage(100 - totaal),
-        bedrag: this.geld((b.extraLoon * factor).toFixed() - md),
+        percentage: this.percentage(b.nettoInkomen / b.extraLoon * 100),
+        bedrag: this.geld((b.nettoInkomen * factor)),
       },
       {
         naam: "bruto extra loon",

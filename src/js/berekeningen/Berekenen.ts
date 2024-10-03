@@ -15,12 +15,12 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
-import functies from "../../ts/functies.js";
+import functies from "../../ts/functies";
+import { BerekenInvoerType, BerekenResultaatType, InvoerGegevensType, PersoonType, VisualisatieType, VisualisatieTypeType, WonenType } from "../../ts/types";
 import hra from "../belasting/hypotheekrente_aftrek.js";
-import iack from "../belasting/inkomensafhankelijke_combinatiekorting";
+import iack from "../belasting/inkomensafhankelijkecombinatiekorting.js";
 import kbs from "../belasting/kinderbijslag";
 import kgb from "../belasting/kindgebonden_budget";
-import { BerekenInvoerType, BerekenResultaatType, InvoerGegevensType, PersoonType, VisualisatieType, WonenType } from "../../ts/types.js";
 import { Legenda } from "../grafieken/Legenda";
 
 export class Berekenen {
@@ -74,7 +74,6 @@ export class Berekenen {
       iacbInkomen: iack.bepaalLaagsteArbeidsInkomenAnderen(personen),
       kinderbijslag: kbs.kinderbijslag(jaar, personen),
       maxKindgebondenBudget: kgb.maxKindgebondenBudget(jaar, personen, toeslagenpartner),
-      //nk: inkomen.nettoKortingenInkomens(personen),
       huren: huren,
       eigenwoningforfait: huren ? 0 : hra.eigenwoningforfait(jaar, wonen.woz),
       hypotheekRenteAftrek: huren ? 0 : hra.hypotheekRenteAftrek(jaar, wonen.rente, wonen.woz),
@@ -83,14 +82,21 @@ export class Berekenen {
 
   /**
    *
-   * @param arbeidsInkomen jaar arbeidsinkomen
+   * @param arbeidsInkomen arbeidsinkomen
+   * @param visualisatie
    */
-  bereken(arbeidsInkomen: number): BerekenResultaatType {
+  bereken(arbeidsInkomen: number, visualisatie: VisualisatieTypeType): BerekenResultaatType {
     return null;
   }
 
   afronden(getal: number, factor: number): number {
     return +(getal * factor).toFixed(2);
+  }
+
+  afrondenNegIsNul(getal: number, factor: number, negIsNull: boolean): number {
+    const afgerond = this.afronden(getal, factor);
+    
+    return negIsNull ? functies.negatiefIsNul(afgerond) : afgerond;
   }
 
   /**
@@ -100,5 +106,5 @@ export class Berekenen {
    * @param {*} gegevens gegevens die moeten worden opgeslagen
    * @param {number} id id waaronder deze gegevens in het alles object moeten worden opgeslagen
    */
-  verzamelGrafiekSeries(alles, gegevens, id: number) {}
+  verzamelGrafiekSeries(alles, gegevens, id: number, negIsNull: boolean) {}
 }

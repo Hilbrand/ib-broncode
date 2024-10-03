@@ -42,7 +42,7 @@ export class BeschikbaarInkomenLegenda extends Legenda {
       });
     }
     ld.totals = [
-      { naam: "beschikbaar inkomen", bedrag: this.geld(b.beschikbaarInkomen * this.berekenen.getFactor()) },
+      { naam: "beschikbaar inkomen", bedrag: this.geld(b.nettoInkomen * this.berekenen.getFactor()) },
       {
         naam: "arbeidsinkomen",
         bedrag: this.geld(b.arbeidsinkomen * this.berekenen.getFactor()),

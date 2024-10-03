@@ -29,40 +29,34 @@
 import { LeeftijdType, PersoonType } from "../../ts/types";
 import data from "./belasting_data";
 
-function algemeneHeffingsKorting(jaar: string, toetsingsinkomen: number, maxBelasting: number, aow: boolean): number {
+function algemeneHeffingsKorting(jaar: string, toetsingsinkomen: number, aow: boolean): number {
   const ahkt = aow ? data.AHK[jaar].AOW : data.AHK[jaar].V;
 
   for (let ahk of ahkt) {
     if (toetsingsinkomen < ahk.inkomen.tot) {
       const algemeneHeffingsKorting = ahk.maximaal - (toetsingsinkomen - ahk.afbouwpunt) * ahk.afbouwfactor;
 
-      return Math.round(Math.min(maxBelasting, algemeneHeffingsKorting));
+      return Math.round(algemeneHeffingsKorting);
     }
   }
   return 0;
 }
 
-function arbeidskorting(jaar: string, arbeidsinkomen: number, maxArbeidsinkomen: number, aow: boolean): number {
+function arbeidskorting(jaar: string, arbeidsinkomen: number, aow: boolean): number {
   const akt = aow ? data.AK[jaar].AOW : data.AK[jaar].V;
 
   for (let ak of akt) {
     if (arbeidsinkomen < ak.inkomen.tot) {
       let arbeidskorting = ak.grens + (arbeidsinkomen - ak.afbouwpunt) * ak.afbouwfactor;
 
-      return Math.round(Math.min(maxArbeidsinkomen, arbeidskorting));
+      return Math.round(arbeidskorting);
     }
   }
   return 0;
 }
 
-function maxArbeidsKorting(jaar: string, toetsingsInkomen: number, maxBelasting: number, aow: boolean): number {
-  return (
-    inkomstenBelasting(jaar, toetsingsInkomen, aow) - algemeneHeffingsKorting(jaar, toetsingsInkomen, maxBelasting, aow)
-  );
-}
-
 function toetsingsinkomen(arbeidsinkomen: number, hypotheekRenteAftrek: number): number {
-  return Math.max(0, arbeidsinkomen + (hypotheekRenteAftrek || 0));
+  return Math.max(0, arbeidsinkomen - (hypotheekRenteAftrek || 0));
 }
 
 function toeslagenToetsInkomen(arbeidsinkomen: number, personen: PersoonType[]): number {
@@ -107,7 +101,7 @@ function nettoKortingenInkomens(jaar: string, personen: PersoonType[]) {
         bruto: inkomen,
         netto: netto(jaar, inkomen, aow),
         arbeidskorting: 0, //arbeidskorting(jaar, inkomen, aow),
-        algemeneHeffingsKorting: algemeneHeffingsKorting(jaar, inkomen, tib, aow),
+        algemeneHeffingsKorting: algemeneHeffingsKorting(jaar, inkomen, aow),
       });
     }
   });
@@ -118,7 +112,6 @@ export default {
   toetsingsinkomen,
   toeslagenToetsInkomen,
   inkomstenBelasting,
-  maxArbeidsKorting,
   arbeidskorting,
   algemeneHeffingsKorting,
   netto,

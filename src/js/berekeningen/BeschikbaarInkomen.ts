@@ -18,13 +18,14 @@
 import functies from "../../ts/functies";
 import inkomen from "../belasting/inkomen";
 import ht from "../belasting//huurtoeslag";
-import iack from "../belasting/inkomensafhankelijke_combinatiekorting";
+import iack from "../belasting/inkomensafhankelijkecombinatiekorting";
 import kgb from "../belasting/kindgebonden_budget";
 import zt from "../belasting/zorgtoeslag";
 import { Berekenen } from "../berekeningen/Berekenen";
 import { BeschikbaarInkomenLegenda } from "../grafieken/BeschikbaarInkomenLegenda";
-import { BeschikbaarInkomenResultaatType, InvoerGegevensType, LeeftijdType } from "../../ts/types";
+import { BeschikbaarInkomenResultaatType, InvoerGegevensType, LeeftijdType , VisualisatieTypeType} from "../../ts/types";
 import { Legenda } from "../grafieken/Legenda";
+import zorgtoeslag from "../belasting/zorgtoeslag";
 
 export class BeschikbaarInkomen extends Berekenen {
   beschikbaarInkomen: number;
@@ -43,45 +44,53 @@ export class BeschikbaarInkomen extends Berekenen {
     return [0, Math.round(yDomain[1] / (1000 / this.factor))];
   }
 
-  bereken(arbeidsInkomen: number): BeschikbaarInkomenResultaatType {
-    return this.berekenBeschikbaarInkomen(arbeidsInkomen);
+  bereken(arbeidsInkomen: number, visualisatie: VisualisatieTypeType): BeschikbaarInkomenResultaatType {
+    return this.berekenBeschikbaarInkomen(arbeidsInkomen, visualisatie);
   }
 
-  berekenBeschikbaarInkomen(arbeidsinkomen): BeschikbaarInkomenResultaatType {
+  berekenBeschikbaarInkomen(arbeidsinkomen, visualisatie: VisualisatieTypeType): BeschikbaarInkomenResultaatType {
     let aow = this.personen[0].leeftijd == LeeftijdType.AOW;
     let toetsingsInkomen = inkomen.toetsingsinkomen(arbeidsinkomen, this.algemeneGegevens.hypotheekRenteAftrek);
-    let arbeidsinkomenBelasting = inkomen.inkomstenBelasting(this.vis.jaar, arbeidsinkomen, aow);
-    let toetsingsinkomenBelasting =
-      arbeidsinkomenBelasting -
-      inkomen.inkomstenBelasting(this.vis.jaar, this.algemeneGegevens.hypotheekRenteAftrek, aow);
+    // Berekende belasting als hypotheek rente van inkomen is afgetrokken.
+    let ibBox1 = inkomen.inkomstenBelasting(this.vis.jaar, toetsingsInkomen, aow);
+    // Belasting die betaald zou zijn als geen hypotheek aftrek
+    let ibBox1Max = Math.max(ibBox1, inkomen.inkomstenBelasting(this.vis.jaar, arbeidsinkomen, aow));
+
+    // Arbeidskorting gaat over alleen arbeidsinkomen
+    // Maar kan niet hoger zijn dan maximum te betalen belasting.
+    let arbeidskortingMax = inkomen.arbeidskorting(this.vis.jaar, arbeidsinkomen, aow);
+    let arbeidskorting = Math.min(ibBox1Max, arbeidskortingMax);
+    let maxBelastingNaAK = functies.negatiefIsNul(ibBox1Max - arbeidskorting);
+
+    // Inkomensafhankelijke combinatie korting
+    let inACKMax = this.algemeneGegevens.kinderbijslag > 0
+          ? iack.inkomensafhankelijkeCombinatiekorting(this.vis.jaar, arbeidsinkomen, this.algemeneGegevens.iacbInkomen,
+                    this.algemeneGegevens.aow)
+          : 0;
+    let inACK = Math.min(maxBelastingNaAK, inACKMax);
+    let maxBelastingNaIACK = functies.negatiefIsNul(maxBelastingNaAK - inACK);
 
     // Algemene heffingskorting gaat over arbeidsinkomen + woning inkomen.
     // Maar kan niet hoger zijn dan maximum te betalen belasting.
-    let algemeneHeffingsKorting = inkomen.algemeneHeffingsKorting(
-      this.vis.jaar,
-      toetsingsInkomen,
-      toetsingsinkomenBelasting,
-      aow
-    );
+    let algemeneHeffingsKortingMax = inkomen.algemeneHeffingsKorting(this.vis.jaar, toetsingsInkomen, aow);
+    let algemeneHeffingsKorting = Math.min(maxBelastingNaIACK, algemeneHeffingsKortingMax);
+
     // Maximum belasting na aftrek van algemene heffingskorting.
-    let maxBelastingNaAHK = functies.negatiefIsNul(arbeidsinkomenBelasting - algemeneHeffingsKorting);
-    // Arbeidskorting gaat over alleen arbeidsinkomen
-    // Maar kan niet hoger zijn dan maximum te betalen belasting.
-    let arbeidskorting = inkomen.arbeidskorting(this.vis.jaar, arbeidsinkomen, maxBelastingNaAHK, aow);
-    // Inkomen als hypotheek rente ervan afgetrokken is.
-    let hypotheekInkomen = inkomen.toetsingsinkomen(arbeidsinkomen, this.algemeneGegevens.hypotheekRenteAftrek);
-    // Berekende belasting als hypotheek rente van inkomen is afgetrokken.
-    // Dit is maximum te betalen belasting.
-    let hypotheekInkomenBelasting = inkomen.inkomstenBelasting(this.vis.jaar, hypotheekInkomen, aow);
+    // let maxBelastingNaAHK = functies.negatiefIsNul(ibBox1Max - algemeneHeffingsKorting);
+    // Maximum te betalen belasting is arbeidsinkomen belasting minus AHK en AK.
+    let maxBelastingNaAHK = functies.negatiefIsNul(maxBelastingNaIACK - algemeneHeffingsKorting);
+    // NVZK: niet-verzilverde heffingskortingen
+    let nvzk = algemeneHeffingsKortingMax - algemeneHeffingsKorting;
+
     // Potentieel aftrekbare hypotheekrente is verschil tussen arbeidsinkomen belasting
     // en belasting van inkomen met hypotheekrente verrekend in het inkomen.
-    let hypotheekRenteAftrek = arbeidsinkomenBelasting - hypotheekInkomenBelasting;
-    // Maximum te betalen belasting is arbeidsinkomen belasting minus AHK en AK.
-    let maxBelasting = maxBelastingNaAHK - arbeidskorting;
-    // Maximum hypotheek rente aftrek kan niet hoger zijn dan te betalen belasting
-    let maxHypotheekRenteAftrek = Math.min(maxBelasting, hypotheekRenteAftrek);
-    // Netto inkomen is arbeidsinkomen minus arbeidsinkomenbelasting.
-    let nettoArbeidsinkomen = arbeidsinkomen - arbeidsinkomenBelasting;
+    let brutoHypotheekRenteAftrek = functies.negatiefIsNul(ibBox1Max - ibBox1);
+
+    let maxHypotheekRenteAftrek = Math.min(maxBelastingNaAHK, brutoHypotheekRenteAftrek);
+    let maxBelasting = functies.negatiefIsNul(maxBelastingNaAHK - maxHypotheekRenteAftrek);
+
+    // Arbeidsloon - ibBox1 + kortingen + hypotheekrenteaftrek
+    let nettoLoon = arbeidsinkomen - maxBelasting;
 
     // Inkomen berekening inclusief fiscale partners.
     let toeslagenToetsInkomen = inkomen.toeslagenToetsInkomen(arbeidsinkomen, this.personen);
@@ -91,95 +100,97 @@ export class BeschikbaarInkomen extends Berekenen {
       this.algemeneGegevens.maxKindgebondenBudget,
       this.algemeneGegevens.toeslagenpartner
     );
+    let zorgtoeslag = zt.zorgtoeslag(this.vis.jaar, toeslagenToetsInkomen, this.algemeneGegevens.toeslagenpartner);
+    let wonen = this.algemeneGegevens.huren
+    ? ht.huurtoeslag(
+        this.vis.jaar,
+        toeslagenToetsInkomen,
+        this.wonen.huur,
+        this.personen.length,
+        this.algemeneGegevens.aow
+      )
+    : maxHypotheekRenteAftrek;
+
+    // / Maximum hypotheek rente aftrek kan niet hoger zijn dan te betalen belasting
+    // let maxHypotheekRenteAftrek = Math.min(maxBelasting, brutoHypotheekRenteAftrek);
+    // Netto inkomen is arbeidsinkomen minus arbeidsinkomen belasting.
+    let nettoArbeidsinkomen = arbeidsinkomen - ibBox1Max;
+
+    // Maximum hypotheek rente aftrek kan niet hoger zijn dan te betalen belasting
+    // let maxHypotheekRenteAftrek = Math.min(maxBelasting, brutoHypotheekRenteAftrek);
+    // Netto inkomen is arbeidsinkomen minus arbeidsinkomen belasting.
+    let nettoInkomen = nettoLoon
+        + this.algemeneGegevens.kinderbijslag
+        + kindgebondenBudget
+        + zorgtoeslag;
+        + wonen;
 
     let beschikbaarInkomen: BeschikbaarInkomenResultaatType = {
       arbeidsinkomen: arbeidsinkomen,
-      brutoInkomstenBelasting: toetsingsinkomenBelasting,
-      nettoLoon: nettoArbeidsinkomen + algemeneHeffingsKorting + arbeidskorting,
-      netto: nettoArbeidsinkomen,
-      ibBox1: hypotheekInkomenBelasting,
-      algemeneHeffingsKorting: algemeneHeffingsKorting,
-      arbeidskorting: arbeidskorting,
-      zorgtoeslag: zt.zorgtoeslag(this.vis.jaar, toeslagenToetsInkomen, this.algemeneGegevens.toeslagenpartner),
-      wonen: this.algemeneGegevens.huren
-        ? ht.huurtoeslag(
-            this.vis.jaar,
-            toeslagenToetsInkomen,
-            this.wonen.huur,
-            this.personen.length,
-            this.algemeneGegevens.aow
-          )
-        : maxHypotheekRenteAftrek,
-      kinderbijslag: this.algemeneGegevens.kinderbijslag,
-      kindgebondenBudget: kindgebondenBudget,
-      inkomensafhankelijkeCombinatiekorting:
-        this.algemeneGegevens.kinderbijslag > 0
-          ? iack.inkomensafhankelijkeCombinatiekorting(
-              this.vis.jaar,
-              arbeidsinkomen,
-              this.algemeneGegevens.iacbInkomen,
-              this.algemeneGegevens.aow
-            )
-          : 0,
+      nettoLoonBelasting: maxBelasting,
+      nettoArbeidsinkomen: nettoArbeidsinkomen,
+      nettoInkomen: nettoInkomen, // som van alles
+      nettoLoon: nettoLoon,
+      ibBox1: ibBox1,
+      ak: arbeidskorting,
+      iack: inACK,
+      ahk: algemeneHeffingsKorting,
+      ahkMax: algemeneHeffingsKortingMax,
+      nvzk: nvzk,
+      zt: zorgtoeslag,
+      wonen: wonen,
+      kb: this.algemeneGegevens.kinderbijslag,
+      kgb: kindgebondenBudget,
     };
 
-    beschikbaarInkomen.beschikbaarInkomen =
-      beschikbaarInkomen.netto +
-      beschikbaarInkomen.algemeneHeffingsKorting +
-      beschikbaarInkomen.arbeidskorting +
-      beschikbaarInkomen.zorgtoeslag +
-      beschikbaarInkomen.wonen +
-      // beschikbaarInkomen.kinderbijslag +
-      beschikbaarInkomen.kindgebondenBudget +
-      beschikbaarInkomen.inkomensafhankelijkeCombinatiekorting;
     return beschikbaarInkomen;
   }
 
-  verzamelGrafiekSeries(alles, beschikbaarInkomen, id) {
+  verzamelGrafiekSeries(alles, beschikbaarInkomen, id: number, negIsNull: boolean) {
     let factor = this.getFactor();
-    if (beschikbaarInkomen.netto !== undefined) {
+    if (beschikbaarInkomen.nettoLoon !== undefined) {
       alles.push({
         id: id,
-        type: "netto",
-        getal: this.afronden(beschikbaarInkomen.netto, factor),
+        type: "netto", // netto loon
+        getal: this.afronden(beschikbaarInkomen.nettoArbeidsinkomen, factor),
       });
     }
     alles.push(
       {
         id: id,
         type: "alg. heffingskorting",
-        getal: this.afronden(beschikbaarInkomen.algemeneHeffingsKorting, factor),
+        getal: this.afronden(beschikbaarInkomen.ahk, factor),
       },
       {
         id: id,
         type: "arbeidskorting",
-        getal: this.afronden(beschikbaarInkomen.arbeidskorting, factor),
-      },
-      {
-        id: id,
-        type: this.algemeneGegevens.huren ? "huurtoeslag" : "hypotheekrenteaftrek",
-        getal: this.afronden(beschikbaarInkomen.wonen, factor),
-      },
-      {
-        id: id,
-        type: "zorgtoeslag",
-        getal: this.afronden(beschikbaarInkomen.zorgtoeslag, factor),
-      },
-      {
-        id: id,
-        type: "kinderbijslag",
-        getal: this.afronden(beschikbaarInkomen.kinderbijslag, factor),
-      },
-      {
-        id: id,
-        type: "kindgebonden budget",
-        getal: this.afronden(beschikbaarInkomen.kindgebondenBudget, factor),
+        getal: this.afronden(beschikbaarInkomen.ak, factor)
       },
       {
         id: id,
         type: "inkomenafh. combi krt",
-        getal: this.afronden(beschikbaarInkomen.inkomensafhankelijkeCombinatiekorting, factor),
-      }
+        getal: this.afronden(beschikbaarInkomen.iack, factor),
+      },
+      {
+        id: id,
+        type: this.algemeneGegevens.huren ? "huurtoeslag" : "hypotheekrenteaftrek",
+        getal: this.afrondenNegIsNul(beschikbaarInkomen.wonen, factor, !this.algemeneGegevens.huren && negIsNull),
+      },
+      {
+        id: id,
+        type: "zorgtoeslag",
+        getal: this.afronden(beschikbaarInkomen.zt, factor),
+      },
+      {
+        id: id,
+        type: "kinderbijslag",
+        getal: this.afronden(beschikbaarInkomen.kb, factor),
+      },
+      {
+        id: id,
+        type: "kindgebonden budget",
+        getal: this.afronden(beschikbaarInkomen.kgb, factor),
+      },
     );
   }
 }
