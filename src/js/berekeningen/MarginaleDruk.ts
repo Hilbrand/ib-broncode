@@ -73,13 +73,17 @@ export class MarginaleDruk extends Berekenen {
     const ΔextraLoon = berekening2.arbeidsinkomen - berekening1.arbeidsinkomen;
     const ΔibBox1 = this.mdAbsolute(berekening1.ibBox1, berekening2.ibBox1, false);
 
+    const ΔhraMax = this.mdAbsolute(berekening1.hraMax, berekening2.hraMax, false);
     const Δak = this.mdAbsolute(berekening1.ak, berekening2.ak, false);
+    const ΔakMax = this.mdAbsolute(berekening1.akMax, berekening2.akMax, false);
     const Δiack = this.mdAbsolute(berekening1.iack, berekening2.iack, false);
+    const ΔiackMax = this.mdAbsolute(berekening1.iackMax, berekening2.iackMax, false);
+
     // Als tabel toon dan
     const Δahk = this.mdAbsolute(berekening1.ahk, berekening2.ahk, false);
     const ΔahkMax = this.mdAbsolute(berekening1.ahkMax, berekening2.ahkMax, false);
 
-    const Δnvzk = this.mdAbsolute(berekening1.nvzk, berekening2.nvzk, true)
+    const Δnvzk = this.mdAbsolute(berekening1.nvzk, berekening2.nvzk, false)
     // als grafiek dan 
     const maxLoonBelasting = grafiek
       ? -functies.negatiefIsNul(ΔibBox1 - 
@@ -109,11 +113,14 @@ export class MarginaleDruk extends Berekenen {
       nettoLoon: presentatieFunctie(ΔnettoLoon, ΔextraLoon, grafiek),
       marginaleDruk: this.percentage(md, ΔextraLoon, false),
   
+      hraMax: presentatieFunctie(ΔhraMax, ΔextraLoon, grafiek),
       ak: presentatieFunctie(Δak, ΔextraLoon, grafiek),
+      akMax: presentatieFunctie(ΔakMax, ΔextraLoon, grafiek),
       iack: presentatieFunctie(Δiack, ΔextraLoon, grafiek),
+      iackMax: presentatieFunctie(ΔiackMax, ΔextraLoon, grafiek),
       ahk: presentatieFunctie(tabel ? Δahk : Δahk - Δnvzk, ΔextraLoon, grafiek),
-      nvzk: presentatieFunctie(Δnvzk, ΔextraLoon, grafiek),
       ahkMax: presentatieFunctie(ΔahkMax, ΔextraLoon, grafiek),
+      nvzk: presentatieFunctie(Δnvzk, ΔextraLoon, grafiek),
 
       zt: presentatieFunctie(Δzt, ΔextraLoon, grafiek),
       wonen: presentatieFunctie(Δwonen, ΔextraLoon, grafiek),

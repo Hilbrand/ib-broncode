@@ -49,18 +49,28 @@ export class BeschikbaarInkomen extends Berekenen {
   }
 
   berekenBeschikbaarInkomen(arbeidsinkomen, visualisatie: VisualisatieTypeType): BeschikbaarInkomenResultaatType {
-    let aow = this.personen[0].leeftijd == LeeftijdType.AOW;
-    let toetsingsInkomen = inkomen.toetsingsinkomen(arbeidsinkomen, this.algemeneGegevens.hypotheekRenteAftrek);
+    const aow = this.personen[0].leeftijd == LeeftijdType.AOW;
+    // Hypotheek rente wordt afgetrokken van arbeidsinkomen: toestingsinkomen zal dus lager worden dan arbeidsinkomen.
+    const toetsingsInkomen = inkomen.toetsingsinkomen(arbeidsinkomen, this.algemeneGegevens.hypotheekRenteAftrek);
     // Berekende belasting als hypotheek rente van inkomen is afgetrokken.
-    let ibBox1 = inkomen.inkomstenBelasting(this.vis.jaar, toetsingsInkomen, aow);
+    const ibBox1 = inkomen.inkomstenBelasting(this.vis.jaar, toetsingsInkomen, aow);
+    const ibBox1Arbeid = inkomen.inkomstenBelasting(this.vis.jaar, arbeidsinkomen, aow);
     // Belasting die betaald zou zijn als geen hypotheek aftrek
-    let ibBox1Max = Math.max(ibBox1, inkomen.inkomstenBelasting(this.vis.jaar, arbeidsinkomen, aow));
+    const ibBox1Max = Math.min(ibBox1, ibBox1Arbeid);
 
+    // Potentieel aftrekbare hypotheekrente is verschil tussen arbeidsinkomen belasting
+    // en belasting van inkomen met hypotheekrente verrekend in het inkomen.
+    let brutoHypotheekRenteAftrek = functies.negatiefIsNul(ibBox1Arbeid - ibBox1);
+
+    let maxHypotheekRenteAftrek = brutoHypotheekRenteAftrek;//Math.min(ibBox1Max, brutoHypotheekRenteAftrek);
+    let ibBox1NaHRA = ibBox1Max - maxHypotheekRenteAftrek;
+
+    let hraMax = ibBox1Arbeid - ibBox1;
     // Arbeidskorting gaat over alleen arbeidsinkomen
     // Maar kan niet hoger zijn dan maximum te betalen belasting.
     let arbeidskortingMax = inkomen.arbeidskorting(this.vis.jaar, arbeidsinkomen, aow);
-    let arbeidskorting = Math.min(ibBox1Max, arbeidskortingMax);
-    let maxBelastingNaAK = functies.negatiefIsNul(ibBox1Max - arbeidskorting);
+    let arbeidskorting = Math.min(ibBox1, arbeidskortingMax);
+    let maxBelastingNaAK = functies.negatiefIsNul(ibBox1 - arbeidskorting);
 
     // Inkomensafhankelijke combinatie korting
     let inACKMax = this.algemeneGegevens.kinderbijslag > 0
@@ -80,13 +90,10 @@ export class BeschikbaarInkomen extends Berekenen {
     // Maximum te betalen belasting is arbeidsinkomen belasting minus AHK en AK.
     let maxBelastingNaAHK = functies.negatiefIsNul(maxBelastingNaIACK - algemeneHeffingsKorting);
     // NVZK: niet-verzilverde heffingskortingen
-    let nvzk = algemeneHeffingsKortingMax - algemeneHeffingsKorting;
+    let nvzk = (arbeidskortingMax - arbeidskorting)
+             + (algemeneHeffingsKortingMax - algemeneHeffingsKorting)
+             + (inACKMax -inACK);
 
-    // Potentieel aftrekbare hypotheekrente is verschil tussen arbeidsinkomen belasting
-    // en belasting van inkomen met hypotheekrente verrekend in het inkomen.
-    let brutoHypotheekRenteAftrek = functies.negatiefIsNul(ibBox1Max - ibBox1);
-
-    let maxHypotheekRenteAftrek = Math.min(maxBelastingNaAHK, brutoHypotheekRenteAftrek);
     let maxBelasting = functies.negatiefIsNul(maxBelastingNaAHK - maxHypotheekRenteAftrek);
 
     // Arbeidsloon - ibBox1 + kortingen + hypotheekrenteaftrek
@@ -114,7 +121,9 @@ export class BeschikbaarInkomen extends Berekenen {
     // / Maximum hypotheek rente aftrek kan niet hoger zijn dan te betalen belasting
     // let maxHypotheekRenteAftrek = Math.min(maxBelasting, brutoHypotheekRenteAftrek);
     // Netto inkomen is arbeidsinkomen minus arbeidsinkomen belasting.
-    let nettoArbeidsinkomen = arbeidsinkomen - ibBox1Max;
+    let nettoArbeidsinkomen = arbeidsinkomen - 
+      (arbeidskorting + algemeneHeffingsKorting + inACK  + maxHypotheekRenteAftrek + maxBelasting)
+      //  - maxBelasting;// ibBox1Arbeid - (ibBox1Arbeid - ibBox1);//ibBox1Max;
 
     // Maximum hypotheek rente aftrek kan niet hoger zijn dan te betalen belasting
     // let maxHypotheekRenteAftrek = Math.min(maxBelasting, brutoHypotheekRenteAftrek);
@@ -131,14 +140,17 @@ export class BeschikbaarInkomen extends Berekenen {
       nettoArbeidsinkomen: nettoArbeidsinkomen,
       nettoInkomen: nettoInkomen, // som van alles
       nettoLoon: nettoLoon,
-      ibBox1: ibBox1,
+      ibBox1: ibBox1Arbeid,
       ak: arbeidskorting,
+      akMax: arbeidskortingMax,
       iack: inACK,
+      iackMax: inACKMax,
       ahk: algemeneHeffingsKorting,
       ahkMax: algemeneHeffingsKortingMax,
       nvzk: nvzk,
       zt: zorgtoeslag,
       wonen: wonen,
+      hraMax:hraMax,
       kb: this.algemeneGegevens.kinderbijslag,
       kgb: kindgebondenBudget,
     };

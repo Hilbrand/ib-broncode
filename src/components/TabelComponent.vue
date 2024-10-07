@@ -1,30 +1,32 @@
 <template>
   <n-button @click="downloadCsv">Exporteer CSV</n-button>
   <n-divider />
-  <div style="overflow-x:scroll">
-  <n-data-table
-    ref="tableRef"
-    :columns="kolommen"
-    :data="data"
-    :pagination="pagination"
-    :bordered="false"
-    :render-cell="renderCell"
-    row-class-name="rowClassName"
-  />
+  <div style="overflow-x: scroll">
+    <n-data-table
+      ref="tableRef"
+      :columns="kolommen"
+      :data="data"
+      :pagination="pagination"
+      :bordered="false"
+      :render-cell="renderCell"
+    />
   </div>
 </template>
 
 <style>
-.rowClassName {
-  white-space: nowrap
+.n-data-table-td {
+  white-space: nowrap;
+}
+.n-data-table-th__title {
+  white-space: nowrap !important;
 }
 </style>
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
 import type { DataTableColumns, DataTableInst } from "naive-ui";
-import { type InvoerGegevensType, TabType } from "../ts/types";
-import { mdHuurKolommen, biHuurKolommen } from "../js/tabellen/tabel_kolommen";
+import { type InvoerGegevensType, WoningType, TabType } from "../ts/types";
+import { mdHuurKolommen, mdKoopKolommen, biHuurKolommen, biKoopKolommen } from "../js/tabellen/tabel_kolommen";
 import algemeen from "../js/berekeningen/algemeen";
 
 const props = defineProps<{
@@ -37,8 +39,14 @@ const data = ref();
 
 const downloadCsv = () => tableRef.value?.downloadCsv({ keepOriginalData: true, fileName: "data-table" });
 
-const kolommen = computed<DataTableColumns>(() =>
-  props.gegevens.tab === TabType.BI ? biHuurKolommen() : mdHuurKolommen()
+const kolommen = computed<DataTableColumns>(() => {
+  const huur = props.gegevens.wonen.woning_type === WoningType.HUUR;
+  if (props.gegevens.tab === TabType.BI) {
+    return huur ? biHuurKolommen() : biKoopKolommen();
+  } else {
+    return huur ? mdHuurKolommen() : mdKoopKolommen();
+  }
+}
 );
 
 let timer: NodeJS.Timeout =  null;

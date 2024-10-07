@@ -111,11 +111,14 @@ export type BerekenResultaatType = {
   ahk: number;
   ahkMax: number,
   ak: number;
+  akMax?: number;
   iack: number;
+  iackMax?: number;
   nvzk: number; // niet-verzilverde heffingskortingen
   kb: number;
   kgb: number;
   wonen: number;
+  hraMax?: number;
   zt: number;
 };
 

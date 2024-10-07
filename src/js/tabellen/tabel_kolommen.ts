@@ -55,7 +55,13 @@ const AHK_KOLOM: TableBaseColumn = {
 
 const AK_KOLOM: TableBaseColumn = {
   title: "AK",
-  key: "ak",
+  key: "akMax",
+  align: 'right',
+};
+
+const IACK_KOLOM: TableBaseColumn = {
+  title: "IACK",
+  key: "iackMax",
   align: 'right',
 };
 
@@ -65,9 +71,9 @@ const NVZK_KOLOM: TableBaseColumn = {
   align: 'right',
 };
 
-const IACK_KOLOM: TableBaseColumn = {
-  title: "IACK",
-  key: "iack",
+const HRA_KOLOM: TableBaseColumn = {
+  title: "HRA",
+  key: "hraMax",
   align: 'right',
 };
 
@@ -110,6 +116,20 @@ const BI_HUUR_KOLOMMEN: DataTableColumns<BeschikbaarInkomenResultaatType> = [
   NI_KOLOM,
 ];
 
+const BI_KOOP_KOLOMMEN: DataTableColumns<BeschikbaarInkomenResultaatType> = [
+  AI_KOLOM,
+  BOX1_KOLOM,
+  HRA_KOLOM,
+  AHK_KOLOM,
+  AK_KOLOM,
+  IACK_KOLOM,
+  NVZK_KOLOM,
+  NL_KOLOM,
+  ZT_KOLOM,
+  KGB_KOLOM,
+  NI_KOLOM,
+];
+
 const MD_HUUR_KOLOMMEN: DataTableColumns<MarginaleDrukResultaatType> = [
   AI_KOLOM,
   EL_KOLOM,
@@ -126,6 +146,22 @@ const MD_HUUR_KOLOMMEN: DataTableColumns<MarginaleDrukResultaatType> = [
   MD_KOLOM
 ];
 
+const MD_KOOP_KOLOMMEN: DataTableColumns<MarginaleDrukResultaatType> = [
+  AI_KOLOM,
+  EL_KOLOM,
+  BOX1_KOLOM,
+  HRA_KOLOM,
+  AHK_KOLOM,
+  AK_KOLOM,
+  IACK_KOLOM,
+  NVZK_KOLOM,
+  NL_KOLOM,
+  ZT_KOLOM,
+  KGB_KOLOM,
+  NI_KOLOM,
+  MD_KOLOM
+];
+
 export function biHuurKolommen() : DataTableColumns<BeschikbaarInkomenResultaatType> {
   return BI_HUUR_KOLOMMEN;
 }
@@ -133,10 +169,18 @@ export function biHuurKolommen() : DataTableColumns<BeschikbaarInkomenResultaatT
 export function mdHuurKolommen() : DataTableColumns<MarginaleDrukResultaatType> {
   return MD_HUUR_KOLOMMEN;
 }
-// TODO koop -> misschien org ibBox1 en dan hypotheek als delta die van ibBox1 wordt afgehaald.
-//              misschien iets met Niet verzilverbaar hypotheek aftrek.
+
+export function biKoopKolommen() : DataTableColumns<BeschikbaarInkomenResultaatType> {
+  return BI_KOOP_KOLOMMEN;
+}
+
+export function mdKoopKolommen() : DataTableColumns<MarginaleDrukResultaatType> {
+  return MD_KOOP_KOLOMMEN;
+}
 
 export default {
   biHuurKolommen,
+  biKoopKolommen,
   mdHuurKolommen,
+  mdKoopKolommen,
 }
