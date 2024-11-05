@@ -72,7 +72,7 @@ export function maakSamenvatting(gegevens: InvoerGegevensType): string {
     tekst += ", maandelijkse huur &euro; " + gegevens.wonen.huur;
   } else if (gegevens.wonen.woning_type == WoningType.KOOP) {
     tekst +=
-      ", maandelijkse hypotheek rente &euro; " +
+      ", jaarlijkse hypotheek rente &euro; " +
       gegevens.wonen.rente +
       " voor een huis met WOZ-waarde: &euro; " +
       gegevens.wonen.woz;
