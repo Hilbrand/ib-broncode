@@ -32,6 +32,7 @@ export class BelastingdrukLegenda extends Legenda {
       grafiek: [],
       titel: "Belastingdruk",
       arbeidsInkomen: data[offset].id.toFixed(),
+      bovenaan: [],
     };
 
     ld.grafiek.push({

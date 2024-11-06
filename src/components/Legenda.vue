@@ -10,6 +10,11 @@
       </div>
       <n-table :single-line="false" size="tiny" class="table">
         <tbody>
+          <tr v-for="(gd, idx) in data.bovenaan" :key="gd.naam">
+            <td colspan="2" class="tekst lijnBeneden">{{ gd.naam }}</td>
+            <td v-if="gd.percentage" class="nr lijnBeneden">{{ gd.percentage }}</td>
+            <td class="nr lijnBeneden">{{ gd.bedrag }}</td>
+          </tr>
           <tr v-for="(gd, idx) in data.grafiek" :key="gd.naam">
             <td><div class="dot" :style="'background-color:' + gd.color" /></td>
             <td>{{ gd.naam }}</td>
@@ -47,6 +52,9 @@
 }
 .streep {
   border-top: 1px solid black;
+}
+.lijnBeneden {
+  border-bottom: 1px solid black;
 }
 </style>
 

@@ -51,7 +51,7 @@ const koop: WonenType = {
   woz: 315000,
 };
 
-function invoerGegevens(
+export function invoerGegevens(
   tab: string,
   personen: PersoonType[],
   wonen: WonenType,

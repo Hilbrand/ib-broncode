@@ -49,6 +49,10 @@ function negatiefIsNul(getal: number): number {
   return Math.max(0, getal);
 }
 
+function positiefIsNul(getal: number): number {
+  return Math.min(0, getal);
+}
+
 function factorBerekening(periode: PeriodeType): number {
   return PeriodeType.MAAND == periode ? 1 / 12 : 1;
 }
@@ -62,5 +66,6 @@ export default {
   aow,
   isHuur,
   negatiefIsNul,
+  positiefIsNul,
   factorBerekening,
 };

@@ -19,7 +19,6 @@
 
 <script>
 import { defineComponent } from "vue";
-import { NConfigProvider } from "naive-ui";
 import FooterPaneel from "./components/FooterPaneel.vue";
 
 const themeOverrides = {

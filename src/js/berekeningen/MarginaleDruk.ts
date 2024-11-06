@@ -24,6 +24,7 @@ import {
   InvoerGegevensType,
   MarginaleDrukResultaatType,
   VisualisatieTypeType,
+  WoningType,
 } from "../../ts/types";
 
 export class MarginaleDruk extends Berekenen {
@@ -67,6 +68,7 @@ export class MarginaleDruk extends Berekenen {
   percentage(Δbedrag: number, Δtotaal: number, inverse: boolean): number {
     const percentage = Δtotaal == 0 ? 0 : Δbedrag / Δtotaal;
     const result: number = +(percentage * 100).toFixed(2);
+
     return Math.max(0, isNaN(result) || result == 0 ? 0 : inverse ? -result : 1 * result);
   }
 
@@ -75,9 +77,8 @@ export class MarginaleDruk extends Berekenen {
     berekening2: BeschikbaarInkomenResultaatType,
     visualisatie: VisualisatieTypeType
   ): MarginaleDrukResultaatType {
-    const tabel = visualisatie === VisualisatieTypeType.T;
     const grafiek = visualisatie === VisualisatieTypeType.G;
-    const presentatieFunctie = tabel ? this.absolute : this.percentage;
+    const presentatieFunctie = grafiek ? this.percentage : this.absolute;
 
     const ΔextraLoon = berekening2.arbeidsinkomen - berekening1.arbeidsinkomen;
     const ΔibBox1 = this.mdAbsolute(berekening1.ibBox1, berekening2.ibBox1, false);
@@ -93,16 +94,6 @@ export class MarginaleDruk extends Berekenen {
     const ΔahkMax = this.mdAbsolute(berekening1.ahkMax, berekening2.ahkMax, false);
 
     const Δnvzk = this.mdAbsolute(berekening1.nvzk, berekening2.nvzk, false);
-    // als grafiek dan
-    const maxLoonBelasting = grafiek
-      ? -functies.negatiefIsNul(
-          ΔibBox1 -
-            (functies.negatiefIsNul(Δahk) +
-              functies.negatiefIsNul(Δak) +
-              functies.negatiefIsNul(Δiack) +
-              functies.negatiefIsNul(Δnvzk))
-        )
-      : this.mdAbsolute(berekening1.nettoLoonBelasting, berekening2.nettoLoonBelasting, false);
 
     const Δzt = this.mdAbsolute(berekening1.zt, berekening2.zt, false);
     const Δwonen = this.mdAbsolute(berekening1.wonen, berekening2.wonen, false);
@@ -111,14 +102,29 @@ export class MarginaleDruk extends Berekenen {
 
     const ΔnettoLoon = berekening2.nettoLoon - berekening1.nettoLoon;
     const ΔnettoInkomen = berekening2.nettoInkomen - berekening1.nettoInkomen;
-    const ΔnettoArbeidsinkomen = ΔnettoLoon + (Δzt + Δwonen + Δkb + Δkgb);
-    const md = ΔextraLoon - ΔnettoArbeidsinkomen;
+    const Δhuurtoeslag = this.wonen.woning_type === WoningType.HUUR ? Δwonen : 0;
+    const ΔnettoArbeidsinkomen = ΔnettoLoon + (Δzt + Δhuurtoeslag + Δkb + Δkgb);
+
+    const ΔnettoLoonBelasting = this.mdAbsolute(berekening1.nettoLoonBelasting, berekening2.nettoLoonBelasting, false);
+    // Als grafiek dan trek positieve kortingen van loonbelasting af omdat grafiek geen positieve
+    // bedragen toont wordt dit verrekend met de te betalen belasting. In de legenda zijn positieve
+    // bedragen ook niet te zien. Maar wel als de tabel wordt getoond.
+    const nettoLoonBelastingPresentatie = grafiek
+      ? -functies.negatiefIsNul(
+          ΔnettoLoonBelasting +
+            functies.positiefIsNul(Δahk) +
+            functies.positiefIsNul(Δak) +
+            functies.positiefIsNul(Δiack) +
+            functies.positiefIsNul(Δnvzk)
+        )
+      : ΔnettoLoonBelasting;
+    const md = ΔextraLoon - ΔnettoInkomen;
 
     return {
       arbeidsinkomen: berekening1.arbeidsinkomen,
       extraLoon: ΔextraLoon,
       ibBox1: presentatieFunctie(ΔibBox1, ΔextraLoon, true),
-      nettoLoonBelasting: presentatieFunctie(maxLoonBelasting, ΔextraLoon, grafiek),
+      nettoLoonBelasting: presentatieFunctie(nettoLoonBelastingPresentatie, ΔextraLoon, grafiek),
       nettoInkomen: presentatieFunctie(ΔnettoInkomen, ΔextraLoon, grafiek),
       nettoArbeidsinkomen: presentatieFunctie(ΔnettoArbeidsinkomen, ΔextraLoon, grafiek),
       nettoLoon: presentatieFunctie(ΔnettoLoon, ΔextraLoon, grafiek),
@@ -129,7 +135,7 @@ export class MarginaleDruk extends Berekenen {
       akMax: presentatieFunctie(ΔakMax, ΔextraLoon, grafiek),
       iack: presentatieFunctie(Δiack, ΔextraLoon, grafiek),
       iackMax: presentatieFunctie(ΔiackMax, ΔextraLoon, grafiek),
-      ahk: presentatieFunctie(tabel ? Δahk : Δahk - Δnvzk, ΔextraLoon, grafiek),
+      ahk: presentatieFunctie(grafiek ? Δahk - Δnvzk : Δahk, ΔextraLoon, grafiek),
       ahkMax: presentatieFunctie(ΔahkMax, ΔextraLoon, grafiek),
       nvzk: presentatieFunctie(Δnvzk, ΔextraLoon, grafiek),
 

@@ -18,12 +18,24 @@
 import { expect, test } from "vitest";
 import { BeschikbaarInkomen } from "../../../src/js/berekeningen/BeschikbaarInkomen.js";
 import { MarginaleDruk } from "../../../src/js/berekeningen/MarginaleDruk.js";
-import { InvoerGegevensType, MarginaleDrukResultaatType, VisualisatieTypeType } from "../../../src/ts/types.js";
+import {
+  InvoerGegevensType,
+  LeeftijdType,
+  MarginaleDrukResultaatType,
+  PeriodeType,
+  PersoonType,
+  SalarisVerhogingType,
+  VisualisatieType,
+  VisualisatieTypeType,
+  WonenType,
+  WoningType,
+} from "../../../src/ts/types.js";
 import {
   alleenstaande2KinderenHuur,
   alleenstaandeKoop,
   eenverdiener2KinderenHuur,
   eenverdiener2kinderenKoop,
+  invoerGegevens,
 } from "./invoer";
 
 function bereken(
@@ -40,7 +52,7 @@ function bereken(
 
 test("Bereken 2024 marginale druk alleenstaande 27500, 2 kinderen, huur 674", () => {
   const arbeidsinkomen: number = 29206; /* Brutoloon: 30.000*/
-  const berekening = bereken(arbeidsinkomen, alleenstaande2KinderenHuur("bi"), 939, VisualisatieTypeType.T);
+  const berekening = bereken(arbeidsinkomen, alleenstaande2KinderenHuur("md"), 939, VisualisatieTypeType.T);
   const expected: MarginaleDrukResultaatType = {
     ahk: 126,
     ahkMax: -63,
@@ -68,7 +80,7 @@ test("Bereken 2024 marginale druk alleenstaande 27500, 2 kinderen, huur 674", ()
 
 test("Bereken 2024 beschikbaar inkomen eenverdiener 47500, 2 kinderen, huur 674", () => {
   const arbeidsinkomen: number = 45633; // Brutoloon: 47500
-  const berekening = bereken(arbeidsinkomen, eenverdiener2KinderenHuur("bi"), 939, VisualisatieTypeType.T);
+  const berekening = bereken(arbeidsinkomen, eenverdiener2KinderenHuur("md"), 939, VisualisatieTypeType.T);
   const expected: MarginaleDrukResultaatType = {
     ahk: -63,
     ahkMax: -63,
@@ -96,7 +108,7 @@ test("Bereken 2024 beschikbaar inkomen eenverdiener 47500, 2 kinderen, huur 674"
 
 test("Bereken 2024 beschikbaar inkomen meestverdiener 45000, 2 kinderen, huur 674", () => {
   const arbeidsinkomen: number = 43313; // Brutoloon: 45000
-  const gegevens = eenverdiener2KinderenHuur("bi");
+  const gegevens = eenverdiener2KinderenHuur("md");
   gegevens.personen[1].bruto_inkomen = 21969;
 
   const berekening = bereken(arbeidsinkomen, gegevens, 939, VisualisatieTypeType.T);
@@ -127,7 +139,7 @@ test("Bereken 2024 beschikbaar inkomen meestverdiener 45000, 2 kinderen, huur 67
 
 test("Bereken 2024 beschikbaar inkomen 47500 eenverdiener, 2 kinderen, koop", () => {
   const arbeidsinkomen: number = 45633; // Brutoloon: 47500
-  const berekening = bereken(arbeidsinkomen, eenverdiener2kinderenKoop("bi"), 939, VisualisatieTypeType.T);
+  const berekening = bereken(arbeidsinkomen, eenverdiener2kinderenKoop("md"), 939, VisualisatieTypeType.T);
   const expected: MarginaleDrukResultaatType = {
     ahk: -62,
     ahkMax: -62,
@@ -155,7 +167,7 @@ test("Bereken 2024 beschikbaar inkomen 47500 eenverdiener, 2 kinderen, koop", ()
 
 test("Bereken 2024 beschikbaar inkomen 80000 alleenstaande, koop", () => {
   const arbeidsinkomen: number = 80000;
-  const berekening = bereken(arbeidsinkomen, alleenstaandeKoop("bi"), 939, VisualisatieTypeType.T);
+  const berekening = bereken(arbeidsinkomen, alleenstaandeKoop("md"), 939, VisualisatieTypeType.T);
   const expected: MarginaleDrukResultaatType = {
     ahk: -62,
     ahkMax: -62,
@@ -169,9 +181,9 @@ test("Bereken 2024 beschikbaar inkomen 80000 alleenstaande, koop", () => {
     ibBox1: -465,
     kb: 0,
     kgb: 0,
-    marginaleDruk: 37.49,
-    nettoArbeidsinkomen: 587,
-    nettoInkomen: 587,
+    marginaleDruk: 50.05,
+    nettoArbeidsinkomen: 469,
+    nettoInkomen: 469,
     nettoLoon: 469,
     nettoLoonBelasting: 470,
     nvzk: 0,
