@@ -29,7 +29,7 @@ test("Samenvatting alleenstaande, 2 kinderen 6-11, huur 674", () => {
 test("Samenvatting eenverdiener, 1 kind 0-5, 2 kinderen 6-11, koop", () => {
   const expected =
     "Eenverdiener met een kind tussen 0 en 5 jaar en twee kinderen tussen 6 en 11 jaar, " +
-    "maandelijkse hypotheek rente &euro; 13482 voor een huis met WOZ-waarde: &euro; 315000";
+    "jaarlijkse hypotheek rente &euro; 13482 voor een huis met WOZ-waarde: &euro; 315000";
   const gegevens = eenverdiener2kinderenKoop("bi");
 
   gegevens.personen.push({ leeftijd: LeeftijdType.K05 });
@@ -40,7 +40,7 @@ test("Samenvatting eenverdiener, 1 kind 0-5, 2 kinderen 6-11, koop", () => {
 test("Samenvatting meerdere verdieners, 2 kinderen 6-11, koop", () => {
   const expected =
     "Meerdere verdieners met twee kinderen tussen 6 en 11 jaar, " +
-    "maandelijkse hypotheek rente &euro; 13482 voor een huis met WOZ-waarde: &euro; 315000";
+    "jaarlijkse hypotheek rente &euro; 13482 voor een huis met WOZ-waarde: &euro; 315000";
   const gegevens = eenverdiener2kinderenKoop("bi");
 
   gegevens.personen.push({ leeftijd: LeeftijdType.V, bruto_inkomen: 10000 });

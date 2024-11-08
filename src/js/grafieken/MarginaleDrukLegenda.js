@@ -43,21 +43,24 @@ export class MarginaleDrukLegenda extends Legenda {
         bedrag: this.geld(b.extraLoon * factor * (-getal / 100)),
       });
     }
-    ld.totals = [
-      {
-        naam: "marginale druk",
-        percentage: this.percentage(b.marginaleDruk),
-        bedrag: this.geld(b.marginaleDruk * factor * b.extraLoon * 0.01),
-      },
-      {
-        naam: "netto extra loon",
-        percentage: this.percentage(b.nettoInkomen / (b.extraLoon * 100)),
-        bedrag: this.geld(b.nettoInkomen * factor),
-      },
+    ld.bovenaan = [
       {
         naam: "bruto extra loon",
         percentage: this.percentage(100),
         bedrag: this.geld(b.extraLoon * factor),
+      },
+    ];
+
+    ld.totals = [
+      {
+        naam: "netto extra loon",
+        percentage: this.percentage(b.nettoInkomen / (b.extraLoon * 0.01)),
+        bedrag: this.geld(b.nettoInkomen * factor),
+      },
+      {
+        naam: "marginale druk",
+        percentage: this.percentage(b.marginaleDruk),
+        bedrag: this.geld(b.marginaleDruk * factor * b.extraLoon * 0.01),
       },
     ];
     this.legendaFunction(ld);

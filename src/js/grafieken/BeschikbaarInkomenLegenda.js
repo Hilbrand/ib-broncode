@@ -31,6 +31,7 @@ export class BeschikbaarInkomenLegenda extends Legenda {
       grafiek: [],
       titel: "Beschikbaar inkomen",
       arbeidsInkomen: data[offset].id.toFixed(),
+      bovenaan: [],
     };
 
     for (let j = 0; j < length; j++) {

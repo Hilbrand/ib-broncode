@@ -28,6 +28,7 @@ import {
   InvoerGegevensType,
   LeeftijdType,
   VisualisatieTypeType,
+  WoningType,
 } from "../../ts/types";
 import { Legenda } from "../grafieken/Legenda";
 import zorgtoeslag from "../belasting/zorgtoeslag";
@@ -61,8 +62,8 @@ export class BeschikbaarInkomen extends Berekenen {
     const ibBox1 = inkomen.inkomstenBelasting(this.vis.jaar, toetsingsInkomen, aow);
     // Belasting die betaald zou zijn alleen over arbeid
     const ibBox1Arbeid = inkomen.inkomstenBelasting(this.vis.jaar, arbeidsinkomen, aow);
-    // Maximaal (of eigenlijk minimaal te betalen belasting)
-    const ibBox1Max = Math.min(ibBox1, ibBox1Arbeid);
+    // Belasting die betaald moet worden over arbeid of met eventuele hypotheek verrekening.
+    const ibBox1Effectief = Math.min(ibBox1, ibBox1Arbeid);
 
     // Potentieel aftrekbare hypotheekrente is verschil tussen arbeidsinkomen belasting
     // en belasting van inkomen met hypotheekrente verrekend in het inkomen.
@@ -71,8 +72,8 @@ export class BeschikbaarInkomen extends Berekenen {
     // Arbeidskorting gaat over alleen arbeidsinkomen
     // Maar kan niet hoger zijn dan maximum te betalen belasting.
     let arbeidskortingMax = inkomen.arbeidskorting(this.vis.jaar, arbeidsinkomen, aow);
-    let arbeidskorting = Math.min(ibBox1Max, arbeidskortingMax);
-    let maxBelastingNaAK = functies.negatiefIsNul(ibBox1Max - arbeidskorting);
+    let arbeidskorting = Math.min(ibBox1Effectief, arbeidskortingMax);
+    let maxBelastingNaAK = functies.negatiefIsNul(ibBox1Effectief - arbeidskorting);
 
     // Inkomensafhankelijke combinatie korting
     let inACKMax =
@@ -125,13 +126,14 @@ export class BeschikbaarInkomen extends Berekenen {
       arbeidsinkomen - (arbeidskorting + algemeneHeffingsKorting + inACK + hraMax + maxBelasting);
 
     // Netto inkomen is arbeidsinkomen minus arbeidsinkomen belasting.
+    const huurtoeslag = this.wonen.woning_type === WoningType.HUUR ? wonen : 0;
     let nettoInkomen =
       nettoLoon +
       // In de tabel wordt kinderbijslag niet getoond en dus niet meegenomen in nettoInkomen berekening
       (visualisatie == VisualisatieTypeType.T ? 0 : this.algemeneGegevens.kinderbijslag) +
       kindgebondenBudget +
       zorgtoeslag +
-      wonen;
+      huurtoeslag;
 
     let beschikbaarInkomen: BeschikbaarInkomenResultaatType = {
       arbeidsinkomen: arbeidsinkomen,
