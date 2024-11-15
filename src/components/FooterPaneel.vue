@@ -13,7 +13,12 @@
           <a href="https://github.com/hilbrand/ib-broncode" target="_blank">https://github.com/hilbrand/ib-broncode</a>.
           Voor vragen of hergebruik van de webpagina e-mail naar: hilbrand @ freedom.nl.
         </p>
+        <p>Githash: {{ gitHash }}</p>
       </n-card>
     </n-collapse-item>
   </n-collapse>
 </template>
+
+<script setup lang="ts">
+const gitHash = import.meta.env.VITE_GIT_COMMIT_HASH;
+</script>
