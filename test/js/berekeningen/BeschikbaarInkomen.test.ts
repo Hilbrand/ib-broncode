@@ -17,7 +17,13 @@
 
 import { expect, test } from "vitest";
 import { BeschikbaarInkomen } from "../../../src/js/berekeningen/BeschikbaarInkomen";
-import { BeschikbaarInkomenResultaatType, InvoerGegevensType, VisualisatieTypeType } from "../../../src/ts/types";
+import {
+  BeschikbaarInkomenResultaatType,
+  InkomenType,
+  InvoerGegevensType,
+  LeeftijdType,
+  VisualisatieTypeType,
+} from "../../../src/ts/types";
 import {
   alleenstaande2KinderenHuur,
   alleenstaandeKoop,
@@ -43,6 +49,7 @@ test("Bereken 2024 beschikbaar inkomen alleenstaande 27500, 2 kinderen, huur 674
     ahkMax: 3226,
     ak: 5208,
     akMax: 5208,
+    anderenArbeidsinkomen: [],
     arbeidsinkomen: arbeidsinkomen,
     hraMax: 0,
     iack: 2380,
@@ -69,6 +76,7 @@ test("Bereken 2024 beschikbaar inkomen eenverdiener 47500, 2 kinderen, huur 674"
     ahkMax: 1982,
     ak: 5162,
     akMax: 5162,
+    anderenArbeidsinkomen: [],
     arbeidsinkomen: arbeidsinkomen,
     hraMax: 0,
     iack: 0,
@@ -95,6 +103,7 @@ test("Bereken 2024 beschikbaar inkomen 47500 eenverdiener, 2 kinderen, koop", ()
     ahkMax: 2802,
     ak: 5162,
     akMax: 5162,
+    anderenArbeidsinkomen: [],
     arbeidsinkomen: arbeidsinkomen,
     hraMax: 4577,
     iack: 0,
@@ -122,6 +131,7 @@ test("Bereken 2024 beschikbaar inkomen 80000 alleenstaande, koop", () => {
     ahkMax: 524,
     ak: 2925,
     akMax: 2925,
+    anderenArbeidsinkomen: [],
     arbeidsinkomen: arbeidsinkomen,
     hraMax: 5139,
     iack: 0,
@@ -136,6 +146,36 @@ test("Bereken 2024 beschikbaar inkomen 80000 alleenstaande, koop", () => {
     nvzk: 0,
     wonen: 5139,
     zt: 0,
+  };
+
+  expect(berekening).toEqual(expected);
+});
+
+test("Bereken 2024 beschikbaar inkomen 10000 minstverdiener, huur", () => {
+  const arbeidsinkomen: number = 10000;
+  const gegevens = alleenstaande2KinderenHuur("bi");
+  gegevens.personen.push({ leeftijd: LeeftijdType.V, inkomen_type: InkomenType.PERCENTAGE, percentage: 200 });
+  const berekening = bereken(arbeidsinkomen, gegevens, VisualisatieTypeType.T);
+  const expected: BeschikbaarInkomenResultaatType = {
+    ahk: 2422,
+    ahkMax: 3362,
+    ak: 825,
+    akMax: 825,
+    anderenArbeidsinkomen: [20000],
+    arbeidsinkomen: arbeidsinkomen,
+    hraMax: 0,
+    iack: 450,
+    iackMax: 450,
+    ibBox1: 3697,
+    kb: 2736,
+    kgb: 4872,
+    nettoArbeidsinkomen: 6303,
+    nettoInkomen: 21590,
+    nettoLoon: 10000,
+    nettoLoonBelasting: 0,
+    nvzk: 940,
+    wonen: 4320,
+    zt: 2398,
   };
 
   expect(berekening).toEqual(expected);

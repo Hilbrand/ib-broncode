@@ -20,43 +20,29 @@ import { LeeftijdType, PersoonType } from "../../../src/ts/types";
 import iack from "../../../src/js/belasting/inkomensafhankelijkecombinatiekorting";
 
 const JAAR: string = "2023";
+const INKOMEN: number = 20000;
+const ENKELE_PERSOON: PersoonType[] = [{ leeftijd: LeeftijdType.V }];
 
 // Bepaal Laagste Arbeidsinkomen Inkomen Anderen
 
 test("Laagste Arbeidsinkomen Inkomen, alleenstaande", () => {
-  let personen: PersoonType[] = [{ leeftijd: LeeftijdType.V }];
-
-  expect(iack.bepaalLaagsteArbeidsInkomenAnderen(personen)).toEqual(Number.MAX_VALUE);
-});
-
-test("Laagste Arbeidsinkomen Inkomen, inkomen 0", () => {
-  let personen: PersoonType[] = [{ leeftijd: LeeftijdType.V }, { leeftijd: LeeftijdType.V, bruto_inkomen: 0 }];
-
-  expect(iack.bepaalLaagsteArbeidsInkomenAnderen(personen)).toEqual(0);
-});
-
-test("Laagste Arbeidsinkomen Inkomen, inkomen undefined", () => {
-  let personen: PersoonType[] = [{ leeftijd: LeeftijdType.V }, { leeftijd: LeeftijdType.V }];
-
-  expect(iack.bepaalLaagsteArbeidsInkomenAnderen(personen)).toEqual(0);
+  expect(iack.bepaalLaagsteArbeidsInkomenAnderen([])).toEqual(Number.MAX_VALUE);
 });
 
 test("Laagste Arbeidsinkomen Inkomen, inkomen 1000", () => {
-  let personen: PersoonType[] = [{ leeftijd: LeeftijdType.V }, { leeftijd: LeeftijdType.V, bruto_inkomen: 1000 }];
-
-  expect(iack.bepaalLaagsteArbeidsInkomenAnderen(personen)).toEqual(1000);
+  expect(iack.bepaalLaagsteArbeidsInkomenAnderen([1000])).toEqual(1000);
 });
 
 // Test Inkomensafhankelijke Combinatiekorting
 
 test("Inkomensafhankelijke Combinatiekorting 5.000", () => {
-  expect(iack.inkomensafhankelijkeCombinatiekorting(JAAR, 5000, Number.MAX_VALUE)).toEqual(0);
+  expect(iack.inkomensafhankelijkeCombinatiekorting(JAAR, 5000, [])).toEqual(0);
 });
 
 test("Inkomensafhankelijke Combinatiekorting 20.000", () => {
-  expect(iack.inkomensafhankelijkeCombinatiekorting(JAAR, 20000, Number.MAX_VALUE)).toEqual(1655);
+  expect(iack.inkomensafhankelijkeCombinatiekorting(JAAR, 20000, [])).toEqual(1655);
 });
 
 test("Inkomensafhankelijke Combinatiekorting 50.000", () => {
-  expect(iack.inkomensafhankelijkeCombinatiekorting(JAAR, 50000, Number.MAX_VALUE)).toEqual(2694);
+  expect(iack.inkomensafhankelijkeCombinatiekorting(JAAR, 50000, [])).toEqual(2694);
 });

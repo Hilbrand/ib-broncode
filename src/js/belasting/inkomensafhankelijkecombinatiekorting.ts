@@ -22,6 +22,7 @@
  */
 
 import data from "./belasting_data";
+import inkomen from "../belasting/inkomen";
 import { LeeftijdType, PersoonType } from "../../ts/types";
 
 /**
@@ -29,35 +30,32 @@ import { LeeftijdType, PersoonType } from "../../ts/types";
  * De eerste persoon wordt overgeslagen, want daarvoor wordt het inkomen dynamisch berekend.
  * Als er andere personen zijn dan geeft het terug Number.MAX_VALUE
  */
-function bepaalLaagsteArbeidsInkomenAnderen(personen: PersoonType[]): number {
-  let laagsteInkomen = Number.MAX_VALUE;
-
-  personen.forEach((p, idx) => {
-    if (idx == 0) {
-      return; // Sla eerste persoon over
-    }
-    if (p.leeftijd == LeeftijdType.V || p.leeftijd == LeeftijdType.AOW) {
-      let pInkomen = p.bruto_inkomen === undefined ? 0 : p.bruto_inkomen;
-
-      laagsteInkomen = Math.min(pInkomen, laagsteInkomen);
-    }
-  });
-  return laagsteInkomen;
+function bepaalLaagsteArbeidsInkomenAnderen(andereInkomens: number[]): number {
+  return andereInkomens.reduce((min, _) => Math.min(min, _), Number.MAX_VALUE);
 }
 
+/**
+ * U hebt geen of minder dan 6 maanden een fiscale partner.
+ * Of u hebt langer dan 6 maanden een fiscale partner,
+ * én u hebt een lager arbeidsinkomen dan uw fiscale partner.
+ */
 function inkomensafhankelijkeCombinatiekorting(
   jaar: string,
   toetsinkomen: number,
-  laagstePartnerinkomen: number,
+  andereInkomens: number[],
   aow: boolean = false
 ): number {
   const tabel = data.IACK[jaar];
-  const arbeidsinkomen = laagstePartnerinkomen < 0 ? toetsinkomen : Math.min(toetsinkomen, laagstePartnerinkomen);
+  const laagstePartnerinkomen = bepaalLaagsteArbeidsInkomenAnderen(andereInkomens);
+
+  if (andereInkomens.length > 0 && toetsinkomen > laagstePartnerinkomen) {
+    return 0;
+  }
   const t = aow ? tabel.HAOW : tabel.H;
 
-  return arbeidsinkomen < t.MinAInk
+  return toetsinkomen < t.MinAInk
     ? 0
-    : Math.min(t.MaxInkAfKrt, Math.round((arbeidsinkomen - (t.MinAInk - 1)) * t.InkKorting));
+    : Math.min(t.MaxInkAfKrt, Math.round((toetsinkomen - (t.MinAInk - 1)) * t.InkKorting));
 }
 
 export default {

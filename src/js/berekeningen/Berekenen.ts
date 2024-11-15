@@ -26,7 +26,6 @@ import {
   WonenType,
 } from "../../ts/types";
 import hra from "../belasting/hypotheekrente_aftrek.js";
-import iack from "../belasting/inkomensafhankelijkecombinatiekorting.js";
 import kbs from "../belasting/kinderbijslag";
 import kgb from "../belasting/kindgebonden_budget";
 import { Legenda } from "../grafieken/Legenda";
@@ -79,7 +78,6 @@ export class Berekenen {
     return {
       toeslagenpartner: toeslagenpartner,
       aow: aow,
-      iacbInkomen: iack.bepaalLaagsteArbeidsInkomenAnderen(personen),
       kinderbijslag: kbs.kinderbijslag(jaar, personen),
       maxKindgebondenBudget: kgb.maxKindgebondenBudget(jaar, personen, toeslagenpartner),
       huren: huren,

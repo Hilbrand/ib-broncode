@@ -38,9 +38,16 @@ export enum LeeftijdTekstType {
   AOW = "AOW-er", // "AOW Leeftijd",
 }
 
+export enum InkomenType {
+  BRUTO = "bruto",
+  PERCENTAGE = "percentage",
+}
+
 export type PersoonType = {
   leeftijd: LeeftijdType;
+  inkomen_type?: InkomenType;
   bruto_inkomen?: number;
+  percentage?: number;
 };
 
 export enum WoningType {
@@ -92,7 +99,6 @@ export type InvoerGegevensType = {
 export type BerekenInvoerType = {
   toeslagenpartner: boolean;
   aow: boolean;
-  iacbInkomen: number;
   kinderbijslag: number;
   maxKindgebondenBudget: number;
   nk?: number;
@@ -103,6 +109,7 @@ export type BerekenInvoerType = {
 
 export type BerekenResultaatType = {
   arbeidsinkomen: number; // bruto loon
+  anderenArbeidsinkomen?: number[];
   ibBox1: number;
   nettoLoon: number; // bruto inkomen - ibBox1 + AHK + AK + HT
   nettoInkomen: number; // netto inkomen

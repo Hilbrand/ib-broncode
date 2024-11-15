@@ -19,6 +19,7 @@
  * Helper JavaScript om navigatie van en naar JSON objecten om te zetten.
  */
 import {
+  InkomenType,
   InvoerGegevensType,
   JaarType,
   LeeftijdType,
@@ -62,11 +63,11 @@ function splitParam(queryParam: string | any): string {
   return a ? a.map(toJsonArray) : a;
 }
 
-function copyNavigatieToJson(from, to, functionNavToJson: (any) => any) {
-  Object.entries(functionNavToJson(splitParam(from))).forEach((a) => (to[a[0]] = toJsonArray(a[1])));
+function copyNavigatieNaarJson(from, to, functionNavNaarJson: (any) => any) {
+  Object.entries(functionNavNaarJson(splitParam(from))).forEach((a) => (to[a[0]] = toJsonArray(a[1])));
 }
 
-function jsonArrayToNavigatie(jsonArray: string[]): string {
+function jsonArrayNaarNavigatie(jsonArray: string[]): string {
   return jsonArray.join(KEY_VALUE_SPLIT);
 }
 
@@ -82,7 +83,7 @@ export function standaardPersoon(): PersoonType {
   };
 }
 
-function persoonNavigatieToJson(p: any[]): PersoonType {
+function persoonNavigatieNaarJson(p: any[], index: number): PersoonType {
   const len = lengte(p);
   let persoon: PersoonType = standaardPersoon();
 
@@ -92,18 +93,28 @@ function persoonNavigatieToJson(p: any[]): PersoonType {
   persoon.leeftijd = Array.isArray(p) ? p[0] : p;
 
   if (len == 2) {
-    persoon.bruto_inkomen = p[1];
+    if (isNaN(p[1])) {
+      persoon.inkomen_type = InkomenType.PERCENTAGE;
+      persoon.percentage = +p[1].substring(1);
+    } else {
+      persoon.inkomen_type = InkomenType.BRUTO;
+      persoon.bruto_inkomen = p[1];
+    }
+  } else if (index != 0 && (persoon.leeftijd == LeeftijdType.V || persoon.leeftijd == LeeftijdType.AOW)) {
+    persoon.inkomen_type = InkomenType.BRUTO;
   }
   return persoon;
 }
 
-function personenNavigatieToJson(queryParams): PersoonType[] {
+function personenNavigatieNaarJson(queryParams: any[]): PersoonType[] {
   let len = lengte(queryParams);
 
   if (len == 0) {
     return [];
   }
-  return queryParams.filter((p) => lengte(p) > 0).map(persoonNavigatieToJson);
+  return queryParams
+    .filter((p: any) => lengte(p) > 0)
+    .map((p: any, index: number) => persoonNavigatieNaarJson(p, index));
 }
 
 export function standaardWonen(): WonenType {
@@ -115,7 +126,7 @@ export function standaardWonen(): WonenType {
   };
 }
 
-function wonenNavigatieToJson(queryParams: any[]): WonenType {
+function wonenNavigatieNaarJson(queryParams: any[]): WonenType {
   const len = lengte(queryParams);
   let wonen: WonenType = standaardWonen();
 
@@ -148,7 +159,7 @@ export function standardVisualisatie(): VisualisatieType {
 
 // visualisatie=<type>;<jaar>;<periode>;<start>;<eind>;<stap>;<md type>;<md getal>;<arbeidsinkomen>
 
-function visualisatieNavigatieToJson(p: any): VisualisatieType {
+function visualisatieNavigatieNaarJson(p: any): VisualisatieType {
   let vis: VisualisatieType = standardVisualisatie();
   let orgLength8: boolean = lengte(p) == 8;
 
@@ -179,7 +190,7 @@ function visualisatieNavigatieToJson(p: any): VisualisatieType {
   return vis;
 }
 
-export function navigatieToJson(query: NavigatieType): InvoerGegevensType {
+export function navigatieNaarJson(query: NavigatieType): InvoerGegevensType {
   let basis: InvoerGegevensType = {
     // Als oude code "eb" gebruikt is, vervang door nieuwe "bd".
     tab: (query?.tab == "eb" ? "bd" : query?.tab) || "intro",
@@ -187,24 +198,35 @@ export function navigatieToJson(query: NavigatieType): InvoerGegevensType {
     wonen: standaardWonen(),
     visualisatie: standardVisualisatie(),
   };
-  copyNavigatieToJson(query?.p, basis.personen, personenNavigatieToJson);
-  copyNavigatieToJson(query?.w, basis.wonen, wonenNavigatieToJson);
-  copyNavigatieToJson(query?.v || query?.grafiek, basis.visualisatie, visualisatieNavigatieToJson);
+  copyNavigatieNaarJson(query?.p, basis.personen, personenNavigatieNaarJson);
+  copyNavigatieNaarJson(query?.w, basis.wonen, wonenNavigatieNaarJson);
+  copyNavigatieNaarJson(query?.v || query?.grafiek, basis.visualisatie, visualisatieNavigatieNaarJson);
   return basis;
 }
 
 // --------------------------------------------------
 
-// p=<leeftijd>;<leeftijd>,<bruto_inkomen>
+// p=<leeftijd>;<leeftijd>[(,<bruto_inkomen>)|,P<percentage>)]
 
-function personenJsonToNavigatie(personen: PersoonType[]): string[] {
-  return personen.map((p) => p.leeftijd + (p.bruto_inkomen ? "," + p.bruto_inkomen : ""));
+function persoonJsonNaarNavigatie(persoon: PersoonType) {
+  const alsVoegToe = (n: number, p: string) => (!n || n === 0 ? "" : p + n);
+
+  return (
+    persoon.leeftijd +
+    (persoon.inkomen_type == InkomenType.PERCENTAGE
+      ? ",P" + alsVoegToe(persoon.percentage, "")
+      : alsVoegToe(persoon.bruto_inkomen, ","))
+  );
+}
+
+function personenJsonNaarNavigatie(personen: PersoonType[]): string[] {
+  return personen.map(persoonJsonNaarNavigatie);
 }
 
 // w=huur;<huur>
 // w=koop;<woz>;<rente>
 
-function wonenJsonToNavigatie(wonen: WonenType): any[] {
+function wonenJsonNaarNavigatie(wonen: WonenType): any[] {
   let nav: any[] = [wonen.woning_type];
   if (wonen.woning_type == "koop") {
     nav.push(wonen.woz);
@@ -215,17 +237,17 @@ function wonenJsonToNavigatie(wonen: WonenType): any[] {
   return nav;
 }
 
-function visualisatieJsonToNavigatie(vis: VisualisatieType): any[] {
+function visualisatieJsonNaarNavigatie(vis: VisualisatieType): any[] {
   let sv = vis.svt == SalarisVerhogingType.A ? vis.sv_abs : vis.sv_p;
   return [vis.type, vis.jaar, vis.periode, vis.van_tot, vis.stap, vis.svt, sv, vis.arbeidsInkomen];
 }
 
-export function jsonToNavigatie(json: InvoerGegevensType): NavigatieType {
+export function jsonNaarNavigatie(json: InvoerGegevensType): NavigatieType {
   return {
     tab: json.tab,
-    p: jsonArrayToNavigatie(personenJsonToNavigatie(json.personen)),
-    w: jsonArrayToNavigatie(wonenJsonToNavigatie(json.wonen)),
-    v: jsonArrayToNavigatie(visualisatieJsonToNavigatie(json.visualisatie)),
+    p: jsonArrayNaarNavigatie(personenJsonNaarNavigatie(json.personen)),
+    w: jsonArrayNaarNavigatie(wonenJsonNaarNavigatie(json.wonen)),
+    v: jsonArrayNaarNavigatie(visualisatieJsonNaarNavigatie(json.visualisatie)),
   };
 }
 
@@ -233,6 +255,6 @@ export default {
   JAAR,
   JAREN,
   standaardPersoon,
-  navigatieToJson,
-  jsonToNavigatie,
+  navigatieNaarJson,
+  jsonNaarNavigatie,
 };

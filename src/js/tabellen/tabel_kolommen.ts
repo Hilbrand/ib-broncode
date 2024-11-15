@@ -16,23 +16,47 @@
  */
 
 import type { DataTableColumns } from "naive-ui";
-import type {
+import {
   BeschikbaarInkomenResultaatType,
   MarginaleDrukResultaatType,
   BelastingDrukResultaatType,
+  PersoonType,
 } from "../../ts/types";
+import { TableBaseColumn } from "naive-ui/es/data-table/src/interface";
+import { heeftInkomen } from "../../ts/functies";
+import { tekstVerdiener } from "../../ts/samenvatting";
 
 const AI_KOLOM: TableBaseColumn = {
   title: "Brutoinkomen",
   key: "arbeidsinkomen",
   align: "right",
+  render: (_) => Math.round(+_.arbeidsinkomen).toLocaleString(),
 };
 
+function brutoInkomen(titelAanvulling: string): TableBaseColumn {
+  return {
+    title: "Brutoinkomen" + (titelAanvulling && " " + titelAanvulling),
+    key: "arbeidsinkomen",
+    align: "right",
+    render: (_) => Math.round(+_.arbeidsinkomen).toLocaleString(),
+  };
+}
+
 const IBBOX1_KOLOM: TableBaseColumn = {
-  title: "IB Box 1",
+  title: "IB\u00A0Box\u00A01",
   key: "ibBox1",
   align: "right",
 };
+
+function anderenInkomenKolom(titelAanvulling: string, index: number): TableBaseColumn {
+  return {
+    title: "Brutoinkomen" + (titelAanvulling && "-" + titelAanvulling),
+    key: "anderenInkomen_" + index,
+    align: "right",
+    render: (_) => Math.round(_.anderenArbeidsinkomen[index]).toLocaleString(),
+  };
+}
+
 const EL_KOLOM: TableBaseColumn = {
   title: "Extra loon",
   key: "extraLoon",
@@ -103,14 +127,14 @@ const MD_KOLOM: TableBaseColumn = {
   title: "Marginale Druk",
   key: "marginaleDruk",
   align: "right",
-  render: (_, index) => _.marginaleDruk.toFixed(0) + " %",
+  render: (_) => _.marginaleDruk.toFixed(0) + " %",
 };
 
 const BD_KOLOM: TableBaseColumn = {
   title: "Belastingdruk",
   key: "belastingdrukPercentage",
   align: "right",
-  render: (_, index) => _.belastingdrukPercentage.toFixed(2) + " %",
+  render: (_) => _.belastingdrukPercentage.toFixed(2) + " %",
 };
 
 const BI_HUUR_KOLOMMEN: DataTableColumns<BeschikbaarInkomenResultaatType> = [
@@ -142,7 +166,6 @@ const BI_KOOP_KOLOMMEN: DataTableColumns<BeschikbaarInkomenResultaatType> = [
 ];
 
 const MD_HUUR_KOLOMMEN: DataTableColumns<MarginaleDrukResultaatType> = [
-  AI_KOLOM,
   EL_KOLOM,
   IBBOX1_KOLOM,
   AHK_KOLOM,
@@ -158,7 +181,6 @@ const MD_HUUR_KOLOMMEN: DataTableColumns<MarginaleDrukResultaatType> = [
 ];
 
 const MD_KOOP_KOLOMMEN: DataTableColumns<MarginaleDrukResultaatType> = [
-  AI_KOLOM,
   EL_KOLOM,
   IBBOX1_KOLOM,
   HRA_KOLOM,
@@ -175,20 +197,36 @@ const MD_KOOP_KOLOMMEN: DataTableColumns<MarginaleDrukResultaatType> = [
 
 const DB_KOLOMMEN: DataTableColumns<BelastingDrukResultaatType> = [AI_KOLOM, IBBOX1_KOLOM, BD_KOLOM];
 
-export function biHuurKolommen(): DataTableColumns<BeschikbaarInkomenResultaatType> {
-  return BI_HUUR_KOLOMMEN;
+function anderenInkomen(persoon: PersoonType, index: number, personen: PersoonType[]): TableBaseColumn {
+  return anderenInkomenKolom(tekstVerdiener(persoon, personen, "-"), index);
 }
 
-export function mdHuurKolommen(): DataTableColumns<MarginaleDrukResultaatType> {
-  return MD_HUUR_KOLOMMEN;
+export function biHuurKolommen(): DataTableColumns<BeschikbaarInkomenResultaatType> {
+  return BI_HUUR_KOLOMMEN;
 }
 
 export function biKoopKolommen(): DataTableColumns<BeschikbaarInkomenResultaatType> {
   return BI_KOOP_KOLOMMEN;
 }
 
-export function mdKoopKolommen(): DataTableColumns<MarginaleDrukResultaatType> {
-  return MD_KOOP_KOLOMMEN;
+function mdKolommen(
+  personen: PersoonType[],
+  overige: DataTableColumns<MarginaleDrukResultaatType>
+): DataTableColumns<MarginaleDrukResultaatType> {
+  const kolommen = [];
+
+  kolommen.push(brutoInkomen(tekstVerdiener(undefined, personen, "-")));
+  personen.filter((p, i) => i != 0 && heeftInkomen(p)).forEach((_, i) => kolommen.push(anderenInkomen(_, i, personen)));
+  kolommen.push(...overige);
+  return kolommen;
+}
+
+export function mdHuurKolommen(personen: PersoonType[]): DataTableColumns<MarginaleDrukResultaatType> {
+  return mdKolommen(personen, MD_HUUR_KOLOMMEN);
+}
+
+export function mdKoopKolommen(personen: PersoonType[]): DataTableColumns<MarginaleDrukResultaatType> {
+  return mdKolommen(personen, MD_KOOP_KOLOMMEN);
 }
 
 export function bdKolommen(): DataTableColumns<BelastingDrukResultaatType> {

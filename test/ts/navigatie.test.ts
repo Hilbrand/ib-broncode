@@ -16,25 +16,28 @@
  */
 
 import { expect, test } from "vitest";
-import { JAAR, jsonToNavigatie, navigatieToJson } from "../../src/ts/navigatie";
+import { JAAR, jsonNaarNavigatie, navigatieNaarJson } from "../../src/ts/navigatie";
 import {
-  VisualisatieType,
+  InkomenType,
   InvoerGegevensType,
   LeeftijdType,
+  NavigatieType,
   PeriodeType,
   PersoonType,
   SalarisVerhogingType,
   TabType,
+  VisualisatieType,
   VisualisatieTypeType,
-  WoningType,
-  NavigatieType,
   WonenType,
+  WoningType,
 } from "../../src/ts/types";
 
-const personenQuery: string = "V;V,10000;K611";
+const personenQuery: string = "V;V;V,10000;V,P50;K611";
 const personenJson: PersoonType[] = [
   { leeftijd: LeeftijdType.V },
-  { leeftijd: LeeftijdType.V, bruto_inkomen: 10000 },
+  { leeftijd: LeeftijdType.V, inkomen_type: InkomenType.BRUTO },
+  { leeftijd: LeeftijdType.V, inkomen_type: InkomenType.BRUTO, bruto_inkomen: 10000 },
+  { leeftijd: LeeftijdType.V, inkomen_type: InkomenType.PERCENTAGE, percentage: 50 },
   { leeftijd: LeeftijdType.K611 },
 ];
 const wonenQuery: string = "huur;123";
@@ -108,15 +111,15 @@ const jsonExpectedKoop: InvoerGegevensType = {
 };
 
 test("navigatie naar json, wonen: huur", () => {
-  expect(navigatieToJson(queryHuur)).toEqual(jsonExpectedHuur);
+  expect(navigatieNaarJson(queryHuur)).toEqual(jsonExpectedHuur);
 });
 
 test("navigatie naar json, wonen: koop", () => {
-  expect(navigatieToJson(queryKoop)).toEqual(jsonExpectedKoop);
+  expect(navigatieNaarJson(queryKoop)).toEqual(jsonExpectedKoop);
 });
 
 test("half lege navigatie", () => {
-  expect(navigatieToJson({ tab: TabType.BD })).toEqual({
+  expect(navigatieNaarJson({ tab: TabType.BD })).toEqual({
     personen: [{ leeftijd: "V" }],
     tab: TabType.BD,
     wonen: {
@@ -140,7 +143,7 @@ test("half lege navigatie", () => {
 });
 
 test("lege navigatie naar json", () => {
-  expect(navigatieToJson("")).toEqual({
+  expect(navigatieNaarJson("")).toEqual({
     tab: "intro",
     personen: [{ leeftijd: "V" }],
     wonen: {
@@ -164,13 +167,13 @@ test("lege navigatie naar json", () => {
 });
 
 test("oude navigatie 1 naar json ", () => {
-  expect(navigatieToJson(queryGrafiekOud1)).toEqual(jsonStandaard);
+  expect(navigatieNaarJson(queryGrafiekOud1)).toEqual(jsonStandaard);
 });
 
 test("oude navigatie 2 naar json ", () => {
-  expect(navigatieToJson(queryGrafiekOud2)).toEqual(jsonStandaard);
+  expect(navigatieNaarJson(queryGrafiekOud2)).toEqual(jsonStandaard);
 });
 
 test("json naar navigatie", () => {
-  expect(jsonToNavigatie(jsonHuur)).toEqual(queryHuur);
+  expect(jsonNaarNavigatie(jsonHuur)).toEqual(queryHuur);
 });

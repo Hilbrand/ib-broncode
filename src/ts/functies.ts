@@ -17,55 +17,68 @@
 
 import { LeeftijdType, PeriodeType, PersoonType, WonenType, WoningType } from "./types";
 
-function telKinderen(personen: PersoonType[]): number {
-  return personen.length - telVolwassenen(personen);
+export function isVolwassene(persoon: PersoonType): boolean {
+  return persoon.leeftijd == LeeftijdType.V || persoon.leeftijd == LeeftijdType.AOW;
 }
 
-function telPersonen(personen: PersoonType[], controleLeeftijd: LeeftijdType) {
+export function heeftInkomen(persoon: PersoonType): boolean {
+  return (
+    isVolwassene(persoon) &&
+    ((persoon.bruto_inkomen && persoon.bruto_inkomen > 0) || (persoon.percentage && persoon.percentage > 0))
+  );
+}
+
+export function telPersonen(personen: PersoonType[], controleLeeftijd: LeeftijdType) {
   return personen.filter((p) => p.leeftijd == controleLeeftijd).length;
 }
 
-function telVolwassenen(personen: PersoonType[]): number {
+export function telVolwassenen(personen: PersoonType[]): number {
   return telPersonen(personen, LeeftijdType.V) + telPersonen(personen, LeeftijdType.AOW);
 }
 
-function toeslagenPartner(personen: PersoonType[]): boolean {
+export function telKinderen(personen: PersoonType[]): number {
+  return personen.length - telVolwassenen(personen);
+}
+
+export function toeslagenPartner(personen: PersoonType[]): boolean {
   return telVolwassenen(personen) > 1;
 }
 
-function eenVerdiener(personen: PersoonType[]): boolean {
-  return personen.filter((p) => p.bruto_inkomen > 0).length == 0;
+export function eenVerdiener(personen: PersoonType[]): boolean {
+  return personen.filter(heeftInkomen).length == 0;
 }
 
-function aow(personen: PersoonType[]): boolean {
+export function aow(personen: PersoonType[]): boolean {
   return telPersonen(personen, LeeftijdType.AOW) > 0;
 }
 
-function isHuur(wonen: WonenType): boolean {
+export function isHuur(wonen: WonenType): boolean {
   return wonen.woning_type == WoningType.HUUR;
 }
 
-function negatiefIsNul(getal: number): number {
+export function negatiefIsNul(getal: number): number {
   return Math.max(0, getal);
 }
 
-function positiefIsNul(getal: number): number {
+export function positiefIsNul(getal: number): number {
   return Math.min(0, getal);
 }
 
-function factorBerekening(periode: PeriodeType): number {
+export function factorBerekening(periode: PeriodeType): number {
   return PeriodeType.MAAND == periode ? 1 / 12 : 1;
 }
 
 export default {
-  telKinderen,
+  aow,
+  factorBerekening,
+  isHuur,
+  isVolwassene,
   eenVerdiener,
+  heeftInkomen,
+  negatiefIsNul,
+  positiefIsNul,
+  telKinderen,
   telPersonen,
   telVolwassenen,
   toeslagenPartner,
-  aow,
-  isHuur,
-  negatiefIsNul,
-  positiefIsNul,
-  factorBerekening,
 };

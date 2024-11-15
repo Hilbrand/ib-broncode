@@ -18,7 +18,8 @@
   white-space: nowrap;
 }
 .n-data-table-th__title {
-  white-space: nowrap !important;
+  word-break: initial;
+  text-align: center;
 }
 </style>
 
@@ -52,7 +53,7 @@ const kolommen = computed<DataTableColumns>(() => {
   if (props.gegevens.tab === TabType.BI) {
     return huur ? biHuurKolommen() : biKoopKolommen();
   } else if (props.gegevens.tab === TabType.MD) {
-    return huur ? mdHuurKolommen() : mdKoopKolommen();
+    return huur ? mdHuurKolommen(props.gegevens.personen) : mdKoopKolommen(props.gegevens.personen);
   } else {
     return bdKolommen();
   }
