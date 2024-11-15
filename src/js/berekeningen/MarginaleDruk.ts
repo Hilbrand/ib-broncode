@@ -26,6 +26,7 @@ import {
   VisualisatieTypeType,
   WoningType,
 } from "../../ts/types";
+import inkomen from "../belasting/inkomen";
 
 export class MarginaleDruk extends Berekenen {
   bi: BeschikbaarInkomen;
@@ -44,15 +45,22 @@ export class MarginaleDruk extends Berekenen {
     return [0, 100];
   }
 
-  bereken(arbeidsInkomen: number, visualisatie: VisualisatieTypeType): MarginaleDrukResultaatType {
-    const berekening1 = this.bi.bereken(arbeidsInkomen, visualisatie);
-    const berekening2 = this.bi.bereken(arbeidsInkomen + this.extraLoon(arbeidsInkomen), visualisatie);
+  bereken(arbeidsinkomen: number, visualisatie: VisualisatieTypeType): MarginaleDrukResultaatType {
+    // Andere arbeidsinkomen moet berekend worden over eerste arbeidsinkomen en niet over inkomen + extra loon
+    // Daarom hier uit rekenen en doorgeven aan beide functie aanroepen.
+    const anderenArbeidsinkomen = inkomen.anderePersonenToetsInkomen(arbeidsinkomen, this.personen);
+    const berekening1 = this.bi.berekenBeschikbaarInkomen(arbeidsinkomen, anderenArbeidsinkomen, visualisatie);
+    const berekening2 = this.bi.berekenBeschikbaarInkomen(
+      arbeidsinkomen + this.extraLoon(arbeidsinkomen),
+      anderenArbeidsinkomen,
+      visualisatie
+    );
 
     return this.marginaleDruk(berekening1, berekening2, visualisatie);
   }
 
   extraLoon(arbeidsInkomen: number): number {
-    return this.vis.svt == "a" ? this.vis.sv_abs : arbeidsInkomen * (this.vis.sv_p / 100);
+    return this.vis.svt == "a" ? this.vis.sv_abs : arbeidsInkomen * (this.vis.sv_p * 0.01);
   }
 
   mdAbsolute(netto1: number, netto2: number, inverse: boolean): number {
@@ -93,7 +101,7 @@ export class MarginaleDruk extends Berekenen {
     const Δahk = this.mdAbsolute(berekening1.ahk, berekening2.ahk, false);
     const ΔahkMax = this.mdAbsolute(berekening1.ahkMax, berekening2.ahkMax, false);
 
-    const Δnvzk = this.mdAbsolute(berekening1.nvzk, berekening2.nvzk, false);
+    const Δnvzk = this.mdAbsolute(berekening2.nvzk, berekening1.nvzk, false);
 
     const Δzt = this.mdAbsolute(berekening1.zt, berekening2.zt, false);
     const Δwonen = this.mdAbsolute(berekening1.wonen, berekening2.wonen, false);
@@ -122,6 +130,7 @@ export class MarginaleDruk extends Berekenen {
 
     return {
       arbeidsinkomen: berekening1.arbeidsinkomen,
+      anderenArbeidsinkomen: berekening1.anderenArbeidsinkomen,
       extraLoon: ΔextraLoon,
       ibBox1: presentatieFunctie(ΔibBox1, ΔextraLoon, true),
       nettoLoonBelasting: presentatieFunctie(nettoLoonBelastingPresentatie, ΔextraLoon, grafiek),

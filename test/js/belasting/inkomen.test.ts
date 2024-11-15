@@ -17,7 +17,7 @@
 
 import { expect, test } from "vitest";
 import inkomen from "../../../src/js/belasting/inkomen";
-import { LeeftijdType } from "../../../src/ts/types";
+import { InkomenType, LeeftijdType } from "../../../src/ts/types";
 
 const JAAR: string = "2023";
 
@@ -69,6 +69,7 @@ test("Arbeidskorting 60.000", () => {
 
 test("Belasting 10.000", () => {
   expect(inkomen.inkomstenBelasting(JAAR, 10000, false)).toEqual(3693);
+  expect(inkomen.inkomstenBelasting(JAAR, 10957, false) - inkomen.inkomstenBelasting(JAAR, 9977, false)).toEqual(361);
   expect(inkomen.inkomstenBelasting(JAAR, 10000, true)).toEqual(1903);
 });
 
@@ -87,10 +88,8 @@ test("Netto 10.000", () => {
   expect(inkomen.netto(JAAR, 10000)).toEqual(6307);
 });
 
-test("", () => {
-  expect(
-    inkomen.toeslagenToetsInkomen(100, [{ bruto_inkomen: 200, leeftijd: LeeftijdType.V }, { leeftijd: LeeftijdType.V }])
-  ).toEqual(300);
+test("Test toeslagenToetsInkomen", () => {
+  expect(inkomen.toeslagenToetsInkomen(10000, [20000, 20000])).toEqual(50000);
 });
 
 // test('Netto 25.000', () => {

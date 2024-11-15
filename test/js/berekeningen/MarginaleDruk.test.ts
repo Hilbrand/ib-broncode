@@ -18,24 +18,12 @@
 import { expect, test } from "vitest";
 import { BeschikbaarInkomen } from "../../../src/js/berekeningen/BeschikbaarInkomen.js";
 import { MarginaleDruk } from "../../../src/js/berekeningen/MarginaleDruk.js";
-import {
-  InvoerGegevensType,
-  LeeftijdType,
-  MarginaleDrukResultaatType,
-  PeriodeType,
-  PersoonType,
-  SalarisVerhogingType,
-  VisualisatieType,
-  VisualisatieTypeType,
-  WonenType,
-  WoningType,
-} from "../../../src/ts/types.js";
+import { InvoerGegevensType, MarginaleDrukResultaatType, VisualisatieTypeType } from "../../../src/ts/types.js";
 import {
   alleenstaande2KinderenHuur,
   alleenstaandeKoop,
   eenverdiener2KinderenHuur,
   eenverdiener2kinderenKoop,
-  invoerGegevens,
 } from "./invoer";
 
 function bereken(
@@ -58,6 +46,7 @@ test("Bereken 2024 marginale druk alleenstaande 27500, 2 kinderen, huur 674", ()
     ahkMax: -63,
     ak: 24,
     akMax: 24,
+    anderenArbeidsinkomen: [],
     arbeidsinkomen: 29206,
     extraLoon: 939,
     hraMax: 0,
@@ -71,7 +60,7 @@ test("Bereken 2024 marginale druk alleenstaande 27500, 2 kinderen, huur 674", ()
     nettoInkomen: 477,
     nettoLoon: 848,
     nettoLoonBelasting: 91,
-    nvzk: -189,
+    nvzk: 189,
     wonen: -180,
     zt: -128,
   };
@@ -86,6 +75,7 @@ test("Bereken 2024 beschikbaar inkomen eenverdiener 47500, 2 kinderen, huur 674"
     ahkMax: -63,
     ak: -61,
     akMax: -61,
+    anderenArbeidsinkomen: [],
     arbeidsinkomen: 45633,
     extraLoon: 939,
     hraMax: 0,
@@ -117,6 +107,7 @@ test("Bereken 2024 beschikbaar inkomen meestverdiener 45000, 2 kinderen, huur 67
     ahkMax: -62,
     ak: -62,
     akMax: -62,
+    anderenArbeidsinkomen: [21969],
     arbeidsinkomen: 43313,
     extraLoon: 939,
     hraMax: 0,
@@ -145,6 +136,7 @@ test("Bereken 2024 beschikbaar inkomen 47500 eenverdiener, 2 kinderen, koop", ()
     ahkMax: -62,
     ak: -61,
     akMax: -61,
+    anderenArbeidsinkomen: [],
     arbeidsinkomen: 45633,
     extraLoon: 939,
     hraMax: 0,
@@ -173,6 +165,7 @@ test("Bereken 2024 beschikbaar inkomen 80000 alleenstaande, koop", () => {
     ahkMax: -62,
     ak: -61,
     akMax: -61,
+    anderenArbeidsinkomen: [],
     arbeidsinkomen: 80000,
     extraLoon: 939,
     hraMax: 118,

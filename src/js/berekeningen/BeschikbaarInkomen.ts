@@ -31,7 +31,6 @@ import {
   WoningType,
 } from "../../ts/types";
 import { Legenda } from "../grafieken/Legenda";
-import zorgtoeslag from "../belasting/zorgtoeslag";
 
 export class BeschikbaarInkomen extends Berekenen {
   beschikbaarInkomen: number;
@@ -50,13 +49,19 @@ export class BeschikbaarInkomen extends Berekenen {
     return [0, Math.round(yDomain[1] / (1000 / this.factor))];
   }
 
-  bereken(arbeidsInkomen: number, visualisatie: VisualisatieTypeType): BeschikbaarInkomenResultaatType {
-    return this.berekenBeschikbaarInkomen(arbeidsInkomen, visualisatie);
+  bereken(arbeidsinkomen: number, visualisatie: VisualisatieTypeType): BeschikbaarInkomenResultaatType {
+    const anderenArbeidsinkomen = inkomen.anderePersonenToetsInkomen(arbeidsinkomen, this.personen);
+
+    return this.berekenBeschikbaarInkomen(arbeidsinkomen, anderenArbeidsinkomen, visualisatie);
   }
 
-  berekenBeschikbaarInkomen(arbeidsinkomen, visualisatie: VisualisatieTypeType): BeschikbaarInkomenResultaatType {
+  berekenBeschikbaarInkomen(
+    arbeidsinkomen: number,
+    anderenArbeidsinkomen: number[],
+    visualisatie: VisualisatieTypeType
+  ): BeschikbaarInkomenResultaatType {
     const aow = this.personen[0].leeftijd == LeeftijdType.AOW;
-    // Hypotheek rente wordt afgetrokken van arbeidsinkomen: toestingsinkomen zal dus lager worden dan arbeidsinkomen.
+    // Hypotheek rente wordt afgetrokken van arbeidsinkomen: toetsingsinkomen zal dus lager worden dan arbeidsinkomen.
     const toetsingsInkomen = inkomen.toetsingsinkomen(arbeidsinkomen, this.algemeneGegevens.hypotheekRenteAftrek);
     // Berekende belasting als hypotheek rente van inkomen is afgetrokken.
     const ibBox1 = inkomen.inkomstenBelasting(this.vis.jaar, toetsingsInkomen, aow);
@@ -81,7 +86,7 @@ export class BeschikbaarInkomen extends Berekenen {
         ? iack.inkomensafhankelijkeCombinatiekorting(
             this.vis.jaar,
             arbeidsinkomen,
-            this.algemeneGegevens.iacbInkomen,
+            anderenArbeidsinkomen,
             this.algemeneGegevens.aow
           )
         : 0;
@@ -100,7 +105,7 @@ export class BeschikbaarInkomen extends Berekenen {
       arbeidskortingMax - arbeidskorting + (algemeneHeffingsKortingMax - algemeneHeffingsKorting) + (inACKMax - inACK);
 
     // Inkomen berekening inclusief fiscale partners.
-    let toeslagenToetsInkomen = inkomen.toeslagenToetsInkomen(arbeidsinkomen, this.personen);
+    let toeslagenToetsInkomen = inkomen.toeslagenToetsInkomen(arbeidsinkomen, anderenArbeidsinkomen);
     let kindgebondenBudget = kgb.kindgebondenBudget(
       this.vis.jaar,
       toeslagenToetsInkomen,
@@ -137,6 +142,7 @@ export class BeschikbaarInkomen extends Berekenen {
 
     let beschikbaarInkomen: BeschikbaarInkomenResultaatType = {
       arbeidsinkomen: arbeidsinkomen,
+      anderenArbeidsinkomen: anderenArbeidsinkomen.filter((_) => _ > 0),
       nettoLoonBelasting: maxBelasting,
       nettoArbeidsinkomen: nettoArbeidsinkomen,
       nettoInkomen: nettoInkomen,

@@ -31,7 +31,7 @@ const vis: VisualisatieType = {
   periode: PeriodeType.JAAR,
   svt: SalarisVerhogingType.A,
 };
-const alleenstaande2Kinderen: PersoonType[] = [
+export const alleenstaande2Kinderen: PersoonType[] = [
   { leeftijd: LeeftijdType.V },
   { leeftijd: LeeftijdType.K611 },
   { leeftijd: LeeftijdType.K611 },

@@ -24,9 +24,13 @@
                 :consistent-menu-width="false"
               />
               <div v-if="inkomenNietEersteVolwassene(index)">
-                Bruto inkomen
+                <n-radio-group v-model:value="gegevens[index].inkomen_type">
+                  <n-radio label="Bruto inkomen p/j" key="bruto" value="bruto" size="small" />
+                  <n-radio label="Percentage van eerste inkomen" key="percentage" value="percentage" size="small" />
+                </n-radio-group>
                 <n-input-number
-                  placeholder="Brutto inkomen p/j"
+                  v-if="gegevens[index].inkomen_type === 'bruto'"
+                  placeholder="Bruto inkomen p/j"
                   id="index+'bruto_inkomen'"
                   min="0"
                   step="1"
@@ -34,6 +38,17 @@
                   v-model:value="gegevens[index]['bruto_inkomen']"
                 >
                   <template #prefix>&euro;</template>
+                </n-input-number>
+                <n-input-number
+                  v-if="gegevens[index].inkomen_type === 'percentage'"
+                  placeholder="Percentage van eerste inkomen"
+                  id="index+'percentage'"
+                  min="0"
+                  step="1"
+                  size="small"
+                  v-model:value="gegevens[index]['percentage']"
+                >
+                  <template #suffix>%</template>
                 </n-input-number>
               </div>
             </td>
@@ -62,6 +77,7 @@
 
 <script>
 import belasting_data from "@/js/belasting/belasting_data";
+import { InkomenType } from "../ts/types";
 
 const MAX_PERSONEN = 8;
 
@@ -104,8 +120,8 @@ export default {
         }
       } else if (newGegevens > oldGegevens) {
         for (let i = 0; i < newGegevens - oldGegevens; i++) {
-          // moet altijd geldige waarde hebben, dus initaliseer met 'V'
-          current.push({ leeftijd: "V", bruto_inkomen: 0 });
+          // moet altijd geldige waarde hebben, dus initialiseer met 'V'
+          current.push({ leeftijd: "V", inkomen_type: "bruto", bruto_inkomen: 0 });
         }
       }
     },

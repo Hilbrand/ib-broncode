@@ -38,8 +38,8 @@
                 size="tiny"
                 style="width: 100px"
               >
-                <template #suffix>%</template></n-input-number
-              >
+                <template #suffix>%</template>
+              </n-input-number>
               <n-input-number
                 v-if="gegevens.visualisatie.svt == 'a'"
                 v-model:value="gegevens.visualisatie.sv_abs"
@@ -48,8 +48,8 @@
                 size="tiny"
                 style="width: 100px"
               >
-                <template #prefix>€</template></n-input-number
-              >
+                <template #prefix>&euro;</template>
+              </n-input-number>
             </n-input-group>
           </n-space>
           <TabelComponent v-if="gegevens.tab == 'md' && gegevens.visualisatie.type == 't'" :gegevens="gegevens" />
@@ -100,7 +100,7 @@ import WonenComponent from "./WonenComponent.vue";
 import VisualisatieInstellingComponent from "./VisualisatieInstellingComponent.vue";
 import TabelComponent from "./TabelComponent.vue";
 import Legenda from "./Legenda.vue";
-import { JAAR, jsonToNavigatie, navigatieToJson } from "@/ts/navigatie";
+import { JAAR, jsonNaarNavigatie, navigatieNaarJson } from "@/ts/navigatie";
 import algemeen from "@/js/berekeningen/algemeen";
 import stacked_chart from "@/js/grafieken/stacked_chart";
 import { maakSamenvatting } from "@/ts/samenvatting";
@@ -146,7 +146,7 @@ export default {
     };
   },
   mounted() {
-    this.gegevens = navigatieToJson(this.$route.query);
+    this.gegevens = navigatieNaarJson(this.$route.query);
     this.resize();
     window.addEventListener("resize", this.resize);
   },
@@ -157,7 +157,7 @@ export default {
     this.$watch(
       () => this.$route.query,
       (toQuery, previousQuery) => {
-        let queryGegevens = navigatieToJson(toQuery);
+        let queryGegevens = navigatieNaarJson(toQuery);
 
         if (queryGegevens.tab != "intro") {
           this.gegevens = queryGegevens;
@@ -186,7 +186,7 @@ export default {
     },
     replace() {
       this.$router.replace({
-        query: jsonToNavigatie(this.gegevens),
+        query: jsonNaarNavigatie(this.gegevens),
       });
     },
     tabUpdated(value) {
