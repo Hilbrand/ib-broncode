@@ -164,3 +164,11 @@ export type NavigatieType = {
   grafiek?: string; // vervangen door visualisatie
   v?: string;
 };
+
+export type Detail = {
+  naam: string,
+  condities: string[],
+  berekeningen: string[],
+  bedrag: string,
+  bronnen: string[]
+}
