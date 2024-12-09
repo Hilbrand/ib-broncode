@@ -24,6 +24,7 @@ import {
   alleenstaandeKoop,
   eenverdiener2KinderenHuur,
   eenverdiener2kinderenKoop,
+  eenverdiener2kinderenKoop2 as alleenstaande2kinderenKoop2,
 } from "./invoer";
 
 function bereken(
@@ -67,7 +68,7 @@ test("Bereken 2024 marginale druk alleenstaande 27500, 2 kinderen, huur 674", ()
   expect(berekening).toEqual(expected);
 });
 
-test("Bereken 2024 beschikbaar inkomen eenverdiener 47500, 2 kinderen, huur 674", () => {
+test("Bereken 2024 marginale druk eenverdiener 47500, 2 kinderen, huur 674", () => {
   const arbeidsinkomen: number = 45633; // Brutoloon: 47500
   const berekening = bereken(arbeidsinkomen, eenverdiener2KinderenHuur("md"), 939, VisualisatieTypeType.T);
   const expected: MarginaleDrukResultaatType = {
@@ -96,7 +97,7 @@ test("Bereken 2024 beschikbaar inkomen eenverdiener 47500, 2 kinderen, huur 674"
   expect(berekening).toEqual(expected);
 });
 
-test("Bereken 2024 beschikbaar inkomen meestverdiener 45000, 2 kinderen, huur 674", () => {
+test("Bereken 2024 marginale druk meestverdiener 45000, 2 kinderen, huur 674", () => {
   const arbeidsinkomen: number = 43313; // Brutoloon: 45000
   const gegevens = eenverdiener2KinderenHuur("md");
   gegevens.personen[1].bruto_inkomen = 21969;
@@ -128,7 +129,7 @@ test("Bereken 2024 beschikbaar inkomen meestverdiener 45000, 2 kinderen, huur 67
   expect(berekening).toEqual(expected);
 });
 
-test("Bereken 2024 beschikbaar inkomen 47500 eenverdiener, 2 kinderen, koop", () => {
+test("Bereken 2024 marginale druk 47500 eenverdiener, 2 kinderen, koop", () => {
   const arbeidsinkomen: number = 45633; // Brutoloon: 47500
   const berekening = bereken(arbeidsinkomen, eenverdiener2kinderenKoop("md"), 939, VisualisatieTypeType.T);
   const expected: MarginaleDrukResultaatType = {
@@ -157,7 +158,36 @@ test("Bereken 2024 beschikbaar inkomen 47500 eenverdiener, 2 kinderen, koop", ()
   expect(berekening).toEqual(expected);
 });
 
-test("Bereken 2024 beschikbaar inkomen 80000 alleenstaande, koop", () => {
+test("\n\n" + "-".repeat(80) + "\nBereken 2024 marginale druk 47500 alleenstaande, 2 kinderen, koop", () => {
+  const arbeidsinkomen: number = 45633; // Brutoloon: 47500
+  const berekening = bereken(arbeidsinkomen, alleenstaande2kinderenKoop2("md"), 939, VisualisatieTypeType.G);
+  const expected: MarginaleDrukResultaatType = {
+    ahk: 0,
+    ahkMax: 0,
+    ak: 6.5,    // moet 0 zijn want iack extra compenseert ook ak verlies.
+    akMax: 6.5, // moet 0 zijn
+    anderenArbeidsinkomen: [],
+    arbeidsinkomen: 45633,
+    extraLoon: 939,
+    hraMax: 0,
+    iack: 0,
+    iackMax: 0,
+    ibBox1: 0,
+    kb: 0,
+    kgb: 6.82,
+    marginaleDruk: 6.82,
+    nettoArbeidsinkomen: 0,
+    nettoInkomen: 0,
+    nettoLoon: 0,
+    nettoLoonBelasting: 0,
+    nvzk: 0,
+    wonen: 0,
+    zt: 0,
+  };
+  expect(berekening).toEqual(expected);
+});
+
+test("Bereken 2024 marginale druk 80000 alleenstaande, koop", () => {
   const arbeidsinkomen: number = 80000;
   const berekening = bereken(arbeidsinkomen, alleenstaandeKoop("md"), 939, VisualisatieTypeType.T);
   const expected: MarginaleDrukResultaatType = {

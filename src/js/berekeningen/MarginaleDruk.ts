@@ -144,7 +144,7 @@ export class MarginaleDruk extends Berekenen {
       akMax: presentatieFunctie(ΔakMax, ΔextraLoon, grafiek),
       iack: presentatieFunctie(Δiack, ΔextraLoon, grafiek),
       iackMax: presentatieFunctie(ΔiackMax, ΔextraLoon, grafiek),
-      ahk: presentatieFunctie(grafiek ? Δahk - Δnvzk : Δahk, ΔextraLoon, grafiek),
+      ahk: presentatieFunctie(grafiek ? Δahk - functies.positiefIsNul(Δnvzk) : Δahk, ΔextraLoon, grafiek),
       ahkMax: presentatieFunctie(ΔahkMax, ΔextraLoon, grafiek),
       nvzk: presentatieFunctie(Δnvzk, ΔextraLoon, grafiek),
 

@@ -42,6 +42,12 @@ const eenverdiener2Kinderen: PersoonType[] = [
   { leeftijd: LeeftijdType.K611 },
   { leeftijd: LeeftijdType.K611 },
 ];
+const alleenstaande2Kinderen2: PersoonType[] = [
+  { leeftijd: LeeftijdType.V },
+  { leeftijd: LeeftijdType.K611 },
+  { leeftijd: LeeftijdType.K1215 },
+];
+
 const alleenstaande: PersoonType[] = [{ leeftijd: LeeftijdType.V }];
 
 const huur: WonenType = { woning_type: WoningType.HUUR, huur: 674 };
@@ -49,6 +55,11 @@ const koop: WonenType = {
   woning_type: WoningType.KOOP,
   rente: 13482,
   woz: 315000,
+};
+const koop2: WonenType = {
+  woning_type: WoningType.KOOP,
+  rente: 32000,
+  woz: 815000,
 };
 
 export function invoerGegevens(
@@ -77,6 +88,10 @@ export function eenverdiener2KinderenHuur(tab: string): InvoerGegevensType {
 
 export function eenverdiener2kinderenKoop(tab: string): InvoerGegevensType {
   return invoerGegevens(tab, eenverdiener2Kinderen, koop, vis);
+}
+
+export function eenverdiener2kinderenKoop2(tab: string): InvoerGegevensType {
+  return invoerGegevens(tab, alleenstaande2Kinderen2, koop2, vis);
 }
 
 export function alleenstaandeKoop(tab: string): InvoerGegevensType {
