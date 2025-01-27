@@ -164,7 +164,7 @@ test("\n\n" + "-".repeat(80) + "\nBereken 2024 marginale druk 47500 alleenstaand
   const expected: MarginaleDrukResultaatType = {
     ahk: 0,
     ahkMax: 0,
-    ak: 6.5,    // moet 0 zijn want iack extra compenseert ook ak verlies.
+    ak: 6.5, // moet 0 zijn want iack extra compenseert ook ak verlies.
     akMax: 6.5, // moet 0 zijn
     anderenArbeidsinkomen: [],
     arbeidsinkomen: 45633,

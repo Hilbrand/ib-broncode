@@ -79,7 +79,7 @@ export enum VisualisatieTypeType {
 
 export type VisualisatieType = {
   type?: VisualisatieTypeType;
-  jaar?: string;
+  jaar?: string | number;
   periode?: PeriodeType;
   van_tot?: number[];
   stap?: number;

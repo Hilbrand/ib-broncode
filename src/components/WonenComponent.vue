@@ -24,7 +24,7 @@
         </n-space>
         <n-button-group>
           <n-button @click="setMaxHuur()" size="small">Max. Huurgrens</n-button>
-          <n-button @click="setAvgHuur()" size="small">Gemiddele Huur</n-button>
+          <n-button @click="setAvgHuur()" size="small">Gemiddelde Huur</n-button>
         </n-button-group>
       </n-space>
     </div>
@@ -98,7 +98,7 @@ export default {
       this.gegevens.huur = belasting_data.HT[this.jaar].MaxHuur;
     },
     setAvgHuur(event) {
-      this.gegevens.huur = belasting_data.AVG_HUUR;
+      this.gegevens.huur = belasting_data.AVG_HUUR[this.jaar] || 0;
     },
   },
 };

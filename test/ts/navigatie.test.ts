@@ -41,8 +41,8 @@ const personenJson: PersoonType[] = [
   { leeftijd: LeeftijdType.K611 },
 ];
 const wonenQuery: string = "huur;123";
-const wonenJson: WonenType = { woning_type: WoningType.HUUR, huur: 123, rente: 13482, woz: 315000 };
-const standaardJaar: string = JAAR;
+const wonenJson: WonenType = { woning_type: WoningType.HUUR, huur: 123, rente: 12600, woz: 315000 };
+const standaardJaar: string | number = JAAR;
 const grafiekOud1Query: string = "jaar;1,2;p;4;12345";
 const grafiekOud2Query: string = standaardJaar + ";jaar;1,2;p;4;12345";
 const visualisatieQuery: string = "g;" + standaardJaar + ";jaar;1,2;100;p;4;12345";
@@ -93,7 +93,7 @@ const jsonHuur: InvoerGegevensType = {
 const jsonExpectedHuur: InvoerGegevensType = {
   tab: TabType.BI,
   personen: personenJson,
-  wonen: { woning_type: WoningType.HUUR, huur: 123, woz: 315000, rente: 13482 },
+  wonen: { woning_type: WoningType.HUUR, huur: 123, woz: 315000, rente: 12600 },
   visualisatie: visualisatieJson,
 };
 
@@ -106,7 +106,7 @@ const queryKoop: NavigatieType = {
 const jsonExpectedKoop: InvoerGegevensType = {
   tab: TabType.BI,
   personen: personenJson,
-  wonen: { woning_type: WoningType.KOOP, huur: 600, woz: 123456, rente: 5432 },
+  wonen: { woning_type: WoningType.KOOP, huur: 710, woz: 123456, rente: 5432 },
   visualisatie: visualisatieJson,
 };
 
@@ -124,9 +124,9 @@ test("half lege navigatie", () => {
     tab: TabType.BD,
     wonen: {
       woning_type: "huur",
-      huur: 600,
+      huur: 710,
       woz: 315000,
-      rente: 13482,
+      rente: 12600,
     },
     visualisatie: {
       type: VisualisatieTypeType.G,
@@ -134,7 +134,7 @@ test("half lege navigatie", () => {
       van_tot: [10000, 100000],
       stap: 100,
       arbeidsInkomen: 0,
-      jaar: "PD2025",
+      jaar: 2025,
       svt: "p",
       sv_p: 3,
       sv_abs: 1000,
@@ -143,14 +143,14 @@ test("half lege navigatie", () => {
 });
 
 test("lege navigatie naar json", () => {
-  expect(navigatieNaarJson("")).toEqual({
+  expect(navigatieNaarJson({})).toEqual({
     tab: "intro",
     personen: [{ leeftijd: "V" }],
     wonen: {
       woning_type: "huur",
-      huur: 600,
+      huur: 710,
       woz: 315000,
-      rente: 13482,
+      rente: 12600,
     },
     visualisatie: {
       type: VisualisatieTypeType.G,
@@ -158,7 +158,7 @@ test("lege navigatie naar json", () => {
       van_tot: [10000, 100000],
       stap: 100,
       arbeidsInkomen: 0,
-      jaar: "PD2025",
+      jaar: 2025,
       svt: "p",
       sv_p: 3,
       sv_abs: 1000,

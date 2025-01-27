@@ -35,11 +35,13 @@ import {
 
 const KEY_VALUE_SPLIT: string = ";";
 const DEFAULT_WOON_TYPE: WoningType = WoningType.HUUR;
-const AVG_HUUR: number = 600;
+const AVG_HUUR: number = 710;
 const AVG_WOZ: number = 315000;
-const AVG_RENTE: number = AVG_WOZ * 0.0428;
-export const JAAR: string = "PD2025";
+const AVG_RENTE_PERCENTAGE: number = 0.04;
+const AVG_RENTE: number = AVG_WOZ * AVG_RENTE_PERCENTAGE;
+export const JAAR: string | number = 2025;
 export const JAREN: JaarType[] = [
+  { value: "2025", label: "2025" },
   { value: "PD2025", label: "Prinsjesdag Belastingplan 2025" },
   { value: "2024", label: "2024" },
   { value: "2023", label: "2023" },
