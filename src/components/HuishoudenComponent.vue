@@ -15,38 +15,61 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(p, index) in gegevens" :key="p" size="small">
+          <tr v-for="(p, index) in personenGegevens" :key="p" size="small">
             <td>{{ index + 1 }}</td>
             <td>
               <n-select
-                v-model:value="gegevens[index]['leeftijd']"
+                v-model:value="personenGegevens[index]['leeftijd']"
                 :options="actieveLeeftijden(index)"
                 :consistent-menu-width="false"
               />
               <div v-if="inkomenNietEersteVolwassene(index)">
-                <n-radio-group v-model:value="gegevens[index].inkomen_type">
+                <n-radio-group v-model:value="personenGegevens[index].inkomen_type">
                   <n-radio label="Bruto inkomen p/j" key="bruto" value="bruto" size="small" />
                   <n-radio label="Percentage van eerste inkomen" key="percentage" value="percentage" size="small" />
                 </n-radio-group>
                 <n-input-number
-                  v-if="gegevens[index].inkomen_type === 'bruto'"
+                  v-if="personenGegevens[index].inkomen_type === 'bruto'"
                   placeholder="Bruto inkomen p/j"
                   id="index+'bruto_inkomen'"
                   min="0"
                   step="1"
                   size="small"
-                  v-model:value="gegevens[index]['bruto_inkomen']"
+                  v-model:value="personenGegevens[index]['bruto_inkomen']"
                 >
                   <template #prefix>&euro;</template>
                 </n-input-number>
                 <n-input-number
-                  v-if="gegevens[index].inkomen_type === 'percentage'"
+                  v-if="personenGegevens[index].inkomen_type === 'percentage'"
                   placeholder="Percentage van eerste inkomen"
                   id="index+'percentage'"
                   min="0"
                   step="1"
                   size="small"
-                  v-model:value="gegevens[index]['percentage']"
+                  v-model:value="personenGegevens[index]['percentage']"
+                >
+                  <template #suffix>%</template>
+                </n-input-number>
+              </div>
+              <div v-if="inkomenEersteVolwassene(index)">
+                <n-input-number
+                  placeholder="Pensioen Franchise"
+                  id="index+'franchise'"
+                  min="0"
+                  step="1"
+                  size="small"
+                  v-model:value="personenGegevens[index]['pensioenFranchise']"
+                >
+                  <template #prefix>&euro;</template>
+                </n-input-number>
+                <n-input-number
+                  placeholder="Pensioenpremie Percentage"
+                  id="index+'premiePercentage'"
+                  min="0"
+                  max="100"
+                  step="0.01"
+                  size="small"
+                  v-model:value="personenGegevens[index]['pensioenPremiePercentage']"
                 >
                   <template #suffix>%</template>
                 </n-input-number>
@@ -77,7 +100,6 @@
 
 <script>
 import belasting_data from "@/js/belasting/belasting_data";
-import { InkomenType } from "../ts/types";
 
 const MAX_PERSONEN = 8;
 
@@ -99,17 +121,17 @@ export default {
   props: ["personen"],
   data() {
     return {
-      gegevens: [],
+      personenGegevens: [],
       aantalPersonen: 1,
     };
   },
   watch: {
     personen(newPersonen, oldPersonen) {
-      this.gegevens = this.personen;
+      this.personenGegevens = this.personen;
       this.aantalPersonen = this.personen.length;
     },
     aantalPersonen(newGegevens, oldGegevens) {
-      let current = this.gegevens;
+      let current = this.personenGegevens;
 
       if (current.length == newGegevens) {
         return;
@@ -121,7 +143,13 @@ export default {
       } else if (newGegevens > oldGegevens) {
         for (let i = 0; i < newGegevens - oldGegevens; i++) {
           // moet altijd geldige waarde hebben, dus initialiseer met 'V'
-          current.push({ leeftijd: "V", inkomen_type: "bruto", bruto_inkomen: 0 });
+          current.push({
+            leeftijd: "V",
+            inkomen_type: "bruto",
+            bruto_inkomen: 0,
+            pensioenFranchise: 0,
+            pensioenPremiePercentage: 0,
+          });
         }
       }
     },
@@ -137,16 +165,19 @@ export default {
         return leeftijdenData;
       }
     },
-    inkomenNietEersteVolwassene(index) {
-      if (index == 0) {
-        return false;
-      }
-      let leeftijd = this.gegevens[index]["leeftijd"];
+    volwassene(index) {
+      let leeftijd = this.personenGegevens[index]["leeftijd"];
 
       return leeftijd == "V" || leeftijd == "AOW";
     },
+    inkomenEersteVolwassene(index) {
+      return index === 0 && this.volwassene(index);
+    },
+    inkomenNietEersteVolwassene(index) {
+      return index !== 0 && this.volwassene(index);
+    },
     verwijderPersoon(index) {
-      this.gegevens.splice(index, 1);
+      this.personenGegevens.splice(index, 1);
       this.aantalPersonen--;
     },
   },

@@ -24,6 +24,7 @@ import {
   JaarType,
   LeeftijdType,
   NavigatieType,
+  PensioenType,
   PeriodeType,
   PersoonType,
   SalarisVerhogingType,
@@ -85,16 +86,24 @@ export function standaardPersoon(): PersoonType {
   };
 }
 
-function persoonNavigatieNaarJson(p: any[], index: number): PersoonType {
-  const len = lengte(p);
+/**
+ * lees array met gegevens persoon in het json data formaat.
+ * Mogelijke opties:
+ * - <persoon>
+ * - [<persoon>, <bruto_inkomen|percentage>]
+ * - [<persoon>, <franchise>, <pensioenPercentage>]
+ * - [<persoon>, <bruto_inkomen|percentage>, <franchise>, <pensioenPercentage>]
+ */
+function persoonNavigatieNaarJson(p: any, index: number): PersoonType {
+  const len = Array.isArray(p) ? lengte(p) : 1;
   let persoon: PersoonType = standaardPersoon();
 
   if (len == 0) {
     return persoon;
   }
   persoon.leeftijd = Array.isArray(p) ? p[0] : p;
-
-  if (len == 2) {
+  const vier = len == 4;
+  if (len == 2 || vier) {
     if (isNaN(p[1])) {
       persoon.inkomen_type = InkomenType.PERCENTAGE;
       persoon.percentage = +p[1].substring(1);
@@ -104,6 +113,11 @@ function persoonNavigatieNaarJson(p: any[], index: number): PersoonType {
     }
   } else if (index != 0 && (persoon.leeftijd == LeeftijdType.V || persoon.leeftijd == LeeftijdType.AOW)) {
     persoon.inkomen_type = InkomenType.BRUTO;
+  }
+  const drie = len == 3;
+  if (index == 0 || drie || vier) {
+    persoon.pensioenFranchise = p[drie ? 1 : 2] || 0;
+    persoon.pensioenPremiePercentage = p[drie ? 2 : 3] || 0;
   }
   return persoon;
 }
@@ -161,7 +175,7 @@ export function standardVisualisatie(): VisualisatieType {
 
 // visualisatie=<type>;<jaar>;<periode>;<start>;<eind>;<stap>;<md type>;<md getal>;<arbeidsinkomen>
 
-function visualisatieNavigatieNaarJson(p: any): VisualisatieType {
+function visualisatieNavigatieNaarJson(p: any[]): VisualisatieType {
   let vis: VisualisatieType = standardVisualisatie();
   let orgLength8: boolean = lengte(p) == 8;
 
@@ -208,17 +222,20 @@ export function navigatieNaarJson(query: NavigatieType): InvoerGegevensType {
 
 // --------------------------------------------------
 
-// p=<leeftijd>;<leeftijd>[(,<bruto_inkomen>)|,P<percentage>)]
+// p=<leeftijd>;<leeftijd>[(,<bruto_inkomen>)|,P<percentage>)][,<franchise>,<premiePercentage>]
 
 function persoonJsonNaarNavigatie(persoon: PersoonType) {
   const alsVoegToe = (n: number, p: string) => (!n || n === 0 ? "" : p + n);
-
-  return (
-    persoon.leeftijd +
-    (persoon.inkomen_type == InkomenType.PERCENTAGE
+  const inkomen =
+    persoon.inkomen_type == InkomenType.PERCENTAGE
       ? ",P" + alsVoegToe(persoon.percentage, "")
-      : alsVoegToe(persoon.bruto_inkomen, ","))
-  );
+      : alsVoegToe(persoon.bruto_inkomen, ",");
+  const pensioen =
+    persoon.pensioenFranchise && persoon.pensioenFranchise !== 0
+      ? "," + persoon.pensioenFranchise + "," + persoon.pensioenPremiePercentage
+      : "";
+
+  return persoon.leeftijd + inkomen + pensioen;
 }
 
 function personenJsonNaarNavigatie(personen: PersoonType[]): string[] {

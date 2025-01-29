@@ -27,8 +27,22 @@
  */
 
 import { isVolwassene } from "../../ts/functies";
-import { InkomenType, LeeftijdType, PersoonType } from "../../ts/types";
+import { InkomenType, PersoonType } from "../../ts/types";
 import data from "./belasting_data";
+
+// Berekening van pensioen premie. Als brutoloon < minimum loon, dan percentage minimum loon gebruiken.
+// Dat is, ((minimum loon - franchise) / minimum loon) * premie factor
+// Als boven minimum loon dan (bruto inkomen-franchise) * premie factor
+function pensioenPremie(jaar: string, brutoloon: number, franchise: number, premiePercentage: number): number {
+  const wml = data.WML[jaar];
+  let premie;
+  if (brutoloon < wml) {
+    premie = brutoloon * (1 - franchise / wml) * premiePercentage * 0.01;
+  } else {
+    premie = (brutoloon - franchise) * premiePercentage * 0.01;
+  }
+  return Math.round(premie);
+}
 
 function algemeneHeffingsKorting(jaar: string, toetsingsinkomen: number, aow: boolean): number {
   const ahkt = aow ? data.AHK[jaar].AOW : data.AHK[jaar].V;
@@ -110,6 +124,7 @@ export default {
   inkomstenBelasting,
   isMeestVerdiener,
   netto,
+  pensioenPremie,
   toeslagenToetsInkomen,
   toetsingsinkomen,
 };

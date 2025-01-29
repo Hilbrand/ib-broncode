@@ -56,12 +56,25 @@ export class BeschikbaarInkomen extends Berekenen {
   }
 
   berekenBeschikbaarInkomen(
-    arbeidsinkomen: number,
+    brutoloon: number,
     anderenArbeidsinkomen: number[],
     visualisatie: VisualisatieTypeType
   ): BeschikbaarInkomenResultaatType {
-    const aow = this.personen[0].leeftijd == LeeftijdType.AOW;
+    const hoofdpersoon = this.personen[0];
+    const aow = hoofdpersoon.leeftijd == LeeftijdType.AOW;
+    // Pensioen Premie
+    const pensioenPremie =
+      hoofdpersoon.pensioenFranchise > 0
+        ? inkomen.pensioenPremie(
+            this.vis.jaar,
+            brutoloon,
+            hoofdpersoon.pensioenFranchise,
+            hoofdpersoon.pensioenPremiePercentage
+          )
+        : 0;
+    const arbeidsinkomen = brutoloon - pensioenPremie;
     // Hypotheek rente wordt afgetrokken van arbeidsinkomen: toetsingsinkomen zal dus lager worden dan arbeidsinkomen.
+
     const toetsingsInkomen = inkomen.toetsingsinkomen(arbeidsinkomen, this.algemeneGegevens.hypotheekRenteAftrek);
     // Berekende belasting als hypotheek rente van inkomen is afgetrokken.
     const ibBox1 = inkomen.inkomstenBelasting(this.vis.jaar, toetsingsInkomen, aow);
@@ -141,7 +154,9 @@ export class BeschikbaarInkomen extends Berekenen {
       huurtoeslag;
 
     let beschikbaarInkomen: BeschikbaarInkomenResultaatType = {
+      brutoloon: brutoloon,
       arbeidsinkomen: arbeidsinkomen,
+      pensioenPremie: pensioenPremie,
       anderenArbeidsinkomen: anderenArbeidsinkomen.filter((_) => _ > 0),
       nettoLoonBelasting: maxBelasting,
       nettoArbeidsinkomen: nettoArbeidsinkomen,
@@ -209,6 +224,11 @@ export class BeschikbaarInkomen extends Berekenen {
         id: id,
         type: "kindgebonden budget",
         getal: this.afronden(beschikbaarInkomen.kgb, factor),
+      },
+      {
+        id: id,
+        type: "pensioen premie",
+        getal: this.afronden(beschikbaarInkomen.pensioenPremie, factor),
       }
     );
   }

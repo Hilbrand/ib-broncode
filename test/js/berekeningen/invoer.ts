@@ -32,18 +32,18 @@ const vis: VisualisatieType = {
   svt: SalarisVerhogingType.A,
 };
 export const alleenstaande2Kinderen: PersoonType[] = [
-  { leeftijd: LeeftijdType.V },
+  { leeftijd: LeeftijdType.V, pensioenFranchise: 17_054, pensioenPremiePercentage: 6.13112951866953 },
   { leeftijd: LeeftijdType.K611 },
   { leeftijd: LeeftijdType.K611 },
 ];
 const eenverdiener2Kinderen: PersoonType[] = [
-  { leeftijd: LeeftijdType.V },
+  { leeftijd: LeeftijdType.V, pensioenFranchise: 17_054, pensioenPremiePercentage: 6.13112951866953 },
   { leeftijd: LeeftijdType.V },
   { leeftijd: LeeftijdType.K611 },
   { leeftijd: LeeftijdType.K611 },
 ];
 const alleenstaande2Kinderen2: PersoonType[] = [
-  { leeftijd: LeeftijdType.V },
+  { leeftijd: LeeftijdType.V, pensioenFranchise: 17_054, pensioenPremiePercentage: 6.13112951866953 },
   { leeftijd: LeeftijdType.K611 },
   { leeftijd: LeeftijdType.K1215 },
 ];

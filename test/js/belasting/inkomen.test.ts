@@ -21,6 +21,17 @@ import { InkomenType, LeeftijdType } from "../../../src/ts/types";
 
 const JAAR: string = "2023";
 
+// test pensioenPremie
+
+test("Pensioen premieberekening", () => {
+  const franchiseMarkt = 17770;
+  const premieFactor = 6.19560524001808;
+
+  expect(inkomen.pensioenPremie("2025", 25_000, franchiseMarkt, premieFactor)).toEqual(25_000 - 24_410);
+  expect(inkomen.pensioenPremie("2025", 30_000, franchiseMarkt, premieFactor)).toEqual(30_000 - 29_242);
+  expect(inkomen.pensioenPremie("2025", 40_000, franchiseMarkt, premieFactor)).toEqual(40_000 - 38_623);
+});
+
 // test algemeneHeffingsKorting
 
 test("Algemene Heffings Korting 1.000", () => {

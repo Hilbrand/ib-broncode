@@ -42,15 +42,16 @@ function bereken(
 }
 
 test("Bereken 2024 beschikbaar inkomen alleenstaande 27500, 2 kinderen, huur 674", () => {
-  const arbeidsinkomen: number = 26860; /* Brutoloon: 27500*/
-  const berekening = bereken(arbeidsinkomen, alleenstaande2KinderenHuur("bi"), VisualisatieTypeType.T);
+  const brutoloon: number = 27_500;
+  const berekening = bereken(brutoloon, alleenstaande2KinderenHuur("bi"), VisualisatieTypeType.T);
   const expected: BeschikbaarInkomenResultaatType = {
     ahk: 2342,
     ahkMax: 3226,
     ak: 5208,
     akMax: 5208,
     anderenArbeidsinkomen: [],
-    arbeidsinkomen: arbeidsinkomen,
+    arbeidsinkomen: 26_860,
+    brutoloon: brutoloon,
     hraMax: 0,
     iack: 2380,
     iackMax: 2380,
@@ -62,6 +63,7 @@ test("Bereken 2024 beschikbaar inkomen alleenstaande 27500, 2 kinderen, huur 674
     nettoLoon: 26860,
     nettoLoonBelasting: 0,
     nvzk: 884,
+    pensioenPremie: 640,
     wonen: 4896,
     zt: 1477,
   };
@@ -69,15 +71,16 @@ test("Bereken 2024 beschikbaar inkomen alleenstaande 27500, 2 kinderen, huur 674
 });
 
 test("Bereken 2024 beschikbaar inkomen eenverdiener 47500, 2 kinderen, huur 674", () => {
-  const arbeidsinkomen: number = 45633; // Brutoloon: 47500
-  const berekening = bereken(arbeidsinkomen, eenverdiener2KinderenHuur("bi"), VisualisatieTypeType.T);
+  const brutoloon: number = 47_500;
+  const berekening = bereken(brutoloon, eenverdiener2KinderenHuur("bi"), VisualisatieTypeType.T);
   const expected: BeschikbaarInkomenResultaatType = {
     ahk: 1982,
     ahkMax: 1982,
     ak: 5162,
     akMax: 5162,
     anderenArbeidsinkomen: [],
-    arbeidsinkomen: arbeidsinkomen,
+    arbeidsinkomen: 45_633,
+    brutoloon: brutoloon,
     hraMax: 0,
     iack: 0,
     iackMax: 0,
@@ -89,6 +92,7 @@ test("Bereken 2024 beschikbaar inkomen eenverdiener 47500, 2 kinderen, huur 674"
     nettoLoon: 35906,
     nettoLoonBelasting: 9727,
     nvzk: 0,
+    pensioenPremie: 1867,
     wonen: 936,
     zt: 261,
   };
@@ -96,15 +100,16 @@ test("Bereken 2024 beschikbaar inkomen eenverdiener 47500, 2 kinderen, huur 674"
 });
 
 test("Bereken 2024 beschikbaar inkomen 47500 eenverdiener, 2 kinderen, koop", () => {
-  const arbeidsinkomen: number = 45633; // Brutoloon: 47500
-  const berekening = bereken(arbeidsinkomen, eenverdiener2kinderenKoop("bi"), VisualisatieTypeType.T);
+  const brutoloon: number = 47_500;
+  const berekening = bereken(brutoloon, eenverdiener2kinderenKoop("bi"), VisualisatieTypeType.T);
   const expected: BeschikbaarInkomenResultaatType = {
     ahk: 2802,
     ahkMax: 2802,
     ak: 5162,
     akMax: 5162,
     anderenArbeidsinkomen: [],
-    arbeidsinkomen: arbeidsinkomen,
+    arbeidsinkomen: 45_633,
+    brutoloon: brutoloon,
     hraMax: 4577,
     iack: 0,
     iackMax: 0,
@@ -116,6 +121,7 @@ test("Bereken 2024 beschikbaar inkomen 47500 eenverdiener, 2 kinderen, koop", ()
     nettoLoon: 41303,
     nettoLoonBelasting: 4330,
     nvzk: 0,
+    pensioenPremie: 1867,
     wonen: 4577,
     zt: 261,
   };
@@ -124,15 +130,16 @@ test("Bereken 2024 beschikbaar inkomen 47500 eenverdiener, 2 kinderen, koop", ()
 });
 
 test("Bereken 2024 beschikbaar inkomen 80000 alleenstaande, koop", () => {
-  const arbeidsinkomen: number = 80000;
-  const berekening = bereken(arbeidsinkomen, alleenstaandeKoop("bi"), VisualisatieTypeType.T);
+  const brutoloon: number = 80_000;
+  const berekening = bereken(brutoloon, alleenstaandeKoop("bi"), VisualisatieTypeType.T);
   const expected: BeschikbaarInkomenResultaatType = {
     ahk: 524,
     ahkMax: 524,
     ak: 2925,
     akMax: 2925,
     anderenArbeidsinkomen: [],
-    arbeidsinkomen: arbeidsinkomen,
+    arbeidsinkomen: brutoloon,
+    brutoloon: brutoloon,
     hraMax: 5139,
     iack: 0,
     iackMax: 0,
@@ -144,6 +151,7 @@ test("Bereken 2024 beschikbaar inkomen 80000 alleenstaande, koop", () => {
     nettoLoon: 58450,
     nettoLoonBelasting: 21550,
     nvzk: 0,
+    pensioenPremie: 0,
     wonen: 5139,
     zt: 0,
   };
@@ -152,30 +160,32 @@ test("Bereken 2024 beschikbaar inkomen 80000 alleenstaande, koop", () => {
 });
 
 test("Bereken 2024 beschikbaar inkomen 10000 minstverdiener, huur", () => {
-  const arbeidsinkomen: number = 10000;
+  const brutoloon: number = 10_000;
   const gegevens = alleenstaande2KinderenHuur("bi");
   gegevens.personen.push({ leeftijd: LeeftijdType.V, inkomen_type: InkomenType.PERCENTAGE, percentage: 200 });
-  const berekening = bereken(arbeidsinkomen, gegevens, VisualisatieTypeType.T);
+  const berekening = bereken(brutoloon, gegevens, VisualisatieTypeType.T);
   const expected: BeschikbaarInkomenResultaatType = {
-    ahk: 2422,
+    ahk: 2383,
     ahkMax: 3362,
-    ak: 825,
-    akMax: 825,
+    ak: 806,
+    akMax: 806,
     anderenArbeidsinkomen: [20000],
-    arbeidsinkomen: arbeidsinkomen,
+    arbeidsinkomen: 9771,
+    brutoloon: brutoloon,
     hraMax: 0,
-    iack: 450,
-    iackMax: 450,
-    ibBox1: 3697,
+    iack: 423,
+    iackMax: 423,
+    ibBox1: 3612,
     kb: 2736,
     kgb: 4872,
-    nettoArbeidsinkomen: 6303,
-    nettoInkomen: 21590,
-    nettoLoon: 10000,
+    nettoArbeidsinkomen: 6159,
+    nettoInkomen: 21440,
+    nettoLoon: 9771,
     nettoLoonBelasting: 0,
-    nvzk: 940,
-    wonen: 4320,
-    zt: 2398,
+    nvzk: 979,
+    pensioenPremie: 229,
+    wonen: 4368,
+    zt: 2429,
   };
 
   expect(berekening).toEqual(expected);

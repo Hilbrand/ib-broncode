@@ -48,6 +48,8 @@ export type PersoonType = {
   inkomen_type?: InkomenType;
   bruto_inkomen?: number;
   percentage?: number;
+  pensioenPremiePercentage?: number;
+  pensioenFranchise?: number;
 };
 
 export enum WoningType {
@@ -79,7 +81,7 @@ export enum VisualisatieTypeType {
 
 export type VisualisatieType = {
   type?: VisualisatieTypeType;
-  jaar?: string | number;
+  jaar?: string;
   periode?: PeriodeType;
   van_tot?: number[];
   stap?: number;
@@ -108,10 +110,12 @@ export type BerekenInvoerType = {
 };
 
 export type BerekenResultaatType = {
-  arbeidsinkomen: number; // bruto loon
+  brutoloon: number;
+  arbeidsinkomen: number; // belastbaar loon (brutoloon - pensioen premie)
+  pensioenPremie: number;
   anderenArbeidsinkomen?: number[];
   ibBox1: number;
-  nettoLoon: number; // bruto inkomen - ibBox1 + AHK + AK + HT
+  nettoLoon: number; // belastbaar loon - ibBox1 + AHK + AK + HT
   nettoInkomen: number; // netto inkomen
   nettoArbeidsinkomen: number;
   nettoLoonBelasting: number;

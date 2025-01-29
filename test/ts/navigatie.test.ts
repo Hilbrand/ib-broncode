@@ -32,12 +32,25 @@ import {
   WoningType,
 } from "../../src/ts/types";
 
-const personenQuery: string = "V;V;V,10000;V,P50;K611";
+const personenQuery: string = "V;V;V,10000;V,P50;V,17000,6.2;V,P50,18000,5.2;K611";
 const personenJson: PersoonType[] = [
-  { leeftijd: LeeftijdType.V },
+  { leeftijd: LeeftijdType.V, pensioenFranchise: 0, pensioenPremiePercentage: 0 },
   { leeftijd: LeeftijdType.V, inkomen_type: InkomenType.BRUTO },
   { leeftijd: LeeftijdType.V, inkomen_type: InkomenType.BRUTO, bruto_inkomen: 10000 },
   { leeftijd: LeeftijdType.V, inkomen_type: InkomenType.PERCENTAGE, percentage: 50 },
+  {
+    leeftijd: LeeftijdType.V,
+    inkomen_type: InkomenType.BRUTO,
+    pensioenFranchise: 17000,
+    pensioenPremiePercentage: 6.2,
+  },
+  {
+    leeftijd: LeeftijdType.V,
+    inkomen_type: InkomenType.PERCENTAGE,
+    percentage: 50,
+    pensioenFranchise: 18000,
+    pensioenPremiePercentage: 5.2,
+  },
   { leeftijd: LeeftijdType.K611 },
 ];
 const wonenQuery: string = "huur;123";

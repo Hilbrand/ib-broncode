@@ -88,7 +88,7 @@ export class MarginaleDruk extends Berekenen {
     const grafiek = visualisatie === VisualisatieTypeType.G;
     const presentatieFunctie = grafiek ? this.percentage : this.absolute;
 
-    const ΔextraLoon = berekening2.arbeidsinkomen - berekening1.arbeidsinkomen;
+    const ΔextraLoon = berekening2.brutoloon - berekening1.brutoloon;
     const ΔibBox1 = this.mdAbsolute(berekening1.ibBox1, berekening2.ibBox1, false);
 
     const ΔhraMax = this.mdAbsolute(berekening1.hraMax, berekening2.hraMax, false);
@@ -129,8 +129,10 @@ export class MarginaleDruk extends Berekenen {
     const md = ΔextraLoon - ΔnettoInkomen;
 
     return {
+      brutoloon: berekening1.brutoloon,
       arbeidsinkomen: berekening1.arbeidsinkomen,
       anderenArbeidsinkomen: berekening1.anderenArbeidsinkomen,
+      pensioenPremie: presentatieFunctie(berekening1.pensioenPremie - berekening2.pensioenPremie, ΔextraLoon, grafiek),
       extraLoon: ΔextraLoon,
       ibBox1: presentatieFunctie(ΔibBox1, ΔextraLoon, true),
       nettoLoonBelasting: presentatieFunctie(nettoLoonBelastingPresentatie, ΔextraLoon, grafiek),

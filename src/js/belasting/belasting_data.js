@@ -641,7 +641,7 @@ const AK = {
       },
       {
         inkomen: { van: 12170, tot: 26289 },
-        grens: 968,
+        grens: 980,
         afbouwpunt: 12169,
         afbouwfactor: 0.3003,
       },
@@ -695,7 +695,7 @@ const AK = {
       },
       {
         inkomen: { van: 12170, tot: 26289 },
-        grens: 968,
+        grens: 980,
         afbouwpunt: 12169,
         afbouwfactor: 0.3003,
       },
@@ -997,12 +997,21 @@ const LEEFTIJDEN = {
   AOW: "AOW Leeftijd",
 };
 
+// Wet minimum loon
+
+const WML = {
+  2025: 28712.82,
+  PD2025: 28712.82,
+  2024: 27235.38,
+  2023: 23940,
+};
+
 const BALKENENDENORM = 223000;
 const AVG_HUUR = {
-  2023: 600,
-  2024: 674,
-  PD2025: 710,
   2025: 710,
+  PD2025: 710,
+  2024: 674,
+  2023: 600,
 };
 const AVG_WOZ = 315000;
 const AVG_RENTE = AVG_WOZ * 0.0428;
@@ -1023,4 +1032,5 @@ export default {
   AVG_HUUR,
   AVG_WOZ,
   AVG_RENTE,
+  WML,
 };

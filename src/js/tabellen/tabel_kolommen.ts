@@ -27,7 +27,7 @@ import { heeftInkomen } from "../../ts/functies";
 import { tekstVerdiener } from "../../ts/samenvatting";
 
 const AI_KOLOM: TableBaseColumn = {
-  title: "Brutoinkomen",
+  title: "Belastbaar loon",
   key: "arbeidsinkomen",
   align: "right",
   render: (_) => Math.round(+_.arbeidsinkomen).toLocaleString(),
@@ -35,12 +35,24 @@ const AI_KOLOM: TableBaseColumn = {
 
 function brutoInkomen(titelAanvulling: string): TableBaseColumn {
   return {
-    title: "Brutoinkomen" + (titelAanvulling && " " + titelAanvulling),
-    key: "arbeidsinkomen",
+    title: "Brutoloon" + (titelAanvulling && " " + titelAanvulling),
+    key: "brutoloon",
     align: "right",
-    render: (_) => Math.round(+_.arbeidsinkomen).toLocaleString(),
+    render: (_) => Math.round(+_.brutoloon).toLocaleString(),
   };
 }
+
+const BL_KOLOM: TableBaseColumn = {
+  title: "Brutoloon",
+  key: "brutoloon",
+  align: "right",
+};
+
+const PP_KOLOM: TableBaseColumn = {
+  title: "Pensioen premie",
+  key: "pensioenPremie",
+  align: "right",
+};
 
 const IBBOX1_KOLOM: TableBaseColumn = {
   title: "IB\u00A0Box\u00A01",
@@ -138,7 +150,9 @@ const BD_KOLOM: TableBaseColumn = {
 };
 
 const BI_HUUR_KOLOMMEN: DataTableColumns<BeschikbaarInkomenResultaatType> = [
+  BL_KOLOM,
   AI_KOLOM,
+  PP_KOLOM,
   IBBOX1_KOLOM,
   AHK_KOLOM,
   AK_KOLOM,
@@ -153,6 +167,8 @@ const BI_HUUR_KOLOMMEN: DataTableColumns<BeschikbaarInkomenResultaatType> = [
 
 const BI_KOOP_KOLOMMEN: DataTableColumns<BeschikbaarInkomenResultaatType> = [
   AI_KOLOM,
+  BL_KOLOM,
+  PP_KOLOM,
   IBBOX1_KOLOM,
   HRA_KOLOM,
   AHK_KOLOM,
@@ -167,6 +183,7 @@ const BI_KOOP_KOLOMMEN: DataTableColumns<BeschikbaarInkomenResultaatType> = [
 
 const MD_HUUR_KOLOMMEN: DataTableColumns<MarginaleDrukResultaatType> = [
   EL_KOLOM,
+  PP_KOLOM,
   IBBOX1_KOLOM,
   AHK_KOLOM,
   AK_KOLOM,
@@ -182,6 +199,7 @@ const MD_HUUR_KOLOMMEN: DataTableColumns<MarginaleDrukResultaatType> = [
 
 const MD_KOOP_KOLOMMEN: DataTableColumns<MarginaleDrukResultaatType> = [
   EL_KOLOM,
+  PP_KOLOM,
   IBBOX1_KOLOM,
   HRA_KOLOM,
   AHK_KOLOM,
