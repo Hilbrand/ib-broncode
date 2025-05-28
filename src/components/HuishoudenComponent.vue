@@ -31,7 +31,7 @@
                 <n-input-number
                   v-if="personenGegevens[index].inkomen_type === 'bruto'"
                   placeholder="Bruto inkomen p/j"
-                  id="index+'bruto_inkomen'"
+                  :input-props="{id:index+'bruto_inkomen'}"
                   min="0"
                   step="1"
                   size="small"
@@ -42,7 +42,7 @@
                 <n-input-number
                   v-if="personenGegevens[index].inkomen_type === 'percentage'"
                   placeholder="Percentage van eerste inkomen"
-                  id="index+'percentage'"
+                  :input-props="{id:index+'percentage'}"
                   min="0"
                   step="1"
                   size="small"
@@ -52,9 +52,10 @@
                 </n-input-number>
               </div>
               <div v-if="inkomenEersteVolwassene(index)">
+                <label :for="index+'franchise'">Pensioen Franchise</label>
                 <n-input-number
                   placeholder="Pensioen Franchise"
-                  id="index+'franchise'"
+                  :input-props="{id:index+'franchise'}"
                   min="0"
                   step="1"
                   size="small"
@@ -62,9 +63,10 @@
                 >
                   <template #prefix>&euro;</template>
                 </n-input-number>
+                <label :for="index+'premiePercentage'">Pensioenpremie Percentage</label>
                 <n-input-number
                   placeholder="Pensioenpremie Percentage"
-                  id="index+'premiePercentage'"
+                  :input-props="{id:index+'premiePercentage'}"
                   min="0"
                   max="100"
                   step="0.01"
