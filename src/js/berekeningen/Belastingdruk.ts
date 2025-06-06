@@ -15,6 +15,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
+import inkomen from "../belasting/inkomen";
 import { BeschikbaarInkomen } from "./BeschikbaarInkomen";
 import { BelastingdrukLegenda } from "../grafieken/BelastingdrukLegenda";
 import { BelastingDrukResultaatType, InvoerGegevensType, VisualisatieTypeType } from "../../ts/types";
@@ -39,13 +40,14 @@ export class Belastingdruk extends BeschikbaarInkomen {
     return 1;
   }
 
-  bereken(arbeidsInkomen, visualisatie: VisualisatieTypeType): BelastingDrukResultaatType {
-    const beschikbaarInkomen = this.berekenBeschikbaarInkomen(arbeidsInkomen, visualisatie);
+  bereken(arbeidsinkomen, visualisatie: VisualisatieTypeType): BelastingDrukResultaatType {
+    const anderenArbeidsinkomen = inkomen.anderePersonenToetsInkomen(arbeidsinkomen, this.personen);
+    const beschikbaarInkomen = this.berekenBeschikbaarInkomen(arbeidsinkomen, anderenArbeidsinkomen, visualisatie);
 
     return {
-      arbeidsinkomen: arbeidsInkomen,
+      arbeidsinkomen: arbeidsinkomen,
       ibBox1: beschikbaarInkomen.ibBox1,
-      belastingdrukPercentage: 100 * (beschikbaarInkomen.nettoLoonBelasting / arbeidsInkomen),
+      belastingdrukPercentage: 100 * (beschikbaarInkomen.nettoLoonBelasting / arbeidsinkomen),
     };
   }
 

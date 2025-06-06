@@ -5,81 +5,115 @@
       <WonenComponent :jaar="gegevens.visualisatie.jaar" :wonen="gegevens.wonen" />
       <VisualisatieInstellingComponent :instellingen="gegevens.visualisatie" />
     </div>
-    <n-tabs ref="tabsRef" type="line" style="padding: 0 10px" @update:value="tabUpdated" v-model:value="gegevens.tab">
-      <n-tab-pane name="intro" tab="Introductie">
-        <IntroPagina />
-      </n-tab-pane>
-      <n-tab-pane name="bi" tab="Beschikbaar Inkomen" key="bi">
-        <n-h4 v-html="samenvattingTekst"></n-h4>
-        <n-divider />
-        <TabelComponent v-if="gegevens.tab == 'bi' && gegevens.visualisatie.type == 't'" :gegevens="gegevens" />
-        <div v-else>
-          <n-space> Deze grafiek toont het beschikbare inkomen uitgesplitst naar kortingen en toeslagen. </n-space>
-          <div id="bi"></div>
+    <div>
+      <nav>
+        <a href="" :class="active('intro')" @click="onChange($event, 'intro')">Introductie</a>
+        <a href="" :class="active('bi')" @click="onChange($event, 'bi')">Beschikbaar Inkomen</a>
+        <a href="" :class="active('md')" @click="onChange($event, 'md')">Marginale Druk</a>
+        <a href="" :class="active('bd')" @click="onChange($event, 'bd')">Belastingdruk</a>
+      </nav>
+      <div class="content">
+        <IntroPagina v-if="gegevens.tab == 'intro'" />
+        <div v-if="gegevens.tab == 'bi'">
+          <n-h4 v-html="samenvattingTekst"></n-h4>
+          <n-divider />
+          <TabelComponent v-if="gegevens.tab == 'bi' && gegevens.visualisatie.type == 't'" :gegevens="gegevens" />
+          <div v-else>
+            <n-space> Deze grafiek toont het beschikbare inkomen uitgesplitst naar kortingen en toeslagen. </n-space>
+            <div id="bi"></div>
+          </div>
         </div>
-      </n-tab-pane>
-      <n-tab-pane name="md" tab="Marginale Druk" key="md">
-        <n-h4 v-html="samenvattingTekst"></n-h4>
-        <n-divider />
-        <n-space vertical>
-          <n-space :wrap="false"
-            >Deze grafiek toont de marginale druk bij extra loon van
-            <n-radio-group v-model:value="gegevens.visualisatie.svt">
-              <n-radio label="%" key="p" value="p" size="small" />
-              <n-radio label="€" key="a" value="a" size="small" />
-            </n-radio-group>
-            <n-input-group>
-              <n-input-number
-                v-if="gegevens.visualisatie.svt == 'p'"
-                v-model:value="gegevens.visualisatie.sv_p"
-                min="0"
-                max="100"
-                step="1"
-                size="tiny"
-                style="width: 100px"
-              >
-                <template #suffix>%</template>
-              </n-input-number>
-              <n-input-number
-                v-if="gegevens.visualisatie.svt == 'a'"
-                v-model:value="gegevens.visualisatie.sv_abs"
-                min="0"
-                step="1"
-                size="tiny"
-                style="width: 100px"
-              >
-                <template #prefix>&euro;</template>
-              </n-input-number>
-            </n-input-group>
+        <div v-if="gegevens.tab == 'md'">
+          <n-h4 v-html="samenvattingTekst"></n-h4>
+          <n-divider />
+          <n-space vertical>
+            <n-space :wrap="false"
+              >Deze grafiek toont de marginale druk bij extra loon van
+              <n-radio-group v-model:value="gegevens.visualisatie.svt">
+                <n-radio label="%" key="p" value="p" size="small" />
+                <n-radio label="€" key="a" value="a" size="small" />
+              </n-radio-group>
+              <n-input-group>
+                <n-input-number
+                  v-if="gegevens.visualisatie.svt == 'p'"
+                  v-model:value="gegevens.visualisatie.sv_p"
+                  min="0"
+                  max="100"
+                  step="1"
+                  size="tiny"
+                  style="width: 100px"
+                >
+                  <template #suffix>%</template>
+                </n-input-number>
+                <n-input-number
+                  v-if="gegevens.visualisatie.svt == 'a'"
+                  v-model:value="gegevens.visualisatie.sv_abs"
+                  min="0"
+                  step="1"
+                  size="tiny"
+                  style="width: 100px"
+                >
+                  <template #prefix>&euro;</template>
+                </n-input-number>
+              </n-input-group>
+            </n-space>
+            <TabelComponent v-if="gegevens.tab == 'md' && gegevens.visualisatie.type == 't'" :gegevens="gegevens" />
+            <div v-else id="md"></div>
           </n-space>
-          <TabelComponent v-if="gegevens.tab == 'md' && gegevens.visualisatie.type == 't'" :gegevens="gegevens" />
-          <div v-else id="md"></div>
-        </n-space>
-      </n-tab-pane>
-      <n-tab-pane name="bd" tab="Belastingdruk" key="bd">
-        <n-h4 v-html="samenvattingTekst"></n-h4>
-        <n-divider />
-        <TabelComponent v-if="gegevens.tab == 'bd' && gegevens.visualisatie.type == 't'" :gegevens="gegevens" />
-        <n-space v-else vertical>
-          <div id="bd"></div>
-        </n-space>
-      </n-tab-pane>
-    </n-tabs>
+        </div>
+        <div v-if="gegevens.tab == 'bd'">
+          <n-h4 v-html="samenvattingTekst"></n-h4>
+          <n-divider />
+          <TabelComponent v-if="gegevens.tab == 'bd' && gegevens.visualisatie.type == 't'" :gegevens="gegevens" />
+          <n-space v-else vertical>
+            <div id="bd"></div>
+          </n-space>
+        </div>
+      </div>
+    </div>
     <n-scrollbar id="legenda" v-if="gegevens.tab != 'intro' && gegevens.visualisatie.type == 'g'">
       <Legenda :data="legendaData" />
     </n-scrollbar>
   </div>
 </template>
 
-<style>
+<style scoped>
+nav {
+  padding: 10px 0;
+}
+nav > a {
+  padding: 10px 0;
+  text-decoration: none;
+  color: var(--n-tab-text-color);
+  margin: 0 15px;
+  line-height: 1.5;
+}
+nav > a:hover,
+nav > .active {
+  color: #18a058;
+  border-bottom: 2px solid #18a058;
+}
+
+@media (max-width: 800px) {
+  nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.content {
+  margin: 10px;
+}
+
 #infoBar {
   max-height: 100% !important;
 }
 .grid {
   display: grid;
+  grid-template-columns: 1fr;
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 800px) {
   #infoBar {
     overflow-y: scroll;
     max-height: calc(100vh - 25px) !important;
@@ -120,6 +154,7 @@ export default {
     tabRef: ref("intro");
     tabel: ref(null);
     samenvattingTekst: ref("");
+    layoutVertical: false;
   },
   data() {
     return {
@@ -178,6 +213,9 @@ export default {
     },
   },
   methods: {
+    active(tab) {
+      return this.gegevens?.tab === tab ? "active" : "";
+    },
     resize() {
       if (document.getElementById("infoBar")) {
         document.getElementById("infoBar").style.maxHeight = document.documentElement.clientHeight + "px";
@@ -189,9 +227,15 @@ export default {
         query: jsonNaarNavigatie(this.gegevens),
       });
     },
+    onChange(event, key) {
+      this.tabRef = ref(key);
+      this.gegevens.tab = key;
+      event.preventDefault();
+    },
     tabUpdated(value) {
       this.tabRef = ref(value);
       this.gegevens.tab = value;
+      preventDefault();
     },
     async chart() {
       if (this.gegevens.tab === "intro") {
@@ -202,13 +246,13 @@ export default {
         return;
       }
       await nextTick();
-
       stacked_chart.makeChart(
         "#" + this.gegevens.tab,
         algemeen.berekenGrafiekData(this.gegevens),
         document.getElementById(this.gegevens.tab).offsetWidth,
         (d) => (this.legendaData = d)
       );
+      await nextTick();
     },
   },
 };

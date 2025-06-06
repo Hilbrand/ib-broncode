@@ -96,7 +96,7 @@ function isMeestVerdiener(arbeidsinkomen: number, andereInkomens: number[]): boo
 }
 
 function toeslagenToetsInkomen(arbeidsinkomen: number, andereInkomens: number[]): number {
-  return arbeidsinkomen + andereInkomens.reduce((subtotaal, a) => subtotaal + a, 0);
+  return arbeidsinkomen + (andereInkomens.length != 0 ? andereInkomens.reduce((subtotaal, a) => subtotaal + a, 0) : 0);
 }
 
 function ibRange(toetsingsInkomen: number, p): number {
