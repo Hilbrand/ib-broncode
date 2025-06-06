@@ -87,13 +87,12 @@ export function maakSamenvatting(gegevens: InvoerGegevensType): string {
   } else {
     tekst += "Alleenstaande";
   }
-  tekst += " ";
   if (gegevens.personen[0].leeftijd == LeeftijdType.AOW) {
-    tekst += "in the AOW ";
+    tekst += " in the AOW ";
   }
   if (functies.telKinderen(gegevens.personen) > 0) {
     tekst +=
-      "met " +
+      " met " +
       [LeeftijdType.K05, LeeftijdType.K611, LeeftijdType.K1215, LeeftijdType.K1617]
         .map((lt) => tekstKinderen(gegevens.personen, lt))
         .filter((s) => s !== "")
