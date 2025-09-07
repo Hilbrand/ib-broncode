@@ -24,7 +24,7 @@ jobs:
           git-config-email: hilbrand@h72.nl
           repository-name: hilbrand/ib
           branch: main
-          token: ${{ secrets.DEPLOY_IB_ACCESS_TOKEN }}
+          token: ${{ secrets.deploy-ib }}
           folder: dist
           target-folder: .
           clean: true
