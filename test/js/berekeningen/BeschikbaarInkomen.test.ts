@@ -115,15 +115,15 @@ test("Bereken 2024 beschikbaar inkomen 47500 eenverdiener, 2 kinderen, koop", ()
     iackMax: 0,
     ibBox1: 16871,
     kb: 2736,
-    kgb: 4212,
+    kgb: 4872,
     nettoArbeidsinkomen: 28762,
-    nettoInkomen: 45776,
+    nettoInkomen: 48128,
     nettoLoon: 41303,
     nettoLoonBelasting: 4330,
     nvzk: 0,
     pensioenPremie: 1867,
     wonen: 4577,
-    zt: 261,
+    zt: 1953,
   };
 
   expect(berekening).toEqual(expected);

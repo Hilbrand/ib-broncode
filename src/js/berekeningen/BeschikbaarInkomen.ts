@@ -118,7 +118,7 @@ export class BeschikbaarInkomen extends Berekenen {
       arbeidskortingMax - arbeidskorting + (algemeneHeffingsKortingMax - algemeneHeffingsKorting) + (inACKMax - inACK);
 
     // Inkomen berekening inclusief fiscale partners.
-    let toeslagenToetsInkomen = inkomen.toeslagenToetsInkomen(arbeidsinkomen, anderenArbeidsinkomen);
+    let toeslagenToetsInkomen = inkomen.toeslagenToetsInkomen(toetsingsInkomen, anderenArbeidsinkomen);
     let kindgebondenBudget = kgb.kindgebondenBudget(
       this.vis.jaar,
       toeslagenToetsInkomen,
