@@ -64,6 +64,7 @@ test("Bereken 2024 marginale druk alleenstaande 27500, 2 kinderen, huur 674", ()
     nettoLoonBelasting: 91,
     nvzk: 189,
     pensioenPremie: -61,
+    toetsingsInkomen: 29_206,
     wonen: -180,
     zt: -128,
   };
@@ -95,6 +96,7 @@ test("Bereken 2024 marginale druk eenverdiener 47500, 2 kinderen, huur 674", () 
     nettoLoonBelasting: 471,
     nvzk: 0,
     pensioenPremie: -61,
+    toetsingsInkomen: 45_633,
     wonen: -180,
     zt: -129,
   };
@@ -129,6 +131,7 @@ test("Bereken 2024 marginale druk meestverdiener 45000, 2 kinderen, huur 674", (
     nettoLoonBelasting: 470,
     nvzk: 0,
     pensioenPremie: -62,
+    toetsingsInkomen: 43_287,
     wonen: 0,
     zt: 0,
   };
@@ -160,6 +163,7 @@ test("Bereken 2024 marginale druk 47500 eenverdiener, 2 kinderen, koop", () => {
     nettoLoonBelasting: 470,
     nvzk: 0,
     pensioenPremie: -61,
+    toetsingsInkomen: 33_253,
     wonen: 0,
     zt: -128,
   };
@@ -191,6 +195,7 @@ test("\n\n" + "-".repeat(80) + "\nBereken 2024 marginale druk 47500 alleenstaand
     nettoLoonBelasting: 0,
     nvzk: 0,
     pensioenPremie: 6.1,
+    toetsingsInkomen: 16_485,
     wonen: 0,
     zt: 0,
   };
@@ -222,6 +227,7 @@ test("Bereken 2024 marginale druk 80000 alleenstaande, koop", () => {
     nettoLoonBelasting: 470,
     nvzk: 0,
     pensioenPremie: 0,
+    toetsingsInkomen: 67_620,
     wonen: 118,
     zt: 0,
   };

@@ -27,6 +27,7 @@ import {
   BeschikbaarInkomenResultaatType,
   InvoerGegevensType,
   LeeftijdType,
+  TabType,
   VisualisatieTypeType,
   WoningType,
 } from "../../ts/types";
@@ -156,6 +157,7 @@ export class BeschikbaarInkomen extends Berekenen {
     let beschikbaarInkomen: BeschikbaarInkomenResultaatType = {
       brutoloon: brutoloon,
       arbeidsinkomen: arbeidsinkomen,
+      toetsingsInkomen: toetsingsInkomen,
       pensioenPremie: pensioenPremie,
       anderenArbeidsinkomen: anderenArbeidsinkomen.filter((_) => _ > 0),
       nettoLoonBelasting: maxBelasting,
@@ -225,11 +227,15 @@ export class BeschikbaarInkomen extends Berekenen {
         type: "kindgebonden budget",
         getal: this.afronden(beschikbaarInkomen.kgb, factor),
       },
-      {
-        id: id,
-        type: "pensioen premie",
-        getal: this.afronden(beschikbaarInkomen.pensioenPremie, factor),
-      }
     );
+    if (this.tab !== TabType.BI) {
+      alles.push(
+        {
+          id: id,
+          type: "pensioen premie",
+          getal: this.afronden(beschikbaarInkomen.pensioenPremie, factor),
+        }
+      );
+    }
   }
 }

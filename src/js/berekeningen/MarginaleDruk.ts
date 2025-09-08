@@ -131,6 +131,7 @@ export class MarginaleDruk extends Berekenen {
     return {
       brutoloon: berekening1.brutoloon,
       arbeidsinkomen: berekening1.arbeidsinkomen,
+      toetsingsInkomen: berekening1.toetsingsInkomen,
       anderenArbeidsinkomen: berekening1.anderenArbeidsinkomen,
       pensioenPremie: presentatieFunctie(berekening1.pensioenPremie - berekening2.pensioenPremie, ΔextraLoon, grafiek),
       extraLoon: ΔextraLoon,

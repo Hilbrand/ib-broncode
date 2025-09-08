@@ -64,6 +64,7 @@ test("Bereken 2024 beschikbaar inkomen alleenstaande 27500, 2 kinderen, huur 674
     nettoLoonBelasting: 0,
     nvzk: 884,
     pensioenPremie: 640,
+    toetsingsInkomen: 26_860,
     wonen: 4896,
     zt: 1477,
   };
@@ -93,6 +94,7 @@ test("Bereken 2024 beschikbaar inkomen eenverdiener 47500, 2 kinderen, huur 674"
     nettoLoonBelasting: 9727,
     nvzk: 0,
     pensioenPremie: 1867,
+    toetsingsInkomen: 45_633,
     wonen: 936,
     zt: 261,
   };
@@ -122,6 +124,7 @@ test("Bereken 2024 beschikbaar inkomen 47500 eenverdiener, 2 kinderen, koop", ()
     nettoLoonBelasting: 4330,
     nvzk: 0,
     pensioenPremie: 1867,
+    toetsingsInkomen: 33_253,
     wonen: 4577,
     zt: 1953,
   };
@@ -152,6 +155,7 @@ test("Bereken 2024 beschikbaar inkomen 80000 alleenstaande, koop", () => {
     nettoLoonBelasting: 21550,
     nvzk: 0,
     pensioenPremie: 0,
+    toetsingsInkomen: 67_620,
     wonen: 5139,
     zt: 0,
   };
@@ -184,6 +188,7 @@ test("Bereken 2024 beschikbaar inkomen 10000 minstverdiener, huur", () => {
     nettoLoonBelasting: 0,
     nvzk: 979,
     pensioenPremie: 229,
+    toetsingsInkomen: 9771,
     wonen: 4368,
     zt: 2429,
   };

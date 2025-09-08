@@ -45,8 +45,8 @@ export class BeschikbaarInkomenLegenda extends Legenda {
     ld.totals = [
       { naam: "beschikbaar inkomen", bedrag: this.geld(b.nettoInkomen * this.berekenen.getFactor()) },
       {
-        naam: "arbeidsinkomen",
-        bedrag: this.geld(b.arbeidsinkomen * this.berekenen.getFactor()),
+        naam: "belastbaar inkomen",
+        bedrag: this.geld(b.toetsingsInkomen * this.berekenen.getFactor()),
       },
       { naam: "inkomstenbelasting box 1", bedrag: this.geld(b.ibBox1 * this.berekenen.getFactor()) },
     ];

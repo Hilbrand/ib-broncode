@@ -71,6 +71,7 @@ export class Legenda {
   berekenGetallen(entry) {
     return this.berekenen.bereken(entry.id / this.berekenen.getFactor(), VisualisatieTypeType.T);
   }
+
   getLabelYAs() {
     return "";
   }

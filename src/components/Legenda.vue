@@ -5,7 +5,7 @@
     </n-space>
     <n-space vertical v-else>
       <div>
-        <h4>Arbeidsinkomen (Salaris): &euro; {{ data.arbeidsInkomen }}</h4>
+        <h4>Bruto jaarinkomen (Salaris): &euro; {{ data.arbeidsInkomen }}</h4>
         <h4>{{ data.titel }}</h4>
       </div>
       <n-table :single-line="false" size="tiny" class="table">

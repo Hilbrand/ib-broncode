@@ -31,6 +31,7 @@ import kgb from "../belasting/kindgebonden_budget";
 import { Legenda } from "../grafieken/Legenda";
 
 export class Berekenen {
+  tab: string;
   vis: VisualisatieType;
   personen: PersoonType[];
   wonen: WonenType;
@@ -39,6 +40,7 @@ export class Berekenen {
   legenda: any;
 
   constructor(gegevens: InvoerGegevensType) {
+    this.tab = gegevens.tab;
     this.vis = gegevens.visualisatie;
     this.personen = gegevens.personen;
     this.wonen = gegevens.wonen;

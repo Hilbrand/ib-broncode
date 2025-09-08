@@ -112,6 +112,7 @@ export type BerekenInvoerType = {
 export type BerekenResultaatType = {
   brutoloon: number;
   arbeidsinkomen: number; // belastbaar loon (brutoloon - pensioen premie)
+  toetsingsInkomen: number;
   pensioenPremie: number;
   anderenArbeidsinkomen?: number[];
   ibBox1: number;
