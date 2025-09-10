@@ -103,14 +103,10 @@ test("Test toeslagenToetsInkomen", () => {
   expect(inkomen.toeslagenToetsInkomen(10000, [20000, 20000])).toEqual(50000);
 });
 
-// test('Netto 25.000', () => {
-//   expect(inkomen.inkomstenBelastingAangepast(25000)).toEqual(25000)
-// })
+// test percentage hypotheekrenteaftrek
 
-// test('Netto 35.000', () => {
-//   expect(inkomen.inkomstenBelastingAangepast(35000)).toEqual(35000)
-// })
-
-// test('algemeneHeffingsKorting verschil', () => {
-//     expect(inkomen.algemeneHeffingsKorting(35000) - inkomen.algemeneHeffingsKorting(25000)).toEqual(308)
-//   })
+test("Test hypotheekrenteaftrekVanaf2025", () => {
+  expect(inkomen.hypotheekrenteaftrekVanaf2025("2025", 10000, 10000, false)).toEqual(3582);
+  expect(inkomen.hypotheekrenteaftrekVanaf2025("2025", 40000, 10000, false)).toEqual(3748);
+  expect(inkomen.hypotheekrenteaftrekVanaf2025("2025", 100000, 10000, false)).toEqual(3748);
+});

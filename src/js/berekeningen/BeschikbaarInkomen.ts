@@ -74,13 +74,17 @@ export class BeschikbaarInkomen extends Berekenen {
           )
         : 0;
     const arbeidsinkomen = brutoloon - pensioenPremie;
-    // Hypotheek rente wordt afgetrokken van arbeidsinkomen: toetsingsinkomen zal dus lager worden dan arbeidsinkomen.
 
-    const toetsingsInkomen = inkomen.toetsingsinkomen(arbeidsinkomen, this.algemeneGegevens.hypotheekRenteAftrek);
-    // Berekende belasting als hypotheek rente van inkomen is afgetrokken.
-    const ibBox1 = inkomen.inkomstenBelasting(this.vis.jaar, toetsingsInkomen, aow);
+    // Hypotheek rente wordt afgetrokken van arbeidsinkomen: toetsingsinkomen zal dus lager worden dan arbeidsinkomen.
+    const oudeHypotheekaftrekRegels = "2023" == this.vis.jaar || "2024" == this.vis.jaar;
+    const hypotheekaftrekVanaf2025 = inkomen.hypotheekrenteaftrekVanaf2025(this.vis.jaar, brutoloon, this.algemeneGegevens.hypotheekRenteAftrek, aow);
+    const toetsingsInkomen =  inkomen.toetsingsinkomen(arbeidsinkomen, this.algemeneGegevens.hypotheekRenteAftrek);
     // Belasting die betaald zou zijn alleen over arbeid
     const ibBox1Arbeid = inkomen.inkomstenBelasting(this.vis.jaar, arbeidsinkomen, aow);
+    // Berekende belasting als hypotheek rente van inkomen is afgetrokken.
+    const ibBox1 = oudeHypotheekaftrekRegels
+        ? inkomen.inkomstenBelasting(this.vis.jaar, toetsingsInkomen, aow)
+        : inkomen.inkomstenBelasting(this.vis.jaar, arbeidsinkomen, aow) - hypotheekaftrekVanaf2025;
     // Belasting die betaald moet worden over arbeid of met eventuele hypotheek verrekening.
     const ibBox1Effectief = Math.min(ibBox1, ibBox1Arbeid);
 

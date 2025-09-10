@@ -74,6 +74,20 @@ function toetsingsinkomen(arbeidsinkomen: number, hypotheekRenteAftrek: number):
   return Math.max(0, arbeidsinkomen - (hypotheekRenteAftrek || 0));
 }
 
+// Bedrag dat vanaf inkomstenbelasting wordt afgetrokken.
+function hypotheekrenteaftrekVanaf2025(jaar: string, inkomen: number, hypotheekRenteAftrek: number, aow: boolean): number {
+  const ibTabel = aow ? data.IB[jaar].AOW : data.IB[jaar].V;
+
+  if (hypotheekRenteAftrek > 0) {
+    for (let schijf of ibTabel) {
+      if ((!schijf.vanaf || inkomen >= schijf.vanaf) && (!schijf.tot || inkomen < schijf.tot)) {
+        return Math.ceil(hypotheekRenteAftrek * (schijf.percentage > ibTabel[1].percentage ? ibTabel[1].percentage : schijf.percentage));
+      }
+    }
+ }
+ return 0;
+}
+
 function anderePersoonToetsInkomen(arbeidsinkomen: number, persoon: PersoonType): number {
   if (persoon.inkomen_type === InkomenType.PERCENTAGE) {
     return arbeidsinkomen * persoon.percentage * 0.01;
@@ -121,6 +135,7 @@ export default {
   anderePersoonToetsInkomen,
   anderePersonenToetsInkomen,
   arbeidskorting,
+  hypotheekrenteaftrekVanaf2025,
   inkomstenBelasting,
   isMeestVerdiener,
   netto,
