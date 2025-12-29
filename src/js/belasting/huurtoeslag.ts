@@ -32,22 +32,33 @@ function huurtoeslag(
 ): number {
   const htj = data.HT[jaar];
   const htbpj = data.HTBP[jaar];
-  // als jonger 23 dan htj.KwKrtGrns
-  if (rekenhuur > htj.MaxHuur) {
+  // als jonger 23 (tot en met 2025) dan htj.KwKrtGrns
+  const tot2025 = jaar <= 2025;
+  if (tot2025 && rekenhuur > htj.MaxHuur) {
     return 0;
   }
   const mph = aantalPersonen > 1;
   const htbp = aow ? (mph ? htbpj.MPHAOW : htbpj.EPHAOW) : mph ? htbpj.MPH : htbpj.EPH;
   const basishuur =
-    (rekeninkomen > htbp.MinInkGr
+    (rekeninkomen > htbp.MinInkGr && tot2025
       ? htbp["Factor a"] * rekeninkomen * rekeninkomen + htbp["Factor b"] * rekeninkomen
       : htbp.MinNrmHr) + htbp.TaakStBedr;
+
   const a = Math.max(0, Math.min(htj.KwKrtGrns, rekenhuur) - basishuur);
   const aftopGrens = aantalPersonen > 2 ? htj.AftopB : htj.AftopA;
   const b =
     rekenhuur > htj.KwKrtGrns ? Math.max(0, Math.min(rekenhuur, aftopGrens) - Math.max(htj.KwKrtGrns, basishuur)) : 0;
   const c = !mph && rekenhuur > aftopGrens ? Math.max(0, rekenhuur - Math.max(aftopGrens, basishuur)) : 0;
-  return 12 * Math.floor(a + 0.65 * b + 0.4 * c);
+  const huurToeslag = 12 * Math.floor(a + 0.65 * b + 0.4 * c);
+
+  if (tot2025) {
+    return huurToeslag;
+  } else {
+    const afbouwpercentage = mph ? htj.AfbPercMPH : htj.AfbPercEPH;
+    const afbouwbedrag = Math.max(0, (rekeninkomen - htbp.MinInkGr) * afbouwpercentage);
+
+    return Math.max(0, huurToeslag - afbouwbedrag);
+  }
 }
 
 function huurtoeslagMax(jaar: string, rekeninkomen: number): number {

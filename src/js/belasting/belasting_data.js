@@ -21,6 +21,22 @@
 */
 
 const TABEL = {
+  2026: {
+    // Kindgebonden budget
+    TslgTP: 7.6,
+    DrempelinkomenKGB: 29736,
+    VerhoogdDrempelInkomen: 9405,
+    Tslg: 7.6,
+    VH12Plus: 724,
+    VH16Plus: 964,
+    VHgeenTP: 3416,
+    // Zorgtoeslag
+    Drempel: 29736,
+    BDA: 0.1373,
+    BDMT: 0.1373,
+    MaxAlleen: 1631, //  2119(SP) - 0.01912 (TDA) * 29736(Drempel)
+    MaxPartner: 3123, // 2119 * 2 - 0.04289 (TDMT) * 29736
+  },
   2025: {
     // Kindgebonden budget
     TslgTP: 7.1,
@@ -96,6 +112,14 @@ const TABEL = {
 // Huurtoeslag
 
 const HT = {
+  2026: {
+    MaxHuur: 932.93,
+    AftopA: 713.02,
+    AftopB: 764.14,
+    KwKrtGrns: 498.2,
+    AfbPercEPH: 0.27,
+    AfbPercMPH: 0.22,
+  },
   2025: {
     MaxHuur: 900.07,
     AftopA: 682.96,
@@ -125,6 +149,36 @@ const HT = {
 // Huurtoeslag
 
 const HTBP = {
+  2026: {
+    EPH: {
+      "Factor a": 0,
+      "Factor b": 0,
+      MinInkGr: 23425,
+      TaakStBedr: -48.15,
+      MinNrmHr: 250.67,
+    },
+    EPHAOW: {
+      "Factor a": 0,
+      "Factor b": 0,
+      MinInkGr: 23425,
+      TaakStBedr: -48.15,
+      MinNrmHr: 250.67,
+    },
+    MPH: {
+      "Factor a": 0,
+      "Factor b": 0,
+      MinInkGr: 31500,
+      TaakStBedr: -48.15,
+      MinNrmHr: 248.86,
+    },
+    MPHAOW: {
+      "Factor a": 0,
+      "Factor b": 0,
+      MinInkGr: 31500,
+      TaakStBedr: -48.15,
+      MinNrmHr: 248.86,
+    },
+  },
   2025: {
     EPH: {
       "Factor a": 4.38698e-7,
@@ -252,6 +306,18 @@ const HTBP = {
 // Inkomsten afhankelijk combinatie korting
 // https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_tarieven/heffingskortingen/inkomensafhankelijke_combikorting/inkomensafhankelijke-combinatiekorting-2025
 const IACK = {
+  2026: {
+    H: {
+      MinAInk: 6239,
+      InkKorting: 0.1145,
+      MaxInkAfKrt: 3032,
+    },
+    HAOW: {
+      MinAInk: 6239,
+      InkKorting: 0.0572,
+      MaxInkAfKrt: 1513,
+    },
+  },
   2025: {
     H: {
       MinAInk: 6146,
@@ -306,6 +372,16 @@ const IACK = {
 // Maximum Kindgebonden budget
 
 const MAXKGB = {
+  2026: {
+    1: 2580,
+    2: 5160,
+    3: 7740,
+    4: 10320,
+    5: 12900,
+    6: 15480,
+    7: 18060,
+    8: 20640,
+  },
   2025: {
     1: 2511,
     2: 5022,
@@ -351,6 +427,11 @@ const MAXKGB = {
 // Kinderbijslag per kwartaal
 // https://www.svb.nl/nl/kinderbijslag/bedragen-betaaldagen/bedragen-kinderbijslag
 const KBS = {
+  2026: {
+    K05: 291.49,
+    K611: 353.95,
+    K1217: 416.41,
+  },
   2025: {
     K05: 286.45,
     K611: 347.83,
@@ -377,7 +458,36 @@ const KBS = {
 // Eigenwoningforfait
 // https://www.belastingdienst.nl/wps/wcm/connect/nl/koopwoning/content/hoe-werkt-eigenwoningforfait
 const EWF = {
-  2025: {
+  2026: {
+    kSchuldFactor: 0.8001,
+    ewf: [
+      {
+        woz: { van: 0, tm: 12500 },
+        factor: 0,
+      },
+      {
+        woz: { van: 12500, tm: 25000 },
+        factor: 0.001,
+      },
+      {
+        woz: { van: 25000, tm: 50000 },
+        factor: 0.002,
+      },
+      {
+        woz: { van: 50000, tm: 75000 },
+        factor: 0.0025,
+      },
+      {
+        woz: { van: 75000, tm: 1350000 },
+        factor: 0.0035,
+      },
+      {
+        woz: { van: 1350000, tm: Number.MAX_VALUE },
+        minimum: 4725,
+        factor: 0.0235,
+      },
+    ],
+  },  2025: {
     kSchuldFactor: 0.8001,
     ewf: [
       {
@@ -503,6 +613,36 @@ const EWF = {
 
 const AHK = {
   // https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_tarieven/heffingskortingen/algemene_heffingskorting/tabel-algemene-heffingskorting-2025
+  2026: {
+    V: [
+      {
+        inkomen: { van: 0, tot: 29736 },
+        maximaal: 3115,
+        afbouwpunt: 0,
+        afbouwfactor: 0,
+      },
+      {
+        inkomen: { van: 29736, tot: 78426 },
+        maximaal: 3115,
+        afbouwpunt: 29736,
+        afbouwfactor: 0.06398,
+      },
+    ],
+    AOW: [
+      {
+        inkomen: { van: 0, tot: 29736 },
+        maximaal: 1556,
+        afbouwpunt: 0,
+        afbouwfactor: 0,
+      },
+      {
+        inkomen: { van: 29736, tot: 78426 },
+        maximaal: 1556,
+        afbouwpunt: 29736,
+        afbouwfactor: 0.03195,
+      },
+    ],
+  },
   2025: {
     V: [
       {
@@ -631,28 +771,82 @@ const AHK = {
 const AK = {
   // https://open.overheid.nl/documenten/dbc8b701-05db-4f38-a3fb-ea0747e34d40/file
   // https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_tarieven/heffingskortingen/arbeidskorting/tabel-arbeidskorting-2025
+  2026: {
+    V: [
+      {
+        inkomen: { tot: 11965 },
+        grens: 0,
+        afbouwpunt: 0,
+        afbouwfactor: 0.08324,
+      },
+      {
+        inkomen: { tot: 25845 },
+        grens: 996,
+        afbouwpunt: 11965,
+        afbouwfactor: 0.31009,
+      },
+      {
+        inkomen: { tot: 45592 },
+        grens: 5300,
+        afbouwpunt: 25845,
+        afbouwfactor: 0.0195,
+      },
+      {
+        inkomen: { tot: 132920 },
+        grens: 5685,
+        afbouwpunt: 45592,
+        afbouwfactor: -0.0651,
+      },
+    ],
+    AOW: [
+      {
+        inkomen: { tot: 11965 },
+        grens: 0,
+        afbouwpunt: 0,
+        afbouwfactor: 0.04156,
+      },
+      {
+        inkomen: { tot: 25845 },
+        grens: 498,
+        afbouwpunt: 11965,
+        afbouwfactor: 0.15483,
+      },
+      {
+        inkomen: { tot: 45592 },
+        grens: 2647,
+        afbouwpunt: 25845,
+        afbouwfactor: 0.00974,
+      },
+      {
+        inkomen: { tot: 132920 },
+        grens: 2840,
+        afbouwpunt: 35592,
+        afbouwfactor: -0.0325,
+      },
+    ],
+  },
   2025: {
     V: [
       {
-        inkomen: { van: 0, tot: 12170 },
+        inkomen: { tot: 12169 },
         grens: 0,
         afbouwpunt: 0,
         afbouwfactor: 0.08053,
       },
       {
-        inkomen: { van: 12170, tot: 26289 },
+        inkomen: { tot: 26288 },
         grens: 980,
         afbouwpunt: 12169,
         afbouwfactor: 0.3003,
       },
       {
-        inkomen: { van: 26289, tot: 43072 },
+        inkomen: { tot: 43071 },
         grens: 5220,
         afbouwpunt: 26288,
         afbouwfactor: 0.02258,
       },
       {
-        inkomen: { van: 43072, tot: 129079 },
+        inkomen: { tot: 129078 },
         grens: 5599,
         afbouwpunt: 43071,
         afbouwfactor: -0.0651,
@@ -660,28 +854,28 @@ const AK = {
     ],
     AOW: [
       {
-        inkomen: { van: 0, tot: 12170 },
+        inkomen: { tot: 12169 },
         grens: 0,
         afbouwpunt: 0,
-        afbouwfactor: 0.04035,
+        afbouwfactor: 0.04029,
       },
       {
-        inkomen: { van: 12170, tot: 26289 },
+        inkomen: { tot: 26288 },
         grens: 491,
         afbouwpunt: 12169,
-        afbouwfactor: 0.15022,
+        afbouwfactor: 0.15023,
       },
       {
-        inkomen: { van: 26289, tot: 42072 },
+        inkomen: { tot: 43071 },
         grens: 2612,
         afbouwpunt: 26288,
-        afbouwfactor: 0.01132,
+        afbouwfactor: 0.0113,
       },
       {
-        inkomen: { van: 42072, tot: 124935 },
+        inkomen: { tot: 129078 },
         grens: 2802,
-        afbouwpunt: 42071,
-        afbouwfactor: -0.03258,
+        afbouwpunt: 43071,
+        afbouwfactor: -0.03257,
       },
     ],
   },
@@ -853,6 +1047,44 @@ const AK = {
 // AOW 1e schijf is inkomstenbelasting + volksverzekering premie.
 
 const IB = {
+  2026: {
+    // https://www.belastingdienst.nl/wps/wcm/connect/nl/voorlopige-aanslag/content/voorlopige-aanslag-tarieven-en-heffingskortingen
+    V: [
+      {
+        // 2e schrijf
+        tot: 38883,
+        // 8.17 + AOW 17.9 + Anw 0.1 + Wlz 9.65
+        percentage: 0.3575,
+      },
+      {
+        // 3e schrijf
+        vanaf: 38883,
+        tot: 78426,
+        percentage: 0.3756,
+      },
+      {
+        // 4e schijf
+        vanaf: 78426,
+        percentage: 0.495,
+      },
+    ],
+    AOW: [
+      {
+        tot: 41123,
+        // 8.17 +  Anw 0.1 + Wlz 9.65
+        percentage: 0.1785,
+      },
+      {
+        vanaf: 41123,
+        tot: 78426,
+        percentage: 0.3756,
+      },
+      {
+        vanaf: 78426,
+        percentage: 0.495,
+      },
+    ],
+  },
   2025: {
     // https://www.belastingdienst.nl/wps/wcm/connect/nl/voorlopige-aanslag/content/voorlopige-aanslag-tarieven-en-heffingskortingen
     V: [
@@ -1000,6 +1232,7 @@ const LEEFTIJDEN = {
 // Wet minimum loon
 
 const WML = {
+  2026: 29330.94, // 14,71 per/uur
   2025: 28712.82,
   PD2025: 28712.82,
   2024: 27235.38,
@@ -1008,13 +1241,15 @@ const WML = {
 
 const BALKENENDENORM = 223000;
 const AVG_HUUR = {
+  2026: 750,
   2025: 710,
   PD2025: 710,
   2024: 674,
   2023: 600,
 };
-const AVG_WOZ = 315000;
-const AVG_RENTE = AVG_WOZ * 0.0428;
+// https://www.cbs.nl/nl-nl/nieuws/2025/25/gemiddelde-woz-waarde-woningen-5-procent-hoger
+const AVG_WOZ = 398000;
+const AVG_RENTE = AVG_WOZ * 0.0369;
 
 export default {
   TABEL: TABEL,

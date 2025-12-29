@@ -24,7 +24,6 @@ import {
   JaarType,
   LeeftijdType,
   NavigatieType,
-  PensioenType,
   PeriodeType,
   PersoonType,
   SalarisVerhogingType,
@@ -33,20 +32,18 @@ import {
   WonenType,
   WoningType,
 } from "./types";
+import data from "@/js/belasting/belasting_data";
 
 const KEY_VALUE_SPLIT: string = ";";
 const DEFAULT_WOON_TYPE: WoningType = WoningType.HUUR;
-const AVG_HUUR: number = 710;
-const AVG_WOZ: number = 315000;
-const AVG_RENTE_PERCENTAGE: number = 0.04;
-const AVG_RENTE: number = AVG_WOZ * AVG_RENTE_PERCENTAGE;
-export const JAAR: string | number = 2025;
+export const JAAR: string | number = 2026;
 export const JAREN: JaarType[] = [
+  { value: "2026", label: "2026" },
   { value: "2025", label: "2025" },
-  { value: "PD2025", label: "Prinsjesdag Belastingplan 2025" },
   { value: "2024", label: "2024" },
   { value: "2023", label: "2023" },
 ];
+const AVG_HUUR: number = data.AVG_HUUR[JAAR];
 
 // Generieke functies voor navigatie conversie.
 
@@ -137,8 +134,8 @@ export function standaardWonen(): WonenType {
   return {
     woning_type: DEFAULT_WOON_TYPE,
     huur: AVG_HUUR,
-    woz: AVG_WOZ,
-    rente: AVG_RENTE,
+    woz: data.AVG_WOZ,
+    rente: data.AVG_RENTE,
   };
 }
 
