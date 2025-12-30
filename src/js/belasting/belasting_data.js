@@ -770,7 +770,7 @@ const AHK = {
 
 const AK = {
   // https://open.overheid.nl/documenten/dbc8b701-05db-4f38-a3fb-ea0747e34d40/file
-  // https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_tarieven/heffingskortingen/arbeidskorting/tabel-arbeidskorting-2025
+  // https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_tarieven/heffingskortingen/arbeidskorting/tabel-arbeidskorting-2026
   2026: {
     V: [
       {
@@ -820,11 +820,12 @@ const AK = {
       {
         inkomen: { tot: 132920 },
         grens: 2840,
-        afbouwpunt: 35592,
+        afbouwpunt: 45592,
         afbouwfactor: -0.0325,
       },
     ],
   },
+  // https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/belastingdienst/prive/inkomstenbelasting/heffingskortingen_boxen_tarieven/heffingskortingen/arbeidskorting/tabel-arbeidskorting-2025
   2025: {
     V: [
       {
