@@ -25,7 +25,7 @@ test("Huurtoeslag alleen 14.500, rekenhuur 355", () => {
   expect(ht.huurtoeslag(JAAR, 14500, 355, 1, false)).toEqual(12 * 129);
 });
 
-test("Huurtoeslag alleen 27038, rekenhuur 639", () => {
+test("Huurtoeslag 3 personen 27038, rekenhuur 639", () => {
   expect(ht.huurtoeslag(JAAR, 27038, 639, 3, false)).toEqual(12 * 318);
 });
 
@@ -33,30 +33,40 @@ test("Huurtoeslag alleen 14.500, rekenhuur 355", () => {
   expect(ht.huurtoeslag(JAAR, 14500, 355, 1, true)).toEqual(12 * 131);
 });
 
-test("Huurtoeslag alleen 27038, rekenhuur 639", () => {
+test("Huurtoeslag 3 personen 27038, rekenhuur 639", () => {
   expect(ht.huurtoeslag(JAAR, 27038, 639, 3, true)).toEqual(12 * 351);
 });
 
-test("Huurtoeslag alleen 27038, rekenhuur 1050", () => {
+test("Huurtoeslag 3 personen 27038, rekenhuur 1050", () => {
   expect(ht.huurtoeslag(JAAR, 27038, 1050, 3, true)).toEqual(0);
 });
 
-test("Huurtoeslag alleen 10.000", () => {
-  expect(ht.huurtoeslagMax(JAAR, 10000)).toEqual(12 * 417);
-});
-
-test("Huurtoeslag alleen 34.000", () => {
-  expect(ht.huurtoeslagMax(JAAR, 34000)).toEqual(12 * 74);
-});
-
-test("Huurtoeslag alleen 100.000", () => {
-  expect(ht.huurtoeslagMax(JAAR, 100000)).toEqual(0);
-});
-
-test("Huurtoeslag alleen 27038, rekenhuur 639", () => {
+test("Huurtoeslag 2026, 3 personen, aow, 27038, rekenhuur 639", () => {
   expect(ht.huurtoeslag(JAAR_2026, 27038, 639, 3, true)).toEqual(12 * 389);
 });
 
-test("Huurtoeslag alleen 27038, rekenhuur 1050", () => {
-  expect(ht.huurtoeslag(JAAR_2026, 27038, 1050, 3, true)).toEqual(12 * 470);
+test("Huurtoeslag 2026, 3 personen 27038, rekenhuur 1050", () => {
+  expect(ht.huurtoeslag(JAAR_2026, 27038, 1050, 3, true)).toEqual(12 * 537);
+});
+
+test("Huurtoeslag 2026, aow, alleen 40_000, rekenhuur 1250", () => {
+  expect(ht.huurtoeslag(JAAR_2026, 40_000, 1250, 1, true)).toEqual(12 * 150);
+});
+
+test("Huurtoeslag 2026, aow, alleen 50_000, rekenhuur 1250", () => {
+  expect(ht.huurtoeslag(JAAR_2026, 50_000, 1250, 1, true)).toEqual(0);
+});
+
+// huurtoeslagMax
+
+test("Max Huurtoeslag 10.000", () => {
+  expect(ht.huurtoeslagMax(JAAR, 10000)).toEqual(12 * 417);
+});
+
+test("Max Huurtoeslag 34.000", () => {
+  expect(ht.huurtoeslagMax(JAAR, 34000)).toEqual(12 * 74);
+});
+
+test("MaX Huurtoeslag 100.000", () => {
+  expect(ht.huurtoeslagMax(JAAR, 100000)).toEqual(0);
 });
