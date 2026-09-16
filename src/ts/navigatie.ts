@@ -15,9 +15,6 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
-/*
- * Helper JavaScript om navigatie van en naar JSON objecten om te zetten.
- */
 import {
   InkomenType,
   InvoerGegevensType,
@@ -34,10 +31,16 @@ import {
 } from "./types";
 import data from "@/js/belasting/belasting_data";
 
+/*
+ * Helper JavaScript om navigatie van en naar JSON objecten om te zetten.
+ */
+
 const KEY_VALUE_SPLIT: string = ";";
 const DEFAULT_WOON_TYPE: WoningType = WoningType.HUUR;
-export const JAAR: string | number = 2026;
+export const JAAR: string = 2026;
+export const JAAR2: string = 2025;
 export const JAREN: JaarType[] = [
+  //{ value: "PD2026", label: "Prinsjesdag 2026" },
   { value: "2026", label: "2026" },
   { value: "2025", label: "2025" },
   { value: "2024", label: "2024" },
@@ -48,7 +51,7 @@ const AVG_HUUR: number = data.AVG_HUUR[JAAR];
 // Generieke functies voor navigatie conversie.
 
 function toNumber(v: any): number {
-  return Number.isNaN(v * 1) ? v : v * 1;
+  return typeof v === "boolean" || Number.isNaN(v * 1) ? v : v * 1;
 }
 
 function toJsonArray(q: any) {
@@ -63,7 +66,7 @@ function splitParam(queryParam: string | any): string {
   return a ? a.map(toJsonArray) : a;
 }
 
-function copyNavigatieNaarJson(from, to, functionNavNaarJson: (any) => any) {
+function copyNavigatieNaarJson(from: any, to: any, functionNavNaarJson: (nav: any) => any) {
   Object.entries(functionNavNaarJson(splitParam(from))).forEach((a) => (to[a[0]] = toJsonArray(a[1])));
 }
 
@@ -160,7 +163,9 @@ export function standardVisualisatie(): VisualisatieType {
   return {
     type: VisualisatieTypeType.G,
     jaar: JAAR,
+    jaar2: JAAR2,
     periode: PeriodeType.JAAR,
+    extraMaand: false,
     van_tot: [10000, 100000],
     stap: 100,
     arbeidsInkomen: 0,
@@ -170,26 +175,49 @@ export function standardVisualisatie(): VisualisatieType {
   };
 }
 
-// visualisatie=<type>;<jaar>;<periode>;<start>;<eind>;<stap>;<md type>;<md getal>;<arbeidsinkomen>
+/**
+ Alle varianten:
+
+6: 1e versie (lengte 5):
+  visualisatie=<periode>;<start>,<eind>;<md type>;<md getal>;<arbeidsinkomen>
+
+7: Toegevoegd: jaar (lengte 6):
+  visualisatie=<jaar>;<periode>;<start>,<eind>;<md type>;<md getal>;<arbeidsinkomen>
+
+9: Toegevoegd: type grafiek/tabel, stap (lengte 8):
+  visualisatie=<type>;<jaar>;<periode>;<start>,<eind>;<stap>;<md type>;<md getal>;<arbeidsinkomen>
+
+11: Toegevoegd: vergelijk met jaar2, 13e maand (lengte 10):
+  visualisatie=<type>;<jaar>;<jaar2>;<periode>;<extra maand>;<start>,<eind>;<stap>;<md type>;<md getal>;<arbeidsinkomen>
+
+*/
 
 function visualisatieNavigatieNaarJson(p: any[]): VisualisatieType {
-  let vis: VisualisatieType = standardVisualisatie();
-  let orgLength8: boolean = lengte(p) == 8;
+  const vis: VisualisatieType = standardVisualisatie();
+  const len = lengte(p);
 
-  if (orgLength8) {
+  if (len >= 8) {
     vis.type = p[0] as VisualisatieTypeType;
     p.shift();
   }
-  if (orgLength8 || lengte(p) == 6) {
+  if (len >= 6) {
     vis.jaar = p[0];
     p.shift();
   }
-  if (lengte(p) < 5) {
+  if (len >= 10) {
+    vis.jaar2 = p[0];
+    p.shift();
+  }
+  if (len < 5) {
     return {} as VisualisatieType;
   }
   vis.periode = p[0];
+  if (len >= 10) {
+    vis.extraMaand = p[1] === "t";
+    p.shift();
+  }
   vis.van_tot = p[1];
-  if (orgLength8) {
+  if (len >= 8) {
     vis.stap = p[2];
     p.shift();
   }
@@ -254,8 +282,9 @@ function wonenJsonNaarNavigatie(wonen: WonenType): any[] {
 }
 
 function visualisatieJsonNaarNavigatie(vis: VisualisatieType): any[] {
-  let sv = vis.svt == SalarisVerhogingType.A ? vis.sv_abs : vis.sv_p;
-  return [vis.type, vis.jaar, vis.periode, vis.van_tot, vis.stap, vis.svt, sv, vis.arbeidsInkomen];
+  const sv = vis.svt == SalarisVerhogingType.A ? vis.sv_abs : vis.sv_p;
+  const em = vis.extraMaand ? "t" : "f";
+  return [vis.type, vis.jaar, vis.jaar2, vis.periode, em, vis.van_tot, vis.stap, vis.svt, sv, vis.arbeidsInkomen];
 }
 
 export function jsonNaarNavigatie(json: InvoerGegevensType): NavigatieType {

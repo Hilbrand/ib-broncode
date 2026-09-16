@@ -1,11 +1,11 @@
 <template>
   <n-card title="Legenda" size="small">
     <n-space vertical v-if="!data.grafiek || Object.keys(data.grafiek).length == 0">
-      Beweeg de muis over de grafiek om de legenda te tonen.
+      Beweeg de muis over de grafiek om de legenda te tonen. En klik op de grafiek om de legenda vast te zetten.
     </n-space>
     <n-space vertical v-else>
       <div>
-        <h4>Bruto jaarinkomen (Salaris): &euro; {{ data.arbeidsInkomen }}</h4>
+        <h4>Bruto {{ data.periode == "jaar" ? "jaar" : "maand" }}inkomen (Salaris): {{ data.arbeidsInkomen }}</h4>
         <h4>{{ data.titel }}</h4>
       </div>
       <n-table :single-line="false" size="tiny" class="table">

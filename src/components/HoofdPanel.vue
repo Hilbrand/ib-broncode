@@ -10,6 +10,7 @@
         <a href="" :class="active('intro')" @click="onChange($event, 'intro')">Introductie</a>
         <a href="" :class="active('bi')" @click="onChange($event, 'bi')">Beschikbaar Inkomen</a>
         <a href="" :class="active('md')" @click="onChange($event, 'md')">Marginale Druk</a>
+        <a href="" :class="active('vj')" @click="onChange($event, 'vj')">Vergelijk jaren</a>
         <a href="" :class="active('bd')" @click="onChange($event, 'bd')">Belastingdruk</a>
       </nav>
       <div class="content">
@@ -17,7 +18,7 @@
         <div v-if="gegevens.tab == 'bi'">
           <n-h4 v-html="samenvattingTekst"></n-h4>
           <n-divider />
-          <TabelComponent v-if="gegevens.tab == 'bi' && gegevens.visualisatie.type == 't'" :gegevens="gegevens" />
+          <TabelComponent v-if="gegevens.visualisatie.type == 't'" :gegevens="gegevens" />
           <div v-else>
             <n-space> Deze grafiek toont het beschikbare inkomen uitgesplitst naar kortingen en toeslagen. </n-space>
             <div id="bi"></div>
@@ -57,14 +58,26 @@
                 </n-input-number>
               </n-input-group>
             </n-space>
-            <TabelComponent v-if="gegevens.tab == 'md' && gegevens.visualisatie.type == 't'" :gegevens="gegevens" />
+            <TabelComponent v-if="gegevens.visualisatie.type == 't'" :gegevens="gegevens" />
             <div v-else id="md"></div>
           </n-space>
+        </div>
+        <div v-if="gegevens.tab == 'vj'">
+          <n-h4 v-html="samenvattingTekst"></n-h4>
+          Toon het verschil van <b>{{ gegevens.visualisatie.jaar }}</b> ten opzichte van &nbsp;<n-select
+            v-model:value="gegevens.visualisatie.jaar2"
+            :options="jaren"
+            :consistent-menu-width="false"
+            style="width: 100px; display: inline-block; vertical-align: middle"
+          />
+          <n-divider />
+          <TabelComponent v-if="gegevens.tab == 'vj' && gegevens.visualisatie.type == 't'" :gegevens="gegevens" />
+          <div v-else id="vj"></div>
         </div>
         <div v-if="gegevens.tab == 'bd'">
           <n-h4 v-html="samenvattingTekst"></n-h4>
           <n-divider />
-          <TabelComponent v-if="gegevens.tab == 'bd' && gegevens.visualisatie.type == 't'" :gegevens="gegevens" />
+          <TabelComponent v-if="gegevens.visualisatie.type == 't'" :gegevens="gegevens" />
           <n-space v-else vertical>
             <div id="bd"></div>
           </n-space>
@@ -134,8 +147,8 @@ import WonenComponent from "./WonenComponent.vue";
 import VisualisatieInstellingComponent from "./VisualisatieInstellingComponent.vue";
 import TabelComponent from "./TabelComponent.vue";
 import Legenda from "./Legenda.vue";
-import { JAAR, jsonNaarNavigatie, navigatieNaarJson } from "@/ts/navigatie";
-import algemeen from "@/js/berekeningen/algemeen";
+import { JAAR, JAREN, jsonNaarNavigatie, navigatieNaarJson } from "@/ts/navigatie";
+import algemeen from "@/ts/berekeningen/algemeen";
 import stacked_chart from "@/js/grafieken/stacked_chart";
 import { maakSamenvatting } from "@/ts/samenvatting";
 
@@ -155,6 +168,7 @@ export default {
     tabel: ref(null);
     samenvattingTekst: ref("");
     layoutVertical: false;
+    jaren: [];
   },
   data() {
     return {
@@ -168,7 +182,9 @@ export default {
         visualisatie: {
           type: "g",
           jaar: JAAR,
+          jaar2: JAAR,
           periode: null,
+          extraMaand: false,
           van_tot: [],
           stap: 100,
           arbeidsInkomen: 0,
@@ -189,6 +205,7 @@ export default {
     window.removeEventListener("resize", this.resize);
   },
   created() {
+    this.jaren = JAREN;
     this.$watch(
       () => this.$route.query,
       (toQuery, previousQuery) => {
@@ -250,7 +267,9 @@ export default {
         "#" + this.gegevens.tab,
         algemeen.berekenGrafiekData(this.gegevens),
         document.getElementById(this.gegevens.tab).offsetWidth,
-        (d) => (this.legendaData = d)
+        (d) => {
+          this.legendaData = d;
+        }
       );
       await nextTick();
     },

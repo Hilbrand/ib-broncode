@@ -15,7 +15,7 @@
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
 
-import { LeeftijdType, PeriodeType, PersoonType, WonenType, WoningType } from "./types";
+import { LeeftijdType, PeriodeType, PersoonType, VisualisatieType, WonenType, WoningType } from "./types";
 
 export function isVolwassene(persoon: PersoonType): boolean {
   return persoon.leeftijd == LeeftijdType.V || persoon.leeftijd == LeeftijdType.AOW;
@@ -24,7 +24,8 @@ export function isVolwassene(persoon: PersoonType): boolean {
 export function heeftInkomen(persoon: PersoonType): boolean {
   return (
     isVolwassene(persoon) &&
-    ((persoon.bruto_inkomen && persoon.bruto_inkomen > 0) || (persoon.percentage && persoon.percentage > 0))
+    ((persoon.bruto_inkomen !== undefined && persoon.bruto_inkomen > 0) ||
+      (persoon.percentage !== undefined && persoon.percentage > 0))
   );
 }
 
@@ -64,11 +65,23 @@ export function positiefIsNul(getal: number): number {
   return Math.min(0, getal);
 }
 
-export function factorBerekening(periode: PeriodeType): number {
-  return PeriodeType.MAAND == periode ? 1 / 12 : 1;
+export function factorBerekening(vis: VisualisatieType): number {
+  return PeriodeType.MAAND == vis.periode ? 1 / (12 + (vis.extraMaand ? 1 : 0)) : 1;
+}
+
+export function afronden(getal: number, factor: number): number {
+  return +(getal * factor).toFixed(2);
+}
+
+export function afrondenNegIsNul(getal: number, factor: number, negIsNull: boolean): number {
+  const afgerond = afronden(getal, factor);
+
+  return negIsNull ? negatiefIsNul(afgerond) : afgerond;
 }
 
 export default {
+  afronden,
+  afrondenNegIsNul,
   aow,
   factorBerekening,
   isHuur,

@@ -33,8 +33,9 @@ import {
   biHuurKolommen,
   biKoopKolommen,
   bdKolommen,
-} from "../js/tabellen/tabel_kolommen";
-import algemeen from "../js/berekeningen/algemeen";
+  vjHuurKolommen,
+} from "../ts/tabellen/tabel_kolommen";
+import algemeen from "../ts/berekeningen/algemeen";
 import { maakBestandsnaam } from "../ts/samenvatting";
 
 const props = defineProps<{
@@ -50,23 +51,26 @@ const downloadCsv = () =>
 
 const kolommen = computed<DataTableColumns>(() => {
   const huur = props.gegevens.wonen.woning_type === WoningType.HUUR;
-  if (props.gegevens.tab === TabType.BI) {
-    return huur ? biHuurKolommen() : biKoopKolommen();
-  } else if (props.gegevens.tab === TabType.MD) {
-    return huur ? mdHuurKolommen(props.gegevens.personen) : mdKoopKolommen(props.gegevens.personen);
-  } else {
-    return bdKolommen();
+  switch (props.gegevens.tab) {
+    case TabType.BI:
+      return huur ? biHuurKolommen() : biKoopKolommen();
+    case TabType.MD:
+      return huur ? mdHuurKolommen(props.gegevens.personen) : mdKoopKolommen(props.gegevens.personen);
+    case TabType.BD:
+      return bdKolommen();
+    case TabType.VJ:
+      return huur ? vjHuurKolommen(props.gegevens.personen) : biKoopKolommen();
   }
 });
 
-let timer: NodeJS.Timeout = null;
+let timer: NodeJS.Timeout | null = null;
 
 function renderCell(value: string | number) {
   return value?.toLocaleString();
 }
 
 onMounted(() => {
-  data.value = algemeen.berekenTabelData(props.gegevens).series;
+  data.value = algemeen.berekenTabelData(props.gegevens);
 });
 
 watch(
@@ -80,7 +84,7 @@ watch(
   { deep: true }
 );
 
-function replace(val) {
-  data.value = algemeen.berekenTabelData(val).series;
+function replace(gegevens: InvoerGegevensType) {
+  data.value = algemeen.berekenTabelData(gegevens);
 }
 </script>

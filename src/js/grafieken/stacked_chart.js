@@ -61,7 +61,7 @@ function StackedAreaChart(
   const series = d3
     .stack()
     .keys(zDomain)
-    .value(([x, I], z) => Y[I.get(z)])
+    .value(([_, I], z) => Y[I.get(z)])
     .order(order)
     .offset(offset)(
       d3.rollup(
@@ -164,7 +164,7 @@ function StackedAreaChart(
   svg.style("pointer-events", "all");
 
   // Salaris lijn
-  if (yLabel.startsWith("Beschikbaar")) {
+  if (legenda.isSalarisLijn()) {
     svg
       .append("g")
       .attr("class", "hover-line")
@@ -173,7 +173,7 @@ function StackedAreaChart(
       .attr("x1", xScale(xDomain[0]))
       .attr("x2", xScale(xDomain[1]))
       .attr("y1", yScale(xDomain[0] / 1000))
-      .attr("y2", yScale(yDomain[1]));
+      .attr("y2", yScale(xDomain[1] / 1000));
   }
 
   svg
@@ -184,8 +184,8 @@ function StackedAreaChart(
     .attr("width", width)
     .attr("height", height);
 
-  legenda.setUpdateFunction((i) => {
-    let x = xScale(i);
+  legenda.setUpdateFunction((index) => {
+    let x = xScale(index);
     hoverLine.attr("x1", x).attr("x2", x);
   });
   // rectHover
@@ -210,15 +210,15 @@ function StackedAreaChart(
       return;
     }
     if (legendaVast) {
-      legenda.setLegendaVast(data, series.length, i);
+      legenda.setLegendaVast(data[i].id);
     } else {
-      legenda.setLegendaText(data, series.length, i);
+      legenda.setLegendaText(data[i].id);
     }
     hoverLine.attr("x1", mouse_x).attr("x2", mouse_x);
   }
 
   function hoverMouseOff() {
-    legenda.setGetal();
+    legenda.setLegendaIngesteld();
   }
 
   return Object.assign(svg.node(), { scales: { color } });
@@ -230,7 +230,7 @@ function makeChart(id, gegevens, width, legendaFunction) {
 
   StackedAreaChart(id, gegevens.series, legenda, {
     x: (d) => d.id,
-    y: (d) => d.getal * legenda.getFactorYas(),
+    y: (d) => d.getal * gegevens.berekenen.getFactorYas(),
     z: (d) => d.type,
     yDomain: gegevens.berekenen.getYDomain(),
     xLabel: "Arbeidsinkomen",
@@ -238,7 +238,7 @@ function makeChart(id, gegevens, width, legendaFunction) {
     width: width,
     height: 500,
   });
-  legenda.setGetal();
+  legenda.setLegendaIngesteld();
 }
 
 export default {

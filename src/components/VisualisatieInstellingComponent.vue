@@ -28,7 +28,6 @@
         />
       </n-input-group>
     </n-space>
-    <!--
     <n-space vertical>
       <n-radio-group v-model:value="visualisatie.periode">
         <n-space :wrap="false">
@@ -38,7 +37,9 @@
         </n-space>
       </n-radio-group>
     </n-space>
-    -->
+    <n-space v-if="visualisatie.periode == 'maand'" justify="end" style="font-size: 11px; margin-right: 35px">
+      <n-switch v-model:value="visualisatie.extraMaand" size="small" style="height: 11px" />13e maand
+    </n-space>
     <n-divider />
     <n-space vertical>
       <n-radio-group v-model:value="visualisatie.type">
@@ -99,7 +100,9 @@ export default {
       visualisatie: {
         type: "g",
         jaar: JAAR,
+        jaar2: JAAR,
         periode: null,
+        extraMaand: false,
         van_tot: [],
         arbeidsInkomen: 0,
         stap: 100,

@@ -44,7 +44,11 @@ function tekstKinderen(personen: PersoonType[], leeftijd: LeeftijdType) {
   return aantal == 0 ? "" : tekstGetal(aantal) + " " + tekstKinderen + " tussen " + LeeftijdTekstType[leeftijd];
 }
 
-export function tekstVerdiener(persoon: PersoonType, personen: PersoonType[], tussenTekst: string = ""): string {
+export function tekstVerdiener(
+  persoon: PersoonType | undefined,
+  personen: PersoonType[],
+  tussenTekst: string = ""
+): string {
   if (personen.filter((_) => heeftInkomen(_) && _.inkomen_type === InkomenType.BRUTO).length > 0) {
     return "";
   }
