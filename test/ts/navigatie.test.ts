@@ -16,7 +16,7 @@
  */
 
 import { expect, test } from "vitest";
-import { JAAR, jsonNaarNavigatie, navigatieNaarJson } from "../../src/ts/navigatie";
+import { JAAR, JAAR2, jsonNaarNavigatie, navigatieNaarJson } from "../../src/ts/navigatie";
 import {
   InkomenType,
   InvoerGegevensType,
@@ -55,15 +55,19 @@ const personenJson: PersoonType[] = [
 ];
 const wonenQuery: string = "huur;123";
 const wonenJson: WonenType = { woning_type: WoningType.HUUR, huur: 123, rente: 14686.2, woz: 398000 };
-const standaardJaar: string | number = JAAR;
-const grafiekOud1Query: string = "jaar;1,2;p;4;12345";
-const grafiekOud2Query: string = standaardJaar + ";jaar;1,2;p;4;12345";
-const visualisatieQuery: string = "g;" + standaardJaar + ";jaar;1,2;100;p;4;12345";
+const standaardJaar: string | number = 2026;
+const standaardJaar2: string | number = 2025;
+const grafiekOud6Query: string = "jaar;1,2;p;4;12345";
+const grafiekOud7Query: string = standaardJaar + ";jaar;1,2;p;4;12345";
+const grafiekOud9Query: string = "g;" + standaardJaar + ";jaar;1,2;100;p;4;12345";
+const visualisatieQuery: string = "g;" + standaardJaar + ";" + standaardJaar2 + ";jaar;f;1,2;100;p;4;12345";
 
 const visualisatieJson: VisualisatieType = {
   type: VisualisatieTypeType.G,
   jaar: standaardJaar,
+  jaar2: standaardJaar2,
   periode: PeriodeType.JAAR,
+  extraMaand: false,
   van_tot: [1, 2],
   stap: 100,
   svt: SalarisVerhogingType.P,
@@ -72,17 +76,23 @@ const visualisatieJson: VisualisatieType = {
   arbeidsInkomen: 12345,
 };
 
-const queryGrafiekOud1: NavigatieType = {
+const queryGrafiekOud6: NavigatieType = {
   tab: TabType.BI,
   p: personenQuery,
   w: wonenQuery,
-  grafiek: grafiekOud1Query,
+  grafiek: grafiekOud6Query,
 };
-const queryGrafiekOud2: NavigatieType = {
+const queryGrafiekOud7: NavigatieType = {
   tab: TabType.BI,
   p: personenQuery,
   w: wonenQuery,
-  grafiek: grafiekOud2Query,
+  grafiek: grafiekOud7Query,
+};
+const queryGrafiekOud9: NavigatieType = {
+  tab: TabType.BI,
+  p: personenQuery,
+  w: wonenQuery,
+  grafiek: grafiekOud9Query,
 };
 const jsonStandaard: InvoerGegevensType = {
   tab: TabType.BI,
@@ -144,10 +154,12 @@ test("half lege navigatie", () => {
     visualisatie: {
       type: VisualisatieTypeType.G,
       periode: "jaar",
+      extraMaand: false,
       van_tot: [10000, 100000],
       stap: 100,
       arbeidsInkomen: 0,
-      jaar: 2026,
+      jaar: standaardJaar,
+      jaar2: standaardJaar2,
       svt: "p",
       sv_p: 3,
       sv_abs: 1000,
@@ -168,10 +180,12 @@ test("lege navigatie naar json", () => {
     visualisatie: {
       type: VisualisatieTypeType.G,
       periode: "jaar",
+      extraMaand: false,
       van_tot: [10000, 100000],
       stap: 100,
       arbeidsInkomen: 0,
-      jaar: 2026,
+      jaar: standaardJaar,
+      jaar2: standaardJaar2,
       svt: "p",
       sv_p: 3,
       sv_abs: 1000,
@@ -179,12 +193,16 @@ test("lege navigatie naar json", () => {
   });
 });
 
-test("oude navigatie 1 naar json ", () => {
-  expect(navigatieNaarJson(queryGrafiekOud1)).toEqual(jsonStandaard);
+test("oude navigatie 6 naar json ", () => {
+  expect(navigatieNaarJson(queryGrafiekOud6)).toEqual(jsonStandaard);
 });
 
-test("oude navigatie 2 naar json ", () => {
-  expect(navigatieNaarJson(queryGrafiekOud2)).toEqual(jsonStandaard);
+test("oude navigatie 7 naar json ", () => {
+  expect(navigatieNaarJson(queryGrafiekOud7)).toEqual(jsonStandaard);
+});
+
+test("oude navigatie 9 naar json ", () => {
+  expect(navigatieNaarJson(queryGrafiekOud9)).toEqual(jsonStandaard);
 });
 
 test("json naar navigatie", () => {

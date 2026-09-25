@@ -4,7 +4,7 @@
       Huishoudens hebben recht op toeslagen en kortingen. Deze kortingen zijn afhankelijk van het inkomen en de
       samenstelling van het huishouden. Aan de linkerkant van het scherm kan deze samenstelling worden ingevuld. Daarmee
       worden grafieken gemaakt die tonen wat dit betekent voor toeslagen en kortingen bij verschillende inkomens. De
-      volgende grafieken zijn beschikbaar onder de titels hierboven:
+      volgende grafieken/tabellen zijn beschikbaar:
     </p>
     <dl>
       <dt><b>Beschikbaar Inkomen</b></dt>
@@ -15,6 +15,11 @@
         <q>verdwijnt</q> door belasting, verlies van kortingen en toeslagen. De grafiek geeft weer waar de marginale
         druk door wordt veroorzaakt. Zonder kortingen en toeslagen is de marginale druk gelijk aan het inkomensbelasting
         tarief. De marginale druk is relevant voor de keuze voor het aantal uren of dagen per week dat gewerkt wordt.
+      </dd>
+      <dt><b>Vergelijk jaren</b></dt>
+      <dd>
+        Dit geeft het verschil aan beschikbaar inkomen tussen verschillende jaren weer.
+        Hiermee wordt het effect van aanpassingen in het belastingstelsel zichtbaar.
       </dd>
       <dt><b>Belastingdruk</b></dt>
       <dd>

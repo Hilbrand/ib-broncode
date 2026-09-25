@@ -80,15 +80,50 @@ export enum VisualisatieTypeType {
 }
 
 export type VisualisatieType = {
-  type?: VisualisatieTypeType;
-  jaar?: string;
-  periode?: PeriodeType;
-  van_tot?: number[];
-  stap?: number;
-  arbeidsInkomen?: number;
-  svt?: SalarisVerhogingType;
-  sv_p?: number;
-  sv_abs?: number;
+  /**
+   * Visualisatie type: grafiek of tabel.
+   */
+  type: VisualisatieTypeType;
+  /**
+   * Jaar dat getoond wordt in legenda.
+   */
+  jaar: string;
+  /**
+   * Jaar dat wordt gebruikt bij vergelijken met ander jaar.
+   */
+  jaar2: string;
+  /**
+   * Cijfers tonen per jaar of maand.
+   */
+  periode: PeriodeType;
+  /**
+   * Bij maand visualisatie neem in de berekening mee dat er wel/geen 13e maand is.
+   */
+  extraMaand: boolean;
+  /**
+   * Begin en eind inkomensrange voor tonen cijfers.
+   */
+  van_tot: number[];
+  /**
+   * Intervalstap voor tonen cijfers in tabel.
+   */
+  stap: number;
+  /**
+   * Arbeidsinkomen dat in legenda wordt getoond.
+   */
+  arbeidsInkomen: number;
+  /**
+   * Type van gegevens voor gebruik in salarisverhogingsberekening: percentage of vast bedrag.
+   */
+  svt: SalarisVerhogingType;
+  /**
+   * Percentage dat wordt gebruikt als SalarisVerhogingType percentage is.
+   */
+  sv_p: number;
+  /**
+   * Absolute salarisverhoging die wordt gebruikt als SalarisVerhogingType absoluut is.
+   */
+  sv_abs: number;
 };
 
 export type InvoerGegevensType = {
@@ -116,10 +151,11 @@ export type BerekenResultaatType = {
   pensioenPremie: number;
   anderenArbeidsinkomen?: number[];
   ibBox1: number;
-  nettoLoon: number; // belastbaar loon - ibBox1 + AHK + AK + HT
+  nettoloon: number; // belastbaar loon - ibBox1 + AHK + AK + HT
   nettoInkomen: number; // netto inkomen
   nettoArbeidsinkomen: number;
-  nettoLoonBelasting: number;
+  nettoloonBelasting: number;
+  nettoloonBelastingGrafiek: number;
   ahk: number;
   ahkMax: number;
   ak: number;
@@ -129,6 +165,7 @@ export type BerekenResultaatType = {
   nvzk: number; // niet-verzilverde heffingskortingen
   kb: number;
   kgb: number;
+  woningType: WoningType;
   wonen: number;
   hraMax?: number;
   zt: number;
@@ -137,7 +174,9 @@ export type BerekenResultaatType = {
 export type BeschikbaarInkomenResultaatType = {} & BerekenResultaatType;
 
 export type MarginaleDrukResultaatType = {
-  extraLoon: number;
+  brutoloon1: number;
+  arbeidsinkomen1: number;
+  toetsingsInkomen1: number;
   marginaleDruk: number;
 } & BerekenResultaatType;
 
@@ -149,12 +188,19 @@ export interface DeltaFunction {
   delta: (a: number, b: number, c: number, inverse: boolean) => number;
 }
 
+export type SerieType = {
+  id: number;
+  type: string;
+  getal: number;
+};
+
 // Navigatie typen
 
 export enum TabType {
   BI = "bi",
   MD = "md",
   BD = "bd",
+  VJ = "vj",
 }
 
 export type PersoonNavigatieType = {

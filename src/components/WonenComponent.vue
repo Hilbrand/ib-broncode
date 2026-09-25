@@ -58,7 +58,7 @@
 
 <script>
 import belasting_data from "@/js/belasting/belasting_data";
-import hra from "@/js/belasting/hypotheekrente_aftrek";
+import hra from "@/ts/belasting/hypotheekrente_aftrek";
 
 export default {
   props: ["jaar", "wonen"],

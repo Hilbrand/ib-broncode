@@ -21,7 +21,7 @@ import {
   alleenstaande2Kinderen,
   alleenstaande2KinderenHuur,
   eenverdiener2kinderenKoop,
-} from "../js/berekeningen/invoer";
+} from "../ts/berekeningen/invoer";
 import { InkomenType, LeeftijdType, PersoonType } from "../../src/ts/types";
 
 const minstVerdiener: PersoonType = { leeftijd: LeeftijdType.V, inkomen_type: InkomenType.PERCENTAGE, percentage: 50 };
